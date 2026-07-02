@@ -1,0 +1,13 @@
+{
+  "topics": ["ecommerce", "retail-ai", "recommendation-system", "inventory-management", "price-optimization"],
+  "agentKeywords": "AI retail recommendation inventory ecommerce agent open source",
+  "repoKeywords": "ecommerce recommendation system retail AI open source",
+  "verticalKeywords": "ecommerce platform shop open source self-hosted",
+  "minStars": 200,
+  "licenses": ["MIT", "Apache-2.0", "GPL-3.0"],
+  "keywords": {
+    "agents": ["product recommendation", "inventory optimizer", "price agent", "support chatbot"],
+    "repos": ["Medusa.js", "Saleor", "WooCommerce", "Surprise recommender"],
+    "verticals": ["Medusa.js", "Saleor", "Bagisto", "Sylius", "Reaction Commerce"]
+  }
+}
