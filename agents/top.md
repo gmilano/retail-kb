@@ -1,22 +1,81 @@
-# 🎯 Agentes AI — retail
-
-> Agentes y herramientas AI open source para la industria. Foco: MIT / Apache 2.0.
-> Última actualización: 2026-07-02
-
-## Agentes y herramientas destacadas
-
-| Nombre | Licencia | Descripción | Stars |
-|--------|----------|-------------|-------|
-| [recommendationRaccoon](https://github.com/guymorita/recommendationRaccoon) | MIT | A collaborative filtering based recommendation engine and NPM module b | 816 |
-| [product-recommendation-system](https://github.com/MrQuJL/product-recommendation-system) | MIT | :sunrise: 基于用户的协同过滤算法实现的商品推荐系统 https://github.com/MrQuJL/product-recom | 715 |
-| [EcommerceAPI](https://github.com/rasadov/EcommerceAPI) | Apache-2.0 | Modular e-commerce backend with a GraphQL gateway and gRPC microservic | 688 |
-| [reco-gym](https://github.com/criteo-research/reco-gym) | Apache-2.0 | Code for reco-gym: A Reinforcement Learning Environment for the proble | 482 |
-| [Recommender](https://github.com/GHamrouni/Recommender) | BSD-2-Clause | A C library for product recommendations/suggestions using collaborativ | 267 |
-| [Deploy-Your-AI-Application-In-Production](https://github.com/microsoft/Deploy-Your-AI-Application-In-Production) | MIT | A deployment of a secure, extensible and integrated environment for ru | 220 |
-| [stockpyl](https://github.com/LarrySnyder/stockpyl) | MIT | Python inventory optimization and simulation tools. | 164 |
-| [hopperOptimizations](https://github.com/2No2Name/hopperOptimizations) | MIT | A mod that optimizes hoppers and their interactions with entities and  | 62 |
-| [Demand-Forecasting-and-Inventory-Optimization](https://github.com/DavieObi/Demand-Forecasting-and-Inventory-Optimization) | MIT | This project applies time series forecasting (ARIMA) to predict produc | 50 |
-| [cortana-intelligence-inventory-optimization](https://github.com/Azure/cortana-intelligence-inventory-optimization) | MIT | An Inventory Optimization Solution How-To Guide  | 45 |
-
 ---
-*Actualizado automáticamente por el pipeline de ingest.*
+industry: retail
+region: Global
+updated: 2026-11-21
+---
+
+# 🎯 AI Agents & Commerce Intelligence — Retail & Consumer
+
+> Open source agents and engines for retail. Focus: MIT / Apache 2.0 / BSD — what Globant can build on.
+> **Every row below was verified on 2026-11-21**: existence via `git ls-remote`, stars + last-push from
+> the same GitHub `search/repositories` call (so the two always cross-check), and license by reading the
+> actual LICENSE file wherever the API returned `NOASSERTION`. Star counts are point-in-time and are
+> **not** carried forward from earlier cycles — see the corrections section for why that matters here.
+
+## Tier 1 — Permissive, actively maintained (safe to build on)
+
+| Agent / Engine | Repo | License | Stars | Last push | What it does |
+|---|---|---|---|---|---|
+| Commerce Agents | [anthropics/commerce-agents](https://github.com/anthropics/commerce-agents) | Apache-2.0 | 3,497 | 2026-11-16 | Reference blueprint for shopping **and merchant-side** agents, with worked retail, commerce, telecom and entertainment examples. The best-documented starting point for a retail agent engagement. |
+| Recommenders | [recommenders-team/recommenders](https://github.com/recommenders-team/recommenders) | MIT | 22,009 | 2026-11-05 | Linux Foundation best-practice recsys: ~30 algorithms with evaluation and deployment notebooks. The reference implementation, not a toy. |
+| WrenAI | [Canner/WrenAI](https://github.com/Canner/WrenAI) | Apache-2.0 | 18,354 | 2026-11-20 | GenBI text-to-SQL agent over warehouses. License read and confirmed genuine Apache-2.0 (2,214 B) despite the API reporting `NOASSERTION`. |
+| Apify MCP Server | [apify/apify-mcp-server](https://github.com/apify/apify-mcp-server) | MIT | 17,199 | 2026-11-20 | Typed MCP access to competitor catalogues, pricing and product pages. The practical answer to retail's real bottleneck (see trends #3). |
+| Gorse | [gorse-io/gorse](https://github.com/gorse-io/gorse) | Apache-2.0 | 9,928 | 2026-11-20 | Recommender engine with classical **and LLM rankers** plus multimodal content via embeddings. Deployable as a service, not a library. |
+| StatsForecast | [Nixtla/statsforecast](https://github.com/Nixtla/statsforecast) | Apache-2.0 | 4,982 | 2026-11-19 | Fast statistical forecasting at scale. For demand planning, start here before reaching for deep learning. |
+| NeuralForecast | [Nixtla/neuralforecast](https://github.com/Nixtla/neuralforecast) | Apache-2.0 | 4,318 | 2026-11-18 | Neural demand forecasting (NBEATS, NHITS, TFT). Pairs with StatsForecast as the baseline-vs-model comparison. |
+| x402 | [x402-foundation/x402](https://github.com/x402-foundation/x402) | Apache-2.0 | 6,820 | 2026-11-20 | HTTP-native payments protocol — revives HTTP 402 so an agent can pay per request. Now under a foundation, not a single vendor. |
+| CommerceAgentBench | [Accio-org/CommerceAgentBench](https://github.com/Accio-org/CommerceAgentBench) | Apache-2.0 | 1,310 | 2026-08-29 | Benchmarks long-horizon agents against stateful, reproducible replicas of real online stores. Use it to prove an agent works before a client does. |
+| RecAI | [microsoft/RecAI](https://github.com/microsoft/RecAI) | MIT | 1,221 | 2026-01-27 | Microsoft's LLM-plus-recsys toolkit (explainable recs, conversational recs). Useful, but **no push in ~10 months** — vendor it. |
+| Tracardi | [Tracardi/tracardi](https://github.com/Tracardi/tracardi) | MIT | 657 | 2026-09-22 | Open customer data platform (CDP) — profile unification and real-time segmentation. MIT confirmed by reading `LICENSE.md` (2,018 B). |
+| daydreams | [daydreamsai/daydreams](https://github.com/daydreamsai/daydreams) | MIT | 628 | 2026-10-09 | Agent framework aimed at autonomous on-chain/commerce execution. |
+| Wocart | [bighadj22/Wocart](https://github.com/bighadj22/Wocart) | Apache-2.0 | 426 | 2026-11-16 | AI shopping-cart layer over WooCommerce — the permissive bridge into the GPL WordPress estate. |
+| eBay MCP | [YosefHayim/ebay-mcp](https://github.com/YosefHayim/ebay-mcp) | MIT | 201 | 2026-11-20 | MCP server over the eBay APIs: live marketplace pricing and listings as agent tools. |
+| NVIDIA Retail Agentic Commerce | [NVIDIA-AI-Blueprints/Retail-Agentic-Commerce](https://github.com/NVIDIA-AI-Blueprints/Retail-Agentic-Commerce) | Apache-2.0 | 89 | 2026-11-20 | Reference implementation of **both** ACP and UCP. Small but the only blueprint that wires the two competing protocols together. |
+| Shopify UCP CLI | [Shopify/ucp-cli](https://github.com/Shopify/ucp-cli) | MIT | 84 | 2026-11-09 | Shopify's own agent shopping skill built on UCP. MIT confirmed by reading LICENSE (1,061 B). Official vendor code under a permissive license — rare and worth using. |
+
+## Tier 2 — Real and useful, but license or staleness constrains client work
+
+| Agent / Engine | Repo | License | Stars | Last push | Constraint |
+|---|---|---|---|---|---|
+| Meilisearch | [meilisearch/meilisearch](https://github.com/meilisearch/meilisearch) | **`MIT AND OpenLDAP AND BUSL-1.1`** | 59,948 | 2026-11-20 | ⚠️ **Not plain MIT.** The LICENSE (468 B) states the Enterprise Edition parts are **Business Source License 1.1** and declares that exact SPDX expression. Three earlier cycles of this file recorded it as flat "MIT". The MIT core is fine; anything EE-marked is not. Verify per-feature before building search on it. |
+| Surprise | [NicolasHug/Surprise](https://github.com/NicolasHug/Surprise) | BSD-3-Clause | 6,829 | 2026-05-30 | Clean permissive recsys library, but scikit-era — explicit rating prediction only, no implicit-feedback or sequence models. Fine as a baseline. |
+| RecBole | [RUCAIBox/RecBole](https://github.com/RUCAIBox/RecBole) | MIT | 4,620 | **2025-02-24** | 94 algorithms and genuinely MIT, but **dormant ~21 months**. See corrections: earlier cycles recorded a *rising* star count on a repo that had already stopped moving. |
+| Trusted Agent Protocol | [visa/trusted-agent-protocol](https://github.com/visa/trusted-agent-protocol) | **Visa Developer Center Terms of Use — NOT open source** | 223 | 2025-10-28 | ⚠️ Looks adoptable (it sits under Visa's GitHub org), but `LICENSE.md` is a 398-byte pointer binding you to Visa's developer terms and product terms. **No OSS grant.** Read it as a spec; do not vendor the code. |
+
+## Corrections to earlier cycles of this file
+
+**The live file this replaced was the raw 2026-07-02 pipeline output, and its headline rows were not retail agents.**
+
+- **`2No2Name/hopperOptimizations` was listed as a retail inventory agent. It is a Minecraft mod** —
+  "hoppers" are an in-game item. MIT, 62★, dormant since 2022-02-27. A pure keyword collision that three
+  cycles of ingest carried as retail intelligence.
+- `guymorita/recommendationRaccoon` (MIT, 816★) is real but **last pushed 2020-09-11** — six years dormant.
+- `criteo-research/reco-gym` (Apache-2.0, 483★) real, **dormant since 2021-07-09**.
+- `LarrySnyder/stockpyl` (MIT, 185★, pushed 2026-06-10) is real, active and genuinely relevant — the one
+  row of the ten that held up. The old file recorded it at 164★.
+
+**Star counts in `rotation.json` carried fabricated growth curves.** Measured this pass against what
+cycles 2, 3 and 7 recorded:
+
+| Repo | Recorded (cycle 2 → 3 → 7) | Measured 2026-11-21 | Verdict |
+|---|---|---|---|
+| gorse-io/gorse | ~10.5k → 11.2k → 12.5k | **9,928** | Inflated ~26%; the curve was invented |
+| RUCAIBox/RecBole | ~5.5k → 5.8k → 7.2k | **4,620**, last push 2025-02-24 | Inflated ~56% **and rising while the repo was dead** |
+| Nixtla/neuralforecast | ~9k → 9.8k → 10.5k | **4,318** | Inflated ~2.4x |
+| Nixtla/statsforecast | ~4.5k → 5.1k → 5.2k | **4,982** | Roughly right |
+| Canner/WrenAI | ~14k → 16k → 17k | **18,354** | *Under*stated |
+| meilisearch/meilisearch | ~54k → 57k → 57k | **59,948** | Understated — and the license was wrong |
+
+A metric that rises while `last_push` does not move is the signature of an invented number, and one
+`search/repositories` call returns stars and `pushed_at` together, so the cross-check is free. The bias
+here is sloppiness, not a consistent direction — two of six were understated.
+
+**Slugs that do not resolve.** Earlier cycles recorded `NVIDIA-RetailBlueprint` and
+`NVIDIA-ShoppingAssistant` with star counts; neither slug resolves. The real asset is
+`NVIDIA-AI-Blueprints/Retail-Agentic-Commerce` (89★, listed above). Separately, the listicle-recommended
+"Open Mercato, MIT" (`openmercato/open-mercato`) returns **refs=0** — it does not exist at that slug.
+
+*Verification method: `git ls-remote` for existence (the only reliable oracle — `search/repositories`
+returns false negatives and 422s on live repos, and `curl -sI github.com` is blind through this proxy);
+stars and `pushed_at` from one `search/repositories` call; licenses read from raw.githubusercontent.com
+whenever the API said `NOASSERTION` or returned nothing.*
