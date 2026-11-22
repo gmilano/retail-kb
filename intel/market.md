@@ -25,6 +25,37 @@ updated: 2026-11-22
 ⚠️ **Do not stack these.** The two US figures measure different things (spend flowing *through* agents vs.
 spend *on* AI software) and earlier cycles of this KB blended such numbers into single growth claims.
 
+### Added 2026-11-22 (pass 3) — retail media: the numbers differ by 8x, and that is a definition problem
+
+Retail media is the fastest-growing profit pool in retail and the published
+figures for it are irreconcilable until you notice that **two different things
+are both called "retail media".**
+
+| Source | 2026 figure | Trajectory | What is being counted |
+|---|---|---|---|
+| WARC | **$200.4B** | $223.4B in 2027 (+11.5%; **+9.8% excluding Amazon**) | **Ad spend** — money flowing through retail media |
+| Grand View Research | $34.2B | $68.8B by 2033 (10.5% CAGR) | **Networks** — the platform/technology market |
+| Persistence Market Research | $32.6B | $109.4B by 2033 (18.9% CAGR) | Networks (most aggressive) |
+| Research and Markets | $26.23B | from $23.96B in 2025, 9.5% CAGR → ~$37.8B by 2030 | Networks |
+| Mordor Intelligence | ~$25.5B | 6.35% CAGR through 2031 | Networks (most conservative) |
+| Dataintelo | $2.8B (2025) | $14.6B by 2034, 20.1% CAGR; **measurement & attribution fastest at 22.6%** | **Data clean rooms** only |
+
+**The spread between $25.5B and $200.4B is roughly 8x, and it is not a
+disagreement about growth.** WARC counts advertiser spend; the others count the
+networks and technology that carry it. Both are defensible; quoting one as the
+other is not.
+
+**Rule for this KB: never state a retail media number without saying which of
+the two it is.** Cycle 8 was criticised in its own notes for carrying
+`$215.31B LATAM` and `WhatsApp $18.2B` as settled fact with no source. The
+figures above are all vendor or trade research with differing scopes and
+undisclosed methods — directional, and attributed.
+
+**The one firm, non-vendor-shaped conclusion:** even the most conservative
+networks estimate ($25.5B) sits against **one** open-source repo matching
+`retail media stars:>=50`, and that repo is a 2020 ML tutorial. The money and
+the open-source floor are completely decoupled here.
+
 ## Global players
 
 | Player | Type | Strength | Weakness |
@@ -119,6 +150,44 @@ cycle running.** Nearly every item above comes from vendor or consultancy blogs.
 proposed order barring a retailer from using facial recognition for surveillance for five years but does
 **not name the retailer** — recorded here as **unverified**. Cycle 8 flagged the same weakness about an
 alleged federal "AI AGENT Act"; that claim remains unverified and should not be used with a client.
+#### Added 2026-11-22 (pass 3) — retail media in North America: a duopoly on the increment
+
+North America is the largest and most concentrated retail media market, and the
+concentration is the commercial fact that should shape any engagement here.
+
+- **US retail media ad spend: $69.33B in 2026**, up **17.9%** from $58.79B in
+  2025 (EMARKETER).
+- **Amazon Ads and Walmart Connect together take 89.5% of the *incremental*
+  spend in 2026** (EMARKETER). Not of the market — of the growth.
+- **Adoption, measured two ways:** a Coresight survey of 100 North American
+  retail executives (fielded **2026-09-02 to 09-04**, ±8 points) finds AI moved
+  "from the lab into the core of operations" while **governance has not kept
+  pace**. Ramp card-spending data in the same report: **49% of US retailers had
+  paid AI subscriptions in August 2026, against 11% two years earlier.**
+
+**What follows for a North America engagement.** Competing with the duopoly's
+network is not the opportunity; being the reason a *second-tier* retailer's
+network is worth buying is. Two concrete openings:
+
+1. **Agent-readiness of the long tail.** The duopoly will be reachable by
+   AdCP-speaking buying agents early. A regional grocer or specialty chain will
+   not, and `prebid/salesagent` (Apache-2.0, alive) is a working starting point
+   for the sales-agent role — see `compose/patterns.md` Pattern 15.
+2. **Governance as a deliverable, not a slide.** The Coresight finding is a
+   *measured* gap between deployment and control, in the region with **no
+   binding AI statute to anchor it.** That makes governance a consulting
+   product here rather than a compliance obligation.
+
+**⚠️ Informed gap — North America is again the weakest-sourced region.** This
+pass searched for retail-media-specific regulation (FTC, state AI statutes, ad
+transparency duties) and **found nothing citable**: the regional searches
+returned adoption and spend data and essentially no regulation. Cycle 8
+recorded the same weakness and flagged a proposed "AI AGENT Act" as traceable
+only to secondary vendor sources. **That remains unverified and is not promoted
+here.** Treat US retail media compliance as driven by state privacy law and
+self-regulatory advertising codes until this KB can cite a primary source —
+and note the contrast with EMEA, where the dates are statutory and dated.
+
 ### EMEA
 
 - ⏰ **Hardest deadline in any region, and it is 11 days away.** EU AI Act **Article 50** transparency
@@ -211,6 +280,60 @@ alternative, `phax/phase4`, which is also the *maintained* one (pushed 2026-11-1
 is a differentiator that costs nothing to acquire. Carried from cycle 8 and still the strongest EMEA
 argument: **Retail Economics reports 95% of EU retailers using or testing AI but only 5% at scalable ROI**
 — a 90-point gap that argues for a delivery partner over another pilot.
+#### Added 2026-11-22 (pass 3) — retail media in EMEA: AI-generated ad creative is now a labelling problem
+
+EMEA remains the region where the deadlines are real and dated, and this pass
+**corrects the scope of the date cycle 8 recorded.**
+
+**EU AI Act Article 50 — the precise shape, because the imprecise version
+misleads.** Article 50 transparency obligations have been **in force since
+2026-08-02** and were not postponed by the Digital Omnibus (which moved
+high-risk duties to Dec 2027 / Aug 2028). Then:
+
+- **2026-12-02** — *ten days after this pass* — is **narrower than "systems
+  already on the market must comply"**. It binds **providers of systems that
+  generate synthetic content** and were placed on the market before
+  2026-08-02, and it covers **Article 50(2) in full: machine-readable marking
+  and detectability.**
+- It does **not** bind deployers, does **not** cover systems that do not
+  generate synthetic content, and does **not** extend to paragraphs 1, 3 and 4
+  — **those already apply.**
+- **2027-02-02** — providers must implement an interoperability solution for
+  watermark detection.
+
+**Why this lands squarely on retail media:** AI-generated **ad creative is
+synthetic content**. A retailer whose media network generates creative,
+product imagery or virtual models with AI is inside Article 50, and the
+machine-readable-marking duty falls on the **provider** of the generation
+system while the retailer **deploying** it is already bound by paragraphs 1, 3
+and 4. In practice the retailer owns the problem either way, because it is the
+one putting the creative in front of a consumer. `compose/patterns.md`
+Pattern 17 is the gate that implements this.
+
+**Market and readiness:**
+
+- **95% of European retailers use or test AI** in marketing and e-commerce
+  while **only ~5% report scalable ROI** (Retail Economics, via Retail Insight
+  Network) — the same ~90-point delivery gap cycle 8 recorded, now confirmed a
+  second time from the same lineage of source.
+- **McKinsey: €240–320B** of value across European retail over five years from
+  end-to-end AI transformation.
+- **Deloitte: 56% of European consumers have used AI to shop at least once**
+  (n=13,500 across 15 countries), reaching 50% in roughly 18 months — **faster
+  than e-commerce or smartphones did.**
+- Deloitte expects retail media networks to become central to retailer revenue,
+  including expansion into **non-endemic advertising** (selling ad space to
+  brands that do not sell in the store).
+
+**⚠️ Informed gap, explicitly not dressed up.** This pass searched for the
+**DSA obligations on designated VLOP retail marketplaces** — in particular the
+public advertisement repository duty, which would bite directly on large
+marketplace retail media — and **could not confirm any of it from the results
+returned.** The direction is plausible and commercially important; it is
+**unverified here and must not be quoted** until a primary source (the DSA text
+and the Commission's VLOP designation list) is read. Recorded as the first
+thing a retail media pass in EMEA should close.
+
 ### APAC
 
 - **Largest stated intent of any region:** Deloitte reports **29% of APAC consumer businesses already
@@ -304,6 +427,45 @@ rather than European.
 lead with the licence analysis nobody else brings. For Japan, the store plane's gap list is the pitch: the
 smart-register and shelf-vision work has *no* open-source floor (see step 3 in `repos/foundations.md`), and
 the driver is a labour shortage that will not reverse.
+#### Added 2026-11-22 (pass 3) — retail media in APAC: the profit-engine framing, and real deployments
+
+APAC is where retail media is being described not as an ad channel but as the
+margin structure of the business.
+
+- **Deloitte: APAC is "set to lead the agentic future of commerce"** and will
+  drive roughly **two thirds of the world's new retail sales over the next five
+  years.**
+- **Criteo's APAC leadership frames retail media as "a profit engine, not just
+  an ad channel"** — the sharpest statement of the thesis found in any region.
+- **Named, concrete deployments** (useful because they are checkable, unlike
+  most regional claims): **Uber Advertising partnered with Criteo in
+  Australia**; **Zepto** (India, quick commerce) is extending its retail media
+  **beyond its own app onto the open internet** with AI-personalised campaigns.
+- **Bain, from NRF APAC 2026: "the technology is ready, but organizations are
+  not."** The constraint is the operating model.
+- **Lazada: three in four Southeast Asian e-commerce sellers say they still
+  need additional support to adopt AI** — a measured, placed SMB enablement
+  gap, and the APAC analogue of the EMEA 95%/5% delivery gap.
+
+**What follows for an APAC engagement.** The open-internet extension Zepto is
+doing is exactly the **off-site retail media** problem that the Prebid stack
+(`prebid-server`, Apache-2.0, alive) plus an identity layer
+(`IABTechLab/uid2-operator`, Apache-2.0, alive) solves with permissive code —
+and it is a build, not a licence purchase. The SMB gap points the other way:
+**seller-side** tooling that lets a marketplace's merchants buy their own
+retail media without an agency, which is a product, not a consulting
+engagement.
+
+**⚠️ Informed gap.** Searched for **retail-media-specific regulation** across
+APAC this pass and found **none citable** — the results returned adoption and
+vendor commentary only. What this KB already holds remains the best available
+anchor and applies directly to agent-mediated ad buying: **Singapore's IMDA
+agentic-AI governance framework (Jan 2026), covering delegation chains and
+multi-agent coordination** (recorded in cycle 8 as the most useful regulatory
+document found in any region), plus China's registration-and-labelling regime
+and South Korea's AI Basic Act (effective Jan 2026). None of these is
+retail-media-specific; **saying so is the finding.**
+
 ### LATAM
 
 - 🎯 **The clearest, best-evidenced opportunity in this file.** An April 2026 scan of **75 LATAM e-commerce
@@ -415,6 +577,58 @@ e-commerce sites found agents can browse but cannot buy.**
 blogs) and **cycles 3 and 7 of this KB quoted them as settled fact.** The fiscal measurements in this
 section are different in kind: they are repository-level facts, re-measured on 2026-11-22 by reading
 licence files and `ls-remote` ref counts, not vendor claims.
+#### Added 2026-11-22 (pass 3) — retail media in LATAM: the clearest market, with a named conflict of interest
+
+LATAM retail media is the most structurally legible of the four regions and the
+most hazardous to source, because the best figures come from the company that
+dominates it.
+
+- **Mercado Libre has held more than half of Latin America's retail media ad
+  spend since 2022** (EMARKETER).
+- **Brazil and Mexico together will account for 82% of LATAM retail media
+  investment in 2026** (Mercado Ads).
+- **Growth roughly 42% in Brazil and 40% in Mexico — about twice the global
+  average** (EMARKETER).
+- In **Mexico**, Mercado Libre's serious rivals are **Walmart and Amazon**;
+  Brazil's market is the larger of the two.
+
+**⚠️ Name the conflict of interest, because the numbers above depend on it.**
+The EMARKETER report carrying the Brazil/Mexico growth figures was **produced
+in collaboration with Mercado Ads** — i.e. the headline sizing of LATAM retail
+media is co-authored by the company holding **>50% share** of it. That does not
+make the figures wrong; it makes them **directional and interested**, and they
+must always be cited with the collaboration attached. This is the third
+consecutive retail cycle in which LATAM's narrative rested on vendor-supplied
+numbers: cycle 8 found `$215.31B LATAM` and `WhatsApp $18.2B` carried as
+settled fact from earlier cycles with no source, and contradictory vendor
+figures for Brazilian WhatsApp users (165M vs 197M) and Mexican penetration
+(73% vs 94.3%).
+
+**Flagged, not promoted:** a single secondhand blog claim of **>50% YoY Mercado
+Ads revenue growth in Mexico, Brazil and Argentina.** One source, not
+independently verified. Recorded here so a later cycle does not find it
+elsewhere and promote it to fact — which is exactly how `$18.2B` entered this
+KB.
+
+**What follows for a LATAM engagement.** The concentration is the opportunity's
+shape: with one player above 50%, **every other retailer in the region is
+either outside retail media or buying into Mercado Ads' surface**, and the
+second tier has no network of its own. Combined with cycle 8's measured LATAM
+finding that **agents can browse but cannot buy on 75 scanned LATAM e-commerce
+sites** (April 2026), the regional play is the full stack a second-tier
+retailer lacks: make the catalogue agent-readable, then make the inventory
+agent-sellable (`compose/patterns.md` Patterns 15–16). The permissive Prebid +
+UID2 + Meridian combination is buildable today and carries no licence fee into
+a price-sensitive market.
+
+**⚠️ Informed gap.** Searched for **retail media regulation in Brazil and
+Mexico** and found **nothing** — not advertising rules, not platform rules, not
+retail-media-specific data rules. One source mentioned "evolving data privacy"
+with no detail. Brazil's LGPD and Mexico's federal data-protection regime
+obviously apply to audience matching, but **this pass cannot cite a
+retail-media-specific obligation in either country, and says so rather than
+implying coverage.**
+
 ## Globant positioning
 
 1. **Lead with protocol reachability, not models.** The scarce skill is making a retailer's catalogue and
@@ -449,3 +663,39 @@ licence files and `ls-remote` ref counts, not vendor claims.
     generic (Timefold Apache-2.0; `supervision` MIT); the retail-specific layer is student projects on
     AGPL-licensed YOLO weights. Price and describe it as IP development — this is now the second confirmed
     proprietary-IP zone in retail alongside markdown/assortment optimisation.
+
+### Added 2026-11-22 (pass 3) — positioning that follows from the retail media plane
+
+Retail media is the first plane this KB has mapped where **the money is
+enormous and the open-source floor is absent.** The product-data plane had a
+floor (GS1, EPCIS). The store plane had one (POS, fiscalisation). Retail media
+has **one repo matching `retail media stars:>=50`, and it is a 2020 ML
+tutorial.**
+
+1. **Sell assembly, not integration.** There is no retail media platform to
+   configure. The capability is composed from `prebid-server` + `uid2-operator`
+   + `meridian`/`pymc-marketing` + `pinot`/`superset`, all Apache-2.0, all
+   committing within four days of this pass. The assembly *is* the deliverable,
+   which is a better commercial position than layering on a vendor platform.
+2. **Own the clean room, because nobody maintains one.** Every open-source data
+   clean room found is dormant 752–1258 days, in the segment vendors call the
+   fastest-growing part of retail media (measurement & attribution, 22.6%
+   CAGR). The primitives are alive and permissive. **This is the single
+   strongest build-proprietary-IP position in the retail KB**, alongside
+   markdown/assortment optimisation (cycle 8) and shelf vision (pass 2).
+3. **Be protocol-neutral, but notice the asymmetry.** Cycle 8's conclusion that
+   neutrality beats betting on a winner still holds for commerce. In
+   advertising, AdCP has 8,610 refs and commits today while `IABTechLab/AAMP`
+   has **two files**. Hedging is cheap; pretending the two are equivalent is
+   not. Build on AdCP, keep the adapter boundary, revisit if AAMP ships code.
+4. **Licence audit per deployed component, not per project.** Snowplow is the
+   case to cite in any engagement review: Apache-2.0 on the umbrella repo,
+   **Snowplow Limited Use License on the collector and enrich services that
+   actually run**, BSD-3 on the browser tracker, and a 0-byte `LICENSE.md`
+   beside the real one.
+5. **Governance sells in North America; labelling sells in EMEA.** NA has a
+   measured deployment-versus-control gap and no binding statute, so governance
+   is a consulting product. EMEA has Article 50 in force since 2026-08-02, a
+   provider marking duty catching up on **2026-12-02**, and watermark-detection
+   interoperability on **2027-02-02** — so creative labelling is a compliance
+   build with a date on it.

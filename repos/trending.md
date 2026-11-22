@@ -10,6 +10,74 @@ updated: 2026-11-22
 > protocol and platform repos**. For agents and agent-facing tooling see `agents/trending.md` — until today
 > the two files were byte-identical and this distinction did not exist.
 
+## 2026-11-22 (pass 3)
+
+**Plane added this pass: retail media infrastructure** — the auction, the
+identity layer, the measurement layer and the clean room.
+
+**Alive and committing within days of this pass (all Apache-2.0):**
+
+| Repo | Licence (read at source) | refs | Last commit |
+|---|---|---|---|
+| [prebid/Prebid.js](https://github.com/prebid/Prebid.js) | Apache-2.0 (10760B, `master`) | 14749 | 2026-11-22 (0d) |
+| [IABTechLab/uid2-operator](https://github.com/IABTechLab/uid2-operator) | Apache-2.0 (11348B) | 4067 | 2026-11-22 (0d) |
+| [pymc-labs/pymc-marketing](https://github.com/pymc-labs/pymc-marketing) | Apache-2.0 (11356B) | 2338 | 2026-11-22 (0d) |
+| [google/meridian](https://github.com/google/meridian) | Apache-2.0 (11357B) | 1725 | 2026-11-20 (2d) |
+| [google/differential-privacy](https://github.com/google/differential-privacy) | Apache-2.0 (13499B) | 471 | 2026-11-20 (2d) |
+| [apache/pinot](https://github.com/apache/pinot) | Apache-2.0 (11356B, `master`) | 17558 | 2026-11-21 (1d) |
+| [apache/druid](https://github.com/apache/druid) | Apache-2.0 (19315B, `master`) | 17408 | 2026-11-21 (1d) |
+| [prebid/prebid-server](https://github.com/prebid/prebid-server) | Apache-2.0 (10759B, `master`) | 4327 | 2026-11-19 (3d) |
+| [prebid/prebid-server-java](https://github.com/prebid/prebid-server-java) | Apache-2.0 (10759B, `master`) | 3985 | 2026-11-18 (4d) |
+
+**⚠️ Two licence facts that contradict public sources.**
+
+- **UID2 is Apache-2.0, not BSD-2.** The Trade Desk's press release announcing
+  the donation says BSD-2; `unifiedid.com` says Apache-2.0. Measured,
+  `IABTechLab/uid2-operator/LICENSE` is the full Apache-2.0 text at **11348
+  bytes**. A press release is not a licence.
+- **OpenRTB ships no licence at all.**
+  [InteractiveAdvertisingBureau/openrtb](https://github.com/InteractiveAdvertisingBureau/openrtb)
+  (198 refs, 2026-04-14, 222d) — root tree confirmed: `.gitignore`,
+  `OpenRTB v3.0 FINAL.md`, `README.md`, `ads.cert...BETA.md`, `extensions/`,
+  `supplychainobject.md`. No licence under any of eight names on either branch.
+  The substrate of all programmatic advertising is unlicensed. Implement from
+  the spec; **do not vendor the repo** — same treatment as `bacen/pix-api`.
+
+**Dormant — recorded so a later cycle does not resurrect them as live:**
+
+| Repo | Licence | Last commit | Days |
+|---|---|---|---|
+| [qascade/dcr](https://github.com/qascade/dcr) | AGPL-3.0 (35215B) | 2023-06-13 | 1258 |
+| [Snowflake-Labs/sfquickstart-data-clean-room](https://github.com/Snowflake-Labs/sfquickstart-data-clean-room) | Apache-2.0 (11356B) | 2024-03-11 | 986 |
+| [Optable/match](https://github.com/Optable/match) | Apache-2.0 (10172B, `LICENCE.md`) | 2024-10-24 | 759 |
+| [tiktok-privacy-innovation/PrivacyGo-DataCleanRoom](https://github.com/tiktok-privacy-innovation/PrivacyGo-DataCleanRoom) | Apache-2.0 (11356B) | 2024-10-31 | 752 |
+| [tiktok-privacy-innovation/PrivacyGo](https://github.com/tiktok-privacy-innovation/PrivacyGo) | Apache-2.0 (11356B) | 2025-01-24 | 667 |
+| [google/lightweight_mmm](https://github.com/google/lightweight_mmm) | Apache-2.0 (11357B) | 2025-06-17 | 523 | 
+| [facebookexperimental/Robyn](https://github.com/facebookexperimental/Robyn) | MIT (1091B) | `main` 2025-06-27 | 513 |
+| [google/private-join-and-compute](https://github.com/google/private-join-and-compute) | Apache-2.0 (11357B, `master`) | 2026-03-09 | 258 |
+| [facebookincubator/GeoLift](https://github.com/facebookincubator/GeoLift) | MIT (1092B, `LICENSE.md`) | 2026-04-01 | 235 |
+
+**The clean-room layer has no maintained option at all** — the three real
+open-source clean rooms are the top three rows above, dormant 752–1258 days,
+in a segment vendors size at $2.8B→$14.6B (Dataintelo, vendor figure). The
+primitives are alive; the product layer is not. Assemble, do not fork —
+`compose/patterns.md` Pattern 14.
+
+**Dead slugs dropped this pass (`ls-remote` refs=0):**
+`fvdrgserge/openadserver` (cited by a 2026 listicle as a "self-hosted
+alternative to Google Ad Manager"), `IABTechLab/uid2-docs` (correct slug is
+**`uid2docs`**, no hyphen), `InteractiveAdvertisingBureau/AAMP` (correct owner
+is **`IABTechLab`**), `InteractiveAdvertisingBureau/aamp-spec`,
+`adcontextprotocol/adcp-spec`, `AgenticAdvertising/adcp`,
+`tiktok-privacy-innovation/privacy-go`.
+
+**Method note — the licence probe produced a false negative.**
+`Optable/match` was first recorded here as having no licence after probing
+eight filenames on two branches. The file is **`LICENCE.md`** (British spelling
+*with* `.md`). Add it to every probe. And: **a filename probe cannot prove
+absence — `git ls-tree HEAD --name-only` on the bare clone can**, which is how
+OpenRTB's missing licence was confirmed rather than guessed.
+
 ## 2026-11-22 (pass 2)
 
 **Theme: fiscalisation is the best-equipped layer in retail open source, and its licence changes at every

@@ -192,3 +192,86 @@ exactly one repo, [Staffjoy/v2](https://github.com/Staffjoy/v2) (MIT, 1686★), 
 (Apache-2.0, 1879★, pushed 2026-11-20) as the constraint engine, with the labour rules, the UI and the
 mobile app as Globant-owned work. That is a product, not an integration — and it is the correct way to
 describe it in a proposal.
+
+## Added 2026-11-22 (pass 3) — retail media platforms, and the licence trap inside one of them
+
+A retail media network needs four platform pieces: something to **serve** the
+ad, something to **identify** the shopper, something to **collect** the
+behaviour, and something to **report** to the advertiser. All four exist in
+open source. Only one of them is retail-specific, and that one is none of them
+— there is **no open-source retail media platform** (see the gap note below).
+
+Every row measured 2026-11-22: refs by `ls-remote`, last commit by bare
+`--depth 1` clone, licence read at `raw.githubusercontent.com` with byte size.
+
+### Serve, identify, collect, report
+
+| Platform | Repo | Licence (read at source) | refs | Last commit | Customise with AI on top? |
+|---|---|---|---|---|---|
+| **Revive Adserver** | [revive-adserver/revive-adserver](https://github.com/revive-adserver/revive-adserver) | ⚠️ **GPL-2.0** (15235B, `master`) | 858 | 2026-11-22 (0d) | The only mature OSS ad server. Alive, but copyleft — wrap, don't embed |
+| **Prebid Server** | [prebid/prebid-server](https://github.com/prebid/prebid-server) | Apache-2.0 (10759B, `master`) | 4327 | 2026-11-19 (3d) | Self-hosted auction. Permissive. Add bid-shading / yield models as modules |
+| **UID2 Operator** | [IABTechLab/uid2-operator](https://github.com/IABTechLab/uid2-operator) | Apache-2.0 (11348B) | 4067 | 2026-11-22 (0d) | Run your own identity service. The prerequisite for selling audiences |
+| **Apache Pinot** | [apache/pinot](https://github.com/apache/pinot) | Apache-2.0 (11356B, `master`) | 17558 | 2026-11-21 (1d) | Advertiser-facing campaign reporting at ad-event volume |
+| **Apache Druid** | [apache/druid](https://github.com/apache/druid) | Apache-2.0 (19315B, `master`) | 17408 | 2026-11-21 (1d) | Same role; pick on team familiarity, not features |
+| **Apache Superset** | [apache/superset](https://github.com/apache/superset) | Apache-2.0 (11585B, `master`) | 30919 | 2026-11-22 (0d) | The advertiser self-service dashboard, without building a UI |
+| **Matomo** | [matomo-org/matomo](https://github.com/matomo-org/matomo) | ⚠️ **GPL-3.0** (35146B) | 12619 | 2026-11-23 (0d) | First-party analytics, self-hosted. Alive but copyleft. ⚠️ default branch is **`6.x-dev`** |
+
+### ⚠️ Snowplow: one product, three licences, and a zero-byte licence file
+
+Snowplow is the usual open-source answer for the first-party behavioural
+pipeline a retail media network runs on. Its licence is routinely reported as
+Apache-2.0. **That is true only of the repository nobody deploys.**
+
+| Repo | What it is | Licence (read at source) | refs | Last commit |
+|---|---|---|---|---|
+| [snowplow/snowplow](https://github.com/snowplow/snowplow) | Umbrella / meta repo | **Apache-2.0** (11359B) — and also ships a **0-byte `LICENSE.md`** | 2984 | 2026-10-19 (34d) |
+| [snowplow/stream-collector](https://github.com/snowplow/stream-collector) | The collector you actually run | ⚠️ **Snowplow Limited Use License Agreement v1.1 (Nov 2024)** (6637B) | 514 | 2026-10-24 (29d) |
+| [snowplow/enrich](https://github.com/snowplow/enrich) | The enrichment you actually run | ⚠️ **Snowplow Limited Use License Agreement v1.1** (6637B) | 1061 | 2026-10-24 (29d) |
+| [snowplow/snowplow-javascript-tracker](https://github.com/snowplow/snowplow-javascript-tracker) | The tag in the storefront | **BSD-3-Clause** (1546B) | 5941 | 2026-11-07 (15d) |
+
+So the two server-side components that carry every event — collector and
+enrich — are under a **proprietary limited-use licence**, while the repo an
+SBOM scanner or a listicle points at declares Apache-2.0, and the browser
+tracker is BSD-3. A team that reads "Snowplow is Apache-2.0" and builds a
+client's retail media data pipeline on it has mislicensed the core of the
+platform.
+
+**The 0-byte `LICENSE.md` deserves its own note.** `snowplow/snowplow` ships
+both `LICENSE` (Apache-2.0, 11359B) and `LICENSE.md` at **zero bytes**. Tooling
+that prefers the `.md` variant, or that merely tests for a filename, reads an
+empty grant. Cycle 8 established that **a short licence file is a pointer, not
+a licence**; this pass adds the degenerate case — **an empty licence file is
+not a licence either, and it can mask a real one sitting beside it.**
+
+**Generalised rule, and it is the most reusable thing in this pass: the licence
+of a product is not the licence of its repository — it is the licence of each
+component you deploy.** Audit per artefact, not per project. Cycle 8 reached
+the same place from Meilisearch (a 468-byte pointer declaring `MIT AND
+OpenLDAP AND BUSL-1.1`); Snowplow is the same lesson with the components split
+across four repos instead of one file.
+
+### ⚠️ Second default-branch trap this pass
+
+`matomo-org/matomo`'s default branch is **`6.x-dev`**, not `main` or `master`.
+With `facebookexperimental/Robyn` (default `accuracy/allocator_v2_fixes`), that
+is **two of this pass's repos whose default branch is neither `main` nor
+`master`**. Anyone cloning for a client build gets development code; any ingest
+measuring liveness via the default branch measures the wrong branch. **Resolve
+the default branch, then measure `main`/`master` by name too.**
+
+### Gap: there is no open-source retail media platform
+
+Searched 2026-11-22. `retail media stars:>=50` returns **one** repo and it is a
+2020 machine-learning tutorial. `retail media network stars:>=10` returns
+**three** and all three are Windows DxDiag dumps. `clean room advertising
+stars:>=50` returns **zero**.
+
+Meanwhile `ad server stars:>=200` returns **51**. The generic adtech platform
+layer is populated; the retail-shaped layer does not exist. There is no Odoo of
+retail media, no OpenMRS of retail media — **nothing to fork.** A retail media
+capability is assembled from the permissive rows above, which is what
+`compose/patterns.md` Patterns 14–16 do, and it is therefore a place where
+Globant's integration work is the product rather than a thin layer over
+someone else's platform. This joins markdown/assortment optimisation (cycle 8)
+and shelf vision (pass 2) on the short list of retail capabilities with **no
+open-source floor at all**.

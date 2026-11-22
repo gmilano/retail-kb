@@ -424,3 +424,209 @@ that no face embedding and no cross-visit re-identifier ever exists.
   **3D-printer filament manager**; `queue management` matches software job queues; `pos system` matches
   **pose estimation** (`AlphaPose`, 8630★) and PowerShell SSH. Cycle 8's Minecraft-mod incident
   (`hopperOptimizations` carried as retail inventory intelligence) was the same failure mode.
+
+## Pattern 14 — Assemble a clean room from live primitives (the one nobody maintains)
+
+**Why this pattern exists.** The data clean room is where a retailer and a
+brand compare audiences without either handing over its customer list. It is
+the layer every retail media network buys from a vendor, and vendors size it at
+**$2.8B (2025) → $14.6B (2034)** with measurement & attribution the fastest
+application (22.6% CAGR, Dataintelo). **Every open-source clean room is
+dead:** `tiktok-privacy-innovation/PrivacyGo-DataCleanRoom` 752d,
+`Snowflake-Labs/sfquickstart-data-clean-room` 986d (and a Snowflake-bound demo,
+not a product), `qascade/dcr` 1258d and AGPL-3.0. **Do not fork any of them.**
+The primitives, however, are alive and permissive.
+
+**Parts (all measured 2026-11-22, all Apache-2.0):**
+
+| Part | Repo | Licence | Last commit | Role |
+|---|---|---|---|---|
+| Private matching | [OpenMined/PSI](https://github.com/OpenMined/PSI) | Apache-2.0 (11356B, `master`) | 2026-09-20 (63d) | ECDH PSI; returns intersection **or only its size**. C++/JS/Go/Python/Rust |
+| Private join + aggregate | [google/private-join-and-compute](https://github.com/google/private-join-and-compute) | Apache-2.0 (11357B, `master`) | 2026-03-09 (258d) | Intersection **plus a sum over the matched rows** — the actual clean-room operation |
+| Noise & budget | [google/differential-privacy](https://github.com/google/differential-privacy) | Apache-2.0 (13499B) | 2026-11-20 (2d) | DP aggregation and **privacy-budget accounting** across C++/Go/Java/Python |
+| Serving layer | [apache/pinot](https://github.com/apache/pinot) | Apache-2.0 (11356B, `master`) | 2026-11-21 (1d) | Query results at ad-event volume |
+| Advertiser UI | [apache/superset](https://github.com/apache/superset) | Apache-2.0 (11585B, `master`) | 2026-11-22 (0d) | Self-service dashboards without building a front end |
+
+**Wiring:**
+
+1. **Normalise identifiers on both sides before any crypto.** Retailer hashes
+   its customer identifiers; brand hashes its own. Use
+   `IABTechLab/uid2-operator` (Apache-2.0, 0d) if a shared pseudonymous
+   identifier is wanted, rather than inventing a hashing scheme.
+2. **Match with `private-join-and-compute`, not plain PSI**, whenever the
+   question is "how much did matched customers spend" rather than "who
+   overlaps". Plain `OpenMined/PSI` is the right choice for **overlap size
+   only** — and overlap-size-only is often all the brand is contractually
+   permitted to learn.
+3. **Put `google/differential-privacy` in front of every returned
+   aggregate**, with a per-partner privacy budget that is *persisted*. The
+   dead clean rooms all shipped matching; what they lacked, and what makes a
+   clean room a clean room, is **query restriction, budget accounting and audit
+   logging.** That is the part you are building.
+4. **Materialise approved aggregates into Pinot**, expose them through Superset
+   per advertiser. Never let an advertiser query the raw join.
+5. **Log every query, its budget draw and its requester.** This is the audit
+   surface a retailer's legal team will ask for, and it is the reason this is a
+   product rather than a script.
+
+**What you are honestly selling:** not cryptography — the cryptography is
+Google's and OpenMined's — but **governance around it**: budgets, query
+allow-lists, audit, and multi-tenant isolation. That is also precisely why
+`compose` work here is defensible IP (see `intel/market.md` positioning).
+
+**⚠️ Do not** reach for `tiktok-privacy-innovation/PrivacyGo` (667d) even
+though its **DPCA-PSI** — intersection statistics under differential privacy —
+is conceptually the closest thing to this pattern in one package. It is
+dormant. Read it for the design, build on the live primitives.
+
+## Pattern 15 — Make retail media inventory agent-sellable (AdCP sales agent)
+
+**Why.** Agent-mediated ad buying became buildable in 2026. The duopoly
+(Amazon Ads, Walmart Connect — **89.5% of US incremental spend**) will be
+reachable by buying agents early; a second-tier retailer will not. This is the
+pattern that closes that gap, and it is the advertising counterpart to
+cycle 8's "agent-reachable storefront".
+
+**Parts:**
+
+| Part | Repo | Licence | Last commit | Role |
+|---|---|---|---|---|
+| Protocol | [adcontextprotocol/adcp](https://github.com/adcontextprotocol/adcp) | Apache-2.0 (10767B) | 2026-11-22 (0d) | AdCP: discovery, media buying, creative, audience activation, reporting |
+| Sales agent | [prebid/salesagent](https://github.com/prebid/salesagent) | Apache-2.0 (10767B) | 2026-11-23 (0d) | Exposes inventory to agents over **MCP + A2A**; 16 AdCP tools, GAM integration, multi-tenant, admin UI |
+| Auction | [prebid/prebid-server](https://github.com/prebid/prebid-server) | Apache-2.0 (10759B, `master`) | 2026-11-19 (3d) | Server-side auction behind the agent |
+| Identity | [IABTechLab/uid2-operator](https://github.com/IABTechLab/uid2-operator) | Apache-2.0 (11348B) | 2026-11-22 (0d) | Pseudonymous identity for audience targeting |
+
+**Wiring:**
+
+1. **Stand up `prebid-server`** as the auction, with the retailer's onsite
+   placements as inventory. This part is mature and uncontroversial.
+2. **Put `prebid/salesagent` in front of it** as the AdCP sales-agent role.
+   It speaks MCP and A2A, so an agent on either transport can discover
+   inventory, buy it, submit creative and pull reporting.
+3. **Pin the protocol version and guard the pin in CI.** Copy the upstream
+   approach exactly: `salesagent` pins the `adcp` SDK in `pyproject.toml` and
+   enforces it with `tests/unit/test_adcp_spec_version.py`, which **fails the
+   build on spec drift.** This is the single most important engineering
+   decision in the pattern, because the protocol is pre-1.0 and `v2.0.0`
+   already shipped breaking changes.
+4. **Keep an adapter boundary at the protocol edge.** AdCP and IAB's AAMP are
+   **not wire-compatible**. AdCP is the only one buildable today
+   (8610 refs vs AAMP's 5 refs and two files), so build on AdCP — but do not
+   let its object model leak into the retailer's domain code.
+5. **Attach identity via `uid2-operator`** so audience segments are sellable
+   without exposing customer records.
+
+**⚠️ Status discipline.** `prebid/salesagent` self-describes as **alpha**, "a
+pre-1.0 implementation of a pre-release protocol", and "one of several AdCP
+sales-agent implementations, not a sole or canonical reference". Put that
+sentence in the client deck. The codebase is substantial and functional; the
+standard under it is not finished.
+
+## Pattern 16 — Closed-loop measurement that survives an audit
+
+**Why.** Retail media's competitive battlefront is **measurement
+transparency** (Mordor). An advertiser that cannot verify incrementality
+eventually stops paying. The open-source measurement layer is good — **as long
+as you pick the two libraries that are still alive.**
+
+**Parts:**
+
+| Part | Repo | Licence | Last commit | Role |
+|---|---|---|---|---|
+| MMM (default) | [google/meridian](https://github.com/google/meridian) | Apache-2.0 (11357B) | 2026-11-20 (2d) | Bayesian MMM, geo-level priors, dynamic baseline via splines/random walks, principled uncertainty |
+| MMM + CLV | [pymc-labs/pymc-marketing](https://github.com/pymc-labs/pymc-marketing) | Apache-2.0 (11356B) | 2026-11-22 (0d) | MMM **and customer lifetime value and Bass diffusion** in one Bayesian framework |
+| Calibration | [facebookincubator/GeoLift](https://github.com/facebookincubator/GeoLift) | MIT (1092B, `LICENSE.md`) | 2026-04-01 (235d) | Geo experiments producing a real lift estimate |
+| Reporting | [apache/druid](https://github.com/apache/druid) / [apache/pinot](https://github.com/apache/pinot) | Apache-2.0 | 2026-11-21 (1d) | Serve the numbers |
+
+**Wiring:**
+
+1. **Run a geo holdout with `GeoLift` first.** A model calibrated to nothing is
+   an opinion. GeoLift gives a measured lift for a known spend.
+2. **Feed that lift into the MMM as a prior.** This is why Meridian is the
+   default: geo-level priors and explicit uncertainty are native to it, so a
+   lift test enters as evidence rather than a fudge factor.
+3. **Use `pymc-marketing` instead when the engagement also needs CLV** — it
+   covers MMM, CLV and Bass diffusion in one library, which avoids maintaining
+   two Bayesian stacks for one client.
+4. **Report intervals, never point ROAS.** Both libraries are Bayesian; the
+   posterior is the deliverable. A single ROAS number is what the advertiser
+   stops trusting.
+5. **Materialise into Druid/Pinot, surface in Superset.**
+
+**⚠️ Do not start here:** `facebookexperimental/Robyn` (MIT) is **dormant
+~513 days** and its **default branch is a feature branch**
+(`accuracy/allocator_v2_fixes`, 2024-11-21) — a plain clone gets non-release
+code, despite 2026 commentary still calling it an "open-source giant".
+`google/lightweight_mmm` (523d) is **Google's own superseded predecessor to
+Meridian.** Both are plausible picks from a listicle and both are wrong.
+
+**⚠️ And do not promise MMM is now easy.** The consistent finding across
+commentary is that open source lowered the **software** barrier, not the
+**expertise** barrier. Staff it accordingly.
+
+## Pattern 17 — EMEA gate: label AI-generated ad creative (Article 50)
+
+**Why, with the right scope.** EU AI Act **Article 50 transparency has been in
+force since 2026-08-02** and was not postponed by the Digital Omnibus.
+**2026-12-02** — days after this pass — binds **providers of systems that
+generate synthetic content placed on the market before 2026-08-02**, covering
+**Article 50(2) in full: machine-readable marking and detectability.** It does
+**not** bind deployers, non-synthetic systems, or paragraphs 1/3/4, which
+already apply. **2027-02-02** adds a watermark-detection interoperability duty
+on providers. **AI-generated ad creative is synthetic content**, so a retail
+media network generating creative, product imagery or virtual models is in
+scope.
+
+**Wiring — a gate in the creative pipeline, not a policy document:**
+
+1. **Classify every creative asset at ingest**: human-made, AI-assisted, or
+   AI-generated. Store the classification as a required field; reject assets
+   without it. This is the step that makes the rest provable.
+2. **Apply machine-readable marking at generation time**, not at publication.
+   Marking must survive the resize/transcode chain, so mark the master and
+   re-verify after each derivative is produced.
+3. **Separate provider duties from deployer duties in the engagement
+   contract.** If the client generates creative with a third-party model, the
+   **provider** carries the Article 50(2) marking duty and the **retailer**
+   carries paragraphs 1/3/4 as deployer. Both need to be written down; the
+   retailer owns the consumer-facing exposure either way.
+4. **Keep a detectability test in CI.** Treat "can an independent detector read
+   our marking?" as a build check, and re-run it before **2027-02-02** when
+   interoperability becomes a duty.
+5. **Log the labelling decision per asset, per market.** Article 50 is EU; the
+   same creative may ship unmarked elsewhere, and the log is what proves the
+   EU path was taken.
+
+**⚠️ Scope honestly.** This KB previously carried 2026-12-02 as a blanket
+"systems already on market" deadline. That was too broad. Quoting the wrong
+scope to a client is worse than quoting no date, because it is checkable.
+
+## Anti-patterns added 2026-11-22 (pass 3)
+
+- **❌ Quoting a retail media market size without saying which market.** WARC
+  says **$200.4B** (ad spend); Mordor says **~$25.5B** (networks/technology).
+  The 8x gap is a definition, not a disagreement. Always state which.
+- **❌ Treating AAMP and AdCP as equivalent options to hedge between.** AdCP:
+  8610 refs, commits today, working implementations. `IABTechLab/AAMP`: two
+  files, one commit, 61 days. Keep an adapter boundary, but build on AdCP.
+- **❌ Reading a licence from the repo a listicle links.** Snowplow's umbrella
+  repo says Apache-2.0; `stream-collector` and `enrich` — the services you
+  deploy — are **Snowplow Limited Use License v1.1**. Audit per deployed
+  artefact.
+- **❌ Trusting a press release over a LICENSE file.** The Trade Desk announced
+  UID2 as **BSD-2**; the repo is **Apache-2.0** (11348B).
+- **❌ Vendoring `InteractiveAdvertisingBureau/openrtb`.** It has **no licence
+  file** (root tree verified). Implement from the spec.
+- **❌ Cloning Robyn or Matomo and expecting `main`.** Their default branches
+  are `accuracy/allocator_v2_fixes` and `6.x-dev`. Resolve the default branch
+  before building or measuring.
+- **❌ Forking a dormant clean room** because it is the only thing shaped like
+  the requirement. All three are 752–1258 days dead. Assemble from live
+  primitives (Pattern 14).
+- **❌ Believing a keyword search in retail.** `retail media network
+  stars:>=10` returns three Windows DxDiag dumps; `data clean room stars:>=20`
+  returns 18 hits of which 3 are real. Open every row.
+- **❌ Writing star counts into this KB.** They are not measurable through the
+  available channel (`gh api repos/<slug>` → 403 for non-attached repos), and
+  this KB has shipped fabricated star curves twice. Record refs and last-commit
+  dates, which **are** measurable.

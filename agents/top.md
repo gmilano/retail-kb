@@ -167,3 +167,94 @@ Apache/MIT-licensed detector, with the Ultralytics weights and package left out 
 - `footfall people counting retail stars:>=50` → **0.**
 - `retail loss prevention theft detection stars:>=20` → **0.** Confirms cycle 8's finding with a tighter
   query; shrink has no open-source floor in either channel.
+
+## Added 2026-11-22 (pass 3) — the retail media plane: agents that buy and sell advertising
+
+Retail media — a retailer selling ads against its own first-party data — had
+**zero mentions anywhere in this KB** before this pass ("retail media",
+"advertising" and "clean room" all returned no hits across all eight files).
+This section covers the agent-shaped part of it. The repository tables live in
+`repos/foundations.md`; the market numbers, which vary by a factor of eight
+depending on definition, live in `intel/market.md`.
+
+### The agent layer here is two repos wide — measured, not estimated
+
+| Agent | Repo | Licence (read at source) | refs | Last commit | What it actually does |
+|---|---|---|---|---|---|
+| Prebid Sales Agent | [prebid/salesagent](https://github.com/prebid/salesagent) | Apache-2.0 (10767B) | 2354 | 2026-11-23 (0d) | Server implementing the AdCP **sales-agent** role: exposes ad inventory to AI agents over **MCP and A2A**, integrates Google Ad Manager, multi-tenant isolation, 16 AdCP tools, admin UI, full campaign lifecycle from discovery to reporting |
+| Setupad Sales Agent | [Setupad/salesagent](https://github.com/Setupad/salesagent) | Apache-2.0 (10767B) | 10 | 2026-10-19 (34d) | An independent second deployment of the same role — the evidence that the role has more than one implementer |
+
+That is the entire inventory of real, licence-verified, agent-shaped retail
+media code found on 2026-11-22. **Two rows, so two rows are written.** The
+searches that produced nothing are listed below, because an informed gap is
+information and a padded table is not.
+
+**Read `prebid/salesagent`'s own status note before it goes in a client deck:**
+*"Status: alpha. A pre-1.0 implementation of a pre-release protocol, under
+active development. APIs still change between releases — `v2.0.0` introduced
+breaking changes — so pin a version and expect to adapt on upgrade. It is one
+of several AdCP sales-agent implementations, not a sole or canonical
+reference."* The codebase is substantial and functional; the protocol under it
+is not finished. It pins the `adcp` SDK exactly and enforces the pin with a CI
+guard that fails on drift — copy that pattern for any pre-1.0 protocol work.
+
+**Slug note:** `adcontextprotocol/salesagent` and `prebid/salesagent` return
+identical HEAD SHAs (`dcd14d0f`) and identical ref counts (2354). By the rename
+test, they are **one repository**; `prebid/salesagent` is canonical (it serves
+the README, which states "maintained under Prebid.org"). Do not list both.
+
+### The protocol under the agents, and an asymmetry worth naming
+
+Cycle 8 mapped the agentic-*commerce* protocols (UCP, ACP, AP2, x402) and
+concluded that **protocol neutrality is cheaper than betting on a winner**.
+Agentic *advertising* has its own protocol layer, and the same conclusion holds
+— but the two candidates are nothing like evenly matched.
+
+| Protocol | Repo | Licence | refs | Last commit | State |
+|---|---|---|---|---|---|
+| **AdCP** (Ad Context Protocol) | [adcontextprotocol/adcp](https://github.com/adcontextprotocol/adcp) | Apache-2.0 (10767B) | **8610** | 2026-11-22 (0d) | Spec + SDKs, transported over **MCP and A2A**. Ships `CHARTER.md`, `IPR_POLICY.md`, `CONTRIBUTORS.md`, changesets, Dockerfile. Governance under AgenticAdvertising.org |
+| **AAMP** | [IABTechLab/AAMP](https://github.com/IABTechLab/AAMP) | Apache-2.0 (11356B) | **5** | 2026-09-22 (61d) | ⚠️ The repository contains **exactly two files — `LICENSE` and `README.md` — and one commit** ("Revise section titles in README") |
+
+Trade press in 2026 frames these as rival standards "dividing the advertising
+industry", with the open question being whether they converge, coexist or
+compete. On repository evidence the contest is not symmetric: one side has
+8,610 refs, governance documents and commits landing during this pass; the
+other has a README.
+
+**State this precisely, because the imprecise version is wrong.** What is
+measured is **GitHub presence, not the existence of a specification.** IAB Tech
+Lab routinely publishes specs through its own site and working groups rather
+than as repository code, so AAMP may well exist as a document that this
+measurement cannot see. The decision-relevant conclusion is narrower and still
+firm: **you cannot build against AAMP from GitHub today, and you can build
+against AdCP today.** The AdCP FAQ states the two are **not wire-compatible**
+and that implementing one does not require the other — so this is a real fork
+in the road, not a layering choice.
+
+**Falsifiable prediction, recorded so a later cycle can score it:** if AAMP is
+a genuine competitor, `IABTechLab/AAMP` acquires implementation code beyond a
+README before **2027-05-22**. If it is still two files then, AdCP is the only
+buildable agentic-advertising protocol and should be treated as such rather
+than hedged against.
+
+### Agent-layer measurements that came back empty (2026-11-22)
+
+| Query | Result |
+|---|---|
+| `gh api search/repositories q='adcp agentic advertising stars:>=5'` | **0** — a fifth measured false negative for `search/repositories` (adcp itself has 8610 refs) |
+| `retail media stars:>=50` | **1**, and it is a 2020 generic ML regression repo with no licence |
+| `retail media network stars:>=10` | **3**, all Windows-7/Minecraft DxDiag dumps — see below |
+| `clean room advertising stars:>=50` | **0** literal |
+
+### ⚠️ Cycle 8's Minecraft defect reproduced itself in this pass
+
+Cycle 8's flagship finding was that `2No2Name/hopperOptimizations` — a
+**Minecraft mod** about in-game hoppers — had been shipped in this very file as
+retail *inventory* intelligence. Querying `retail media network stars:>=10`
+today returns `dovnel/Win-7` (2015), `denman2328/Help` (2013) and
+`Camus777/Minecraft` (2014): DxDiag system-information dumps in which
+"Retail", "Media" and "Network" all appear as ordinary Windows vocabulary.
+
+**Three of three hits are garbage, and all three look like plausible repos in
+a results list.** The defence is not a better query; it is opening every row
+before writing it. Nothing from those queries entered this KB.

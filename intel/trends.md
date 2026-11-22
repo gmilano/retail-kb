@@ -276,3 +276,194 @@ analogy.
   to a single market-research page. **Unverified.**
 - North America remains the weakest-sourced region, a second cycle running; the reported FTC order barring a
   retailer from facial recognition for five years **does not name the retailer** in the source.
+
+## Added 2026-11-22 (pass 3) — the retail media plane
+
+### 19. Retail's largest profit pool had no vocabulary in this knowledge base
+
+Before this pass, **"retail media", "advertising" and "clean room" returned
+zero hits across all eight files.** Nine cycles described retail as storefront,
+catalogue and store — the cost side — and omitted the part that increasingly
+pays for them. Vendor estimates for 2026 range from **~$25.5B to $200.4B**
+depending on definition (see `intel/market.md`); either way it was missing
+entirely.
+
+This is the third consecutive pass to find a whole plane absent (pass 1: product
+data; pass 2: the physical store). **The lesson is now a method, not an
+accident: grep ~25-50 candidate domain terms against all eight files *before*
+searching the web.** It cost one call and located this gap immediately. Terms
+still returning zero after this pass, as candidates for the next one:
+`last mile`, `route optim`, `cold chain`, `perishable`, `food waste`,
+`recommerce`, `resale`, `circular`, `BNPL`, `accessib`/`WCAG`/`EAA`,
+`virtual try-on`, `CLV`/`lifetime value`, `contact cent`, `warranty`,
+`feature store`.
+
+### 20. The money and the open-source floor are completely decoupled here
+
+`retail media stars:>=50` returns **one** repo — a 2020 generic ML regression
+tutorial. `retail media network stars:>=10` returns **three**, all Windows
+DxDiag dumps. `clean room advertising stars:>=50` returns **zero**. Meanwhile
+`ad server stars:>=200` returns **51**.
+
+The generic adtech substrate is populated; **the retail-shaped layer does not
+exist.** There is no Odoo of retail media. A retail media capability must be
+*assembled* from permissive adtech and privacy primitives — which is both the
+risk and the opportunity, and puts retail media on this KB's short list of
+capabilities with no open-source floor, next to markdown/assortment
+optimisation and shelf vision.
+
+### 21. Agentic *advertising* arrived, and its standards contest is wildly asymmetric
+
+Cycle 8 mapped agentic *commerce* (UCP, ACP, AP2, x402 — all Apache-2.0) and
+concluded protocol neutrality beats picking a winner. Advertising now has the
+same layer:
+
+- **AdCP** (`adcontextprotocol/adcp`): Apache-2.0, **8610 refs**, commits on the
+  day of this pass, governance documents (`CHARTER.md`, `IPR_POLICY.md`),
+  transported over **MCP and A2A**, docs at v3.2.x after an Oct-2025 launch at
+  v2.0.0. Working implementations exist (`prebid/salesagent`, Apache-2.0, alpha).
+- **AAMP** (`IABTechLab/AAMP`): Apache-2.0, **5 refs**, **two files — `LICENSE`
+  and `README.md` — one commit**, last touched 61 days before this pass.
+
+Trade press frames these as rival standards dividing the industry. Stated
+precisely: this measures **GitHub presence, not the existence of a
+specification** — IAB Tech Lab publishes specs off-GitHub, so AAMP may exist as
+a document. The decision-relevant version: **AdCP is buildable today and AAMP
+is not**, and the AdCP FAQ states the two are **not wire-compatible**, so this
+is a fork in the road rather than a layering choice. Prediction to score:
+AAMP gains implementation code before **2027-05-22**, or it is not a
+competitor.
+
+### 22. The clean room is the one layer every retailer buys and nobody maintains
+
+The four-step gradient in this plane (`repos/foundations.md`) ends in a hole:
+
+| Step | State |
+|---|---|
+| SERVE IT (auction) | ✅ Prebid stack, Apache-2.0, commits within 0–4 days |
+| SELL IT TO AN AGENT | ✅ AdCP + salesagent, Apache-2.0, alive, alpha |
+| IDENTIFY IT (identity/consent) | ✅ UID2 operator + TCF, Apache-2.0, alive |
+| PROVE IT (measurement) | ⚠️ **2 of 5** famous libraries alive |
+| MATCH IT PRIVATELY (clean room) | ❌ **Zero maintained options** |
+
+Every open-source data clean room found is dormant **752–1258 days**
+(`PrivacyGo-DataCleanRoom` 752d, Snowflake quickstart 986d — and a demo, not a
+product — `qascade/dcr` 1258d and AGPL-3.0). The **primitives** are alive and
+permissive: `google/differential-privacy` (2d), `OpenMined/PSI` (63d),
+`google/private-join-and-compute` (258d).
+
+So the layer with the strongest vendor growth story — clean rooms at
+$2.8B→$14.6B, measurement & attribution fastest at 22.6% CAGR (Dataintelo,
+vendor) — has **no maintained open-source alternative at all.** Assemble from
+primitives, don't fork a corpse: `compose/patterns.md` Pattern 14.
+
+### 23. Two of five famous measurement libraries are alive; the listicles say five
+
+Measured 2026-11-22: **`google/meridian` (2d) and `pymc-labs/pymc-marketing`
+(0d) are alive.** `facebookincubator/GeoLift` is slowing (235d).
+**`google/lightweight_mmm` (523d) is superseded by Google's own Meridian.**
+**`facebookexperimental/Robyn` is dormant ~513 days** while 2026 commentary
+still presents it as one of two "open-source giants" beside Meridian.
+
+Start new measurement work on Meridian (Bayesian, geo priors) or
+PyMC-Marketing (MMM + CLV + Bass diffusion in one library). Calibrate with
+GeoLift while it lasts. Do not start on Robyn or lightweight_mmm.
+
+### 24. Default branch ≠ `main`, and it corrupts both builds and liveness data
+
+Two of this pass's repos have a default branch that is neither `main` nor
+`master`:
+
+- **`facebookexperimental/Robyn` → `accuracy/allocator_v2_fixes`** (a feature
+  branch, last touched 2024-11-21). Default-branch tooling reports **731 days**
+  dormant; `main` is **513 days**. A plain `git clone` yields non-release code.
+- **`matomo-org/matomo` → `6.x-dev`** (development branch, alive 0d).
+
+Both consequences matter: a client build gets the wrong code, and this KB's own
+dormancy numbers get the wrong branch. **Resolve the default branch, then
+measure `main`/`master` by name as well.** This pass made the Robyn error
+first and caught it only by re-measuring.
+
+### 25. The licence of a product is not the licence of its repository
+
+Cycle 8 established that a short licence file is a pointer, not a licence
+(Meilisearch: 468 bytes declaring `MIT AND OpenLDAP AND BUSL-1.1`). This pass
+extends it twice:
+
+- **Snowplow is three licences in one product.** `snowplow/snowplow` declares
+  **Apache-2.0** (11359B), but **`stream-collector` and `enrich` — the two
+  services you actually deploy — are under the proprietary Snowplow Limited Use
+  License Agreement v1.1 (6637B)**, and the browser tracker is BSD-3. A team
+  reading "Snowplow is Apache-2.0" mislicenses the core of a first-party data
+  pipeline.
+- **An empty licence file is not a licence.** `snowplow/snowplow` ships a
+  **0-byte `LICENSE.md`** beside its real `LICENSE`. Tooling preferring the
+  `.md` variant, or merely testing for a filename, reads an empty grant.
+
+**Audit per deployed artefact, not per project.**
+
+### 26. Two public licence claims were wrong, in opposite directions
+
+- **UID2 is Apache-2.0.** The Trade Desk's own press release says the donated
+  code would be **BSD-2**; `unifiedid.com` says Apache-2.0. Measured,
+  `IABTechLab/uid2-operator/LICENSE` is the full **Apache-2.0** text, 11348
+  bytes. **A press release is not a licence** — the fourth industry in which a
+  vendor announcement misstated the licence of its own donated code.
+- **OpenRTB has no licence at all.**
+  `InteractiveAdvertisingBureau/openrtb` (222d) ships only spec markdown — root
+  tree verified, no licence under eight candidate names on either branch. The
+  substrate of all programmatic advertising is unlicensed. Implement from the
+  spec; do not vendor the repo (the `bacen/pix-api` treatment from cycle 8).
+
+### 27. The EMEA date cycle 8 recorded was real but its scope was too broad
+
+Cycle 8 recorded a "transitional deadline of 2026-12-02 for systems already on
+market". Refined from this pass's sources, **2026-12-02 binds providers of
+systems that generate synthetic content and were placed on the market before
+2026-08-02, and covers Article 50(2) in full — machine-readable marking and
+detectability.** It does **not** bind deployers, systems that do not generate
+synthetic content, or paragraphs 1, 3 and 4, which have applied since
+**2026-08-02**. A further date, **2027-02-02**, requires providers to implement
+a watermark-detection interoperability solution.
+
+This matters for retail media because **AI-generated ad creative is synthetic
+content.** It also matters as a method note: **this KB's own prior entries need
+re-scoping, not just extending** — a date carried forward at the wrong scope is
+a wrong fact with a correct number in it.
+
+### 28. The keyword collision is a structural property of this sector, not bad luck
+
+Cycle 8's flagship defect was a **Minecraft mod** (`2No2Name/hopperOptimizations`,
+about in-game hoppers) shipped in `agents/top.md` as retail *inventory*
+intelligence. This pass queried `retail media network stars:>=10` and got
+`dovnel/Win-7`, `denman2328/Help` and `Camus777/Minecraft` — **DxDiag
+system-information dumps from 2013–2015**, in which "Retail", "Media" and
+"Network" all occur as ordinary Windows vocabulary. **Three of three hits,
+every one plausible-looking in a results list.**
+
+Retail's vocabulary is made of common English words, so keyword retrieval in
+this industry has a structurally high false-positive rate. **The only defence
+is opening every row before writing it.** Also recorded: `data clean room
+stars:>=20` returns 18 hits of which **3 are real** (the rest are Android
+"Clean Architecture"/Room-database apps, a news reader, a coin tracker), and
+`incrementality stars:>=20` returns 952 and was **discarded as contaminated**.
+
+### Source-quality notes for this section
+
+- **Every repo claim** here was measured on 2026-11-22: `ls-remote` for
+  existence and refs, bare `--depth 1 --filter=blob:none` clone for last commit
+  date, `raw.githubusercontent.com` read for licence text with byte size
+  recorded, `ls-tree` to prove absence. **Star counts are deliberately omitted**
+  — `gh api repos/<slug>` is 403 for non-attached repos, so stars are not
+  measurable through the available channel, and this KB has twice shipped
+  fabricated star curves. An unmeasurable field is better left blank.
+- **Every market figure** is vendor or trade research (WARC, EMARKETER, Grand
+  View, Persistence, Mordor, Research and Markets, Dataintelo, Deloitte,
+  McKinsey, Coresight, Bain, Criteo, Retail Economics) with differing scopes
+  and undisclosed methods. Attributed inline, treated as directional.
+- **LATAM's headline figures are co-produced with the market leader** (EMARKETER
+  with Mercado Ads, which holds >50% share). Cited with the conflict named.
+- **Regulation was searched per region and mostly not found.** EMEA has dated,
+  statutory obligations. North America, APAC and LATAM returned **no citable
+  retail-media-specific regulation**, and that is recorded as a gap in each
+  regional section rather than smoothed over.

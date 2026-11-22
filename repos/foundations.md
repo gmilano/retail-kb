@@ -263,3 +263,202 @@ no floor either, **store execution is now the second confirmed place to build pr
 - **In compliance code, forks beat stars as an adoption signal.** `OCA/l10n-mexico` has 20★ / **56 forks**
   and `OCA/l10n-chile` 10★ / **41 forks** (ratios 2.8 and 4.1). Nobody stars a tax localisation; they fork
   it to patch it for a client. A star-gated query would have discarded both as noise.
+
+## Added 2026-11-22 (pass 3) — the retail media plane, in four steps
+
+Retail media is the business of a retailer selling advertising against its own
+first-party data. It is, by most counts, the fastest-growing profit pool in
+retail — and before this pass the words **"retail media", "advertising" and
+"clean room" appeared zero times in all eight files of this KB**. Nine cycles
+had described retail as storefront, catalogue and store, and left out the part
+that pays for them.
+
+Everything below was measured on 2026-11-22: existence by `git ls-remote`
+(ref count), liveness by a `--bare --depth 1 --filter=blob:none` clone reading
+the last commit date, licence by reading the file at
+`raw.githubusercontent.com`, with its byte size recorded. **Star counts are
+deliberately absent** — `gh api repos/<slug>` is still 403 for non-attached
+repos, so stars cannot be measured through the available channel, and this KB
+has twice recorded fabricated star curves (Gorse, RecBole, NeuralForecast in
+cycles 2/3/7; MDAgents in healthcare). An unmeasurable field is better left
+out than guessed.
+
+### Step 1 — SERVE IT (the auction). Mature, permissive, and committing today.
+
+The header-bidding/auction substrate is the healthiest layer in this plane. All
+Apache-2.0, all active within four days of this pass.
+
+| Repo | Licence (read at source) | refs | Last commit | Role |
+|---|---|---|---|---|
+| [prebid/Prebid.js](https://github.com/prebid/Prebid.js) | Apache-2.0 (10760B, `master`) | 14749 | 2026-11-22 (0d) | Client-side header bidding; the de-facto browser auction layer |
+| [prebid/prebid-server](https://github.com/prebid/prebid-server) | Apache-2.0 (10759B, `master`) | 4327 | 2026-11-19 (3d) | Go server-side auction; self-hostable alternative to hosted S2S |
+| [prebid/prebid-server-java](https://github.com/prebid/prebid-server-java) | Apache-2.0 (10759B, `master`) | 3985 | 2026-11-18 (4d) | JVM implementation of the same spec; pick by platform team skills |
+| [InteractiveAdvertisingBureau/openrtb](https://github.com/InteractiveAdvertisingBureau/openrtb) | ⚠️ **NO LICENCE FILE** (root tree verified) | 198 | 2026-04-14 (222d) | The OpenRTB 3.0 / AdCOM spec text itself — see warning below |
+| [revive-adserver/revive-adserver](https://github.com/revive-adserver/revive-adserver) | ⚠️ **GPL-2.0** (15235B) | 858 | 2026-11-22 (0d) | The only mature open-source ad *server*; actively maintained, copyleft |
+
+**⚠️ OpenRTB has no licence file.** The root tree of
+`InteractiveAdvertisingBureau/openrtb` contains exactly: `.gitignore`,
+`OpenRTB v3.0 FINAL.md`, `README.md`, `ads.cert: Signed Bid Requests 1.0
+BETA.md`, `extensions/`, `supplychainobject.md`. No `LICENSE` under any of
+eight candidate names, on either `main` or `master`. The substrate of all
+programmatic advertising ships its specification with no grant attached.
+Treat it exactly as cycle 8 treated `bacen/pix-api`: **implement from the
+spec, do not vendor the repo** into a client deliverable.
+
+**⚠️ revive-adserver is GPL-2.0, and that is the whole story of the ad-server
+layer.** It is genuinely alive (committed the day of this pass). It is also
+copyleft, which makes it a poor base for a white-label retail media product
+sold to a retailer — the same shape as cycle 8's nopCommerce finding, for the
+same commercial reason.
+
+### Step 2 — SELL IT TO AN AGENT (agentic ad buying). New, Apache-2.0, alive.
+
+This is the 2026 development, and it is the direct counterpart to the
+agentic-*commerce* protocols cycle 8 mapped (UCP / ACP / AP2 / x402).
+
+| Repo | Licence (read at source) | refs | Last commit | Role |
+|---|---|---|---|---|
+| [adcontextprotocol/adcp](https://github.com/adcontextprotocol/adcp) | Apache-2.0 (10767B) | 8610 | 2026-11-22 (0d) | **Ad Context Protocol** — spec + SDKs for agents buying media. Ships `CHARTER.md`, `IPR_POLICY.md`, `CONTRIBUTORS.md` |
+| [prebid/salesagent](https://github.com/prebid/salesagent) | Apache-2.0 (10767B) | 2354 | 2026-11-23 (0d) | AdCP **sales-agent** server under Prebid.org: exposes inventory to agents over MCP + A2A, integrates Google Ad Manager |
+| [Setupad/salesagent](https://github.com/Setupad/salesagent) | Apache-2.0 (10767B) | 10 | 2026-10-19 (34d) | A second, independent sales-agent deployment — evidence the role has more than one implementer |
+| [IABTechLab/AAMP](https://github.com/IABTechLab/AAMP) | Apache-2.0 (11356B) | 5 | 2026-09-22 (61d) | IAB Tech Lab's rival protocol. ⚠️ **Repo contains two files: `LICENSE` and `README.md`, one commit.** See the asymmetry note |
+
+`adcontextprotocol/salesagent` and `prebid/salesagent` return **identical HEAD
+SHAs (`dcd14d0f`) and identical ref counts (2354)** — by the rename test this
+KB has now used in three industries (matching HEAD = redirect, differing HEAD =
+two repos), they are **one repository, not two**. The README is served from
+`prebid/` and says "maintained under Prebid.org", so **`prebid/salesagent` is
+the canonical slug.**
+
+Read the project's own status note before proposing it: *"Status: alpha. A
+pre-1.0 implementation of a pre-release protocol... It is one of several AdCP
+sales-agent implementations, not a sole or canonical reference."* It pins the
+`adcp` SDK version exactly in `pyproject.toml` and enforces the pin with a CI
+guard (`tests/unit/test_adcp_spec_version.py`) that fails on drift — which is
+the correct engineering posture toward a moving spec, and worth copying.
+
+### Step 3 — IDENTIFY IT (identity and consent). Equipped and alive.
+
+| Repo | Licence (read at source) | refs | Last commit | Role |
+|---|---|---|---|---|
+| [IABTechLab/uid2-operator](https://github.com/IABTechLab/uid2-operator) | **Apache-2.0** (11348B) | 4067 | 2026-11-22 (0d) | Unified ID 2.0 operator — the privacy-preserving identity service |
+| [IABTechLab/uid2docs](https://github.com/IABTechLab/uid2docs) | Apache-2.0 (11356B) | 1543 | 2026-11-20 (2d) | UID2 integration documentation (note the slug: **no hyphen**) |
+| [InteractiveAdvertisingBureau/iabtcf-es](https://github.com/InteractiveAdvertisingBureau/iabtcf-es) | Apache-2.0 (11360B, `master`) | 434 | 2026-09-01 (82d) | Reference TCF consent-string encoder/decoder — required for EU ad serving |
+| [orestbida/cookieconsent](https://github.com/orestbida/cookieconsent) | MIT (1071B, `master`) | 275 | 2026-11-22 (0d) | Lightweight consent UI; MIT, so safe in a white-label storefront |
+
+**⚠️ Licence correction — UID2.** Public sources conflict: The Trade Desk's
+own press release announcing the contribution says the code would be released
+under **BSD-2**, while `unifiedid.com` documentation states **Apache-2.0**.
+Measured at source, `IABTechLab/uid2-operator/LICENSE` is the **full Apache-2.0
+text at 11348 bytes**. Apache-2.0 is correct; the press release is wrong. This
+is the fourth industry in which a vendor announcement has misstated the licence
+of its own donated code. **A press release is not a licence.**
+
+### Step 4 — PROVE IT (measurement, MMM, incrementality). Half of it is dead.
+
+This layer is where the listicles and the repositories disagree most sharply.
+Five libraries are routinely presented together as the open-source measurement
+stack. Measured, **two are alive and three are not.**
+
+| Repo | Licence (read at source) | refs | Last commit | Verdict |
+|---|---|---|---|---|
+| [google/meridian](https://github.com/google/meridian) | Apache-2.0 (11357B) | 1725 | 2026-11-20 (2d) | ✅ **Alive.** Bayesian MMM, geo-level priors, principled uncertainty. The default choice |
+| [pymc-labs/pymc-marketing](https://github.com/pymc-labs/pymc-marketing) | Apache-2.0 (11356B) | 2338 | 2026-11-22 (0d) | ✅ **Alive.** Bayesian MMM **+ CLV + Bass diffusion** in one library; most customisable |
+| [facebookincubator/GeoLift](https://github.com/facebookincubator/GeoLift) | MIT (1092B, `LICENSE.md`) | 211 | 2026-04-01 (235d) | ⚠️ Slowing. Geo-experiment lift testing; still the standard calibration tool |
+| [facebookexperimental/Robyn](https://github.com/facebookexperimental/Robyn) | MIT (1091B) | 548 | `main` 2025-06-27 (513d) | ❌ **Dormant ~17 months.** See the branch trap below |
+| [google/lightweight_mmm](https://github.com/google/lightweight_mmm) | Apache-2.0 (11357B) | 51 | 2025-06-17 (523d) | ❌ **Superseded by Meridian** — Google's own predecessor. Do not start here |
+
+**⚠️ The Robyn branch trap — a transferable measurement error.**
+`facebookexperimental/Robyn`'s **default branch is
+`accuracy/allocator_v2_fixes`**, a feature branch, not `main`. Two consequences:
+
+1. A plain `git clone` of Robyn checks out **non-release code from
+   2024-11-21**. Anyone cloning it to build gets a feature branch.
+2. Any automated ingest that measures "last commit" via the default branch
+   reports **731 days** dormant. The honest figure, read from `main`
+   explicitly, is **513 days** (2025-06-27). This pass made that error first
+   and caught it only by re-measuring `main` by name.
+
+**Method rule, applies to all twelve industries: the default branch is not
+necessarily `main`. Resolve it, and measure `main`/`master` by name as well.**
+Robyn is still presented by 2026 MMM commentary as one of two "open-source
+giants" alongside Meridian. On the evidence it is a dormant library with a
+confusing default branch, and Meridian or PyMC-Marketing should carry new work.
+
+### Step 5 — MATCH IT PRIVATELY (the clean room). Not one maintained option.
+
+The clean room is where a retailer and a brand compare audiences without
+either handing over its customer list. It is the layer every retail media
+network buys from a vendor, and vendors size it at **$2.8B (2025) → $14.6B
+(2034), ~20.1% CAGR, with measurement-and-attribution the fastest-growing
+application at 22.6%** (Dataintelo — a market-research vendor; directional).
+
+**Every open-source data clean room found is dormant by more than two years:**
+
+| Repo | Licence (read at source) | refs | Last commit | Note |
+|---|---|---|---|---|
+| [tiktok-privacy-innovation/PrivacyGo-DataCleanRoom](https://github.com/tiktok-privacy-innovation/PrivacyGo-DataCleanRoom) | Apache-2.0 (11356B) | 4 | 2024-10-31 (752d) | Closest thing to a purpose-built OSS clean room |
+| [Snowflake-Labs/sfquickstart-data-clean-room](https://github.com/Snowflake-Labs/sfquickstart-data-clean-room) | Apache-2.0 (11356B) | 14 | 2024-03-11 (986d) | A **quickstart demo** bound to proprietary Snowflake, not a product |
+| [qascade/dcr](https://github.com/qascade/dcr) | ⚠️ AGPL-3.0 (35215B) | 40 | 2023-06-13 (1258d) | Independent attempt; AGPL and abandoned |
+
+The **primitives**, by contrast, are alive and permissive — which is why the
+recipe in `compose/patterns.md` Pattern 14 assembles a clean room rather than
+forking one:
+
+| Repo | Licence (read at source) | refs | Last commit | Primitive |
+|---|---|---|---|---|
+| [google/differential-privacy](https://github.com/google/differential-privacy) | Apache-2.0 (13499B) | 471 | 2026-11-20 (2d) | ✅ DP aggregation/accounting across C++/Go/Java/Python |
+| [OpenMined/PSI](https://github.com/OpenMined/PSI) | Apache-2.0 (11356B, `master`) | 235 | 2026-09-20 (63d) | ✅ Private set intersection (ECDH + Bloom/Golomb); C++/JS/Go/Python/Rust bindings |
+| [google/private-join-and-compute](https://github.com/google/private-join-and-compute) | Apache-2.0 (11357B, `master`) | 31 | 2026-03-09 (258d) | ⚠️ Private join **and aggregate sum** — the exact clean-room primitive |
+| [Optable/match](https://github.com/Optable/match) | Apache-2.0 (10172B, **`LICENCE.md`**) | 99 | 2024-10-24 (759d) | ❌ Dormant. Production-oriented Go PSI from an adtech vendor |
+| [tiktok-privacy-innovation/PrivacyGo](https://github.com/tiktok-privacy-innovation/PrivacyGo) | Apache-2.0 (11356B) | 15 | 2025-01-24 (667d) | ❌ Dormant. **DPCA-PSI**: intersection statistics under differential privacy, built for ad measurement |
+
+And the reporting layer underneath, both Apache-2.0 and committing this week:
+[apache/pinot](https://github.com/apache/pinot) (11356B, `master`, 17558 refs,
+2026-11-21, 1d) and [apache/druid](https://github.com/apache/druid) (19315B,
+`master`, 17408 refs, 2026-11-21, 1d) — real-time OLAP, the standard way to
+serve advertiser-facing campaign dashboards at ad-event volume.
+
+### ⚠️ Method note earned this pass: the licence probe gave a false negative
+
+This pass first recorded `Optable/match` as having **no licence file**, having
+probed eight filenames (`LICENSE`, `LICENSE.md`, `LICENSE.txt`, `LICENCE`,
+`LICENCE.txt`, `COPYING`, `LICENSE-APACHE`, `NOTICE`) on both `main` and
+`master`. The file is **`LICENCE.md`** — British spelling *with* the `.md`
+extension, a combination the probe list missed. It is Apache-2.0, 10172 bytes.
+
+Two corrections follow, both reusable:
+
+1. **Add `LICENCE.md` to every licence probe.** Cycle 8 already found
+   Akeneo's `LICENCE.txt`; the `.md` variant is a separate miss.
+2. **A filename probe cannot prove absence. A root-tree listing can.**
+   `git ls-tree HEAD --name-only` on the bare clone is authoritative and
+   costs nothing once cloned. That is how OpenRTB's missing licence was
+   *confirmed* rather than merely suspected. **Use the tree to prove a
+   negative; use raw reads to prove a positive.**
+
+### Measured gaps in this plane — searched for on 2026-11-22, genuinely not there
+
+| Query (`gh api search/repositories`) | Result | Reading |
+|---|---|---|
+| `retail media stars:>=50` | **1** | And it is `marcotav/supervised-machine-learning` (2020, no licence) — a generic regression tutorial. Not retail media |
+| `retail media network stars:>=10` | **3** | **All three are Windows-7 / Minecraft DxDiag dumps** from 2013–2015. See the collision note |
+| `clean room advertising stars:>=50` | **0** | Literal zero |
+| `header bidding stars:>=50` | **2** | The whole header-bidding world is the Prebid org |
+| `data clean room stars:>=20` | 18 hits, **3 real** | The rest are Android "Clean Architecture"/Room-DB apps, a news reader, a coin tracker |
+| `marketing mix model stars:>=100` | **6** | Small, and 3 of the famous 5 are dormant (above) |
+| `openrtb stars:>=100` | **10** | Thin for the substrate of all programmatic |
+| `private set intersection stars:>=100` | **7** | Cryptography, not retail |
+| `ad server stars:>=200` | **51** | The generic adtech layer *is* populated — the retail-shaped layer is not |
+| `incrementality stars:>=20` | 952 | **Contaminated query, discarded** — the word is generic across ML and finance |
+
+**⚠️ The keyword collision reproduced itself, live, in this pass.** Cycle 8's
+flagship defect was `2No2Name/hopperOptimizations` — a **Minecraft mod** about
+in-game hoppers — carried in `agents/top.md` as retail *inventory* intelligence.
+Querying `retail media network stars:>=10` today returns `dovnel/Win-7`,
+`denman2328/Help` and `Camus777/Minecraft`: DxDiag system-information dumps, in
+which the words "Retail" (Windows edition), "Media" (Media Center) and
+"Network" all appear. **Three of three hits are garbage.** A keyword search in
+this sector returns confident, plausible-looking, wholly wrong rows, and the
+only defence is opening each one. Nothing from either query was written into
+this KB as data.

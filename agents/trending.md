@@ -10,6 +10,57 @@ updated: 2026-11-22
 > agent-facing tooling**. For infrastructure and platform repos see `repos/trending.md` — until today the
 > two files were byte-identical, so the agents/repos distinction never actually existed in this KB.
 
+## 2026-11-22 (pass 3)
+
+**Plane added this pass: retail media — agents that buy and sell advertising.**
+"Retail media", "advertising" and "clean room" had **zero hits across all eight
+files** before today.
+
+**New this week — agentic advertising became buildable.**
+
+- **[prebid/salesagent](https://github.com/prebid/salesagent)** — Apache-2.0
+  (10767B), 2354 refs, last commit **2026-11-23 (0d — landed during this
+  pass)**. Implements the **AdCP sales-agent role**: exposes ad inventory to AI
+  agents over **MCP and A2A**, 16 AdCP tools, Google Ad Manager integration,
+  multi-tenant isolation. Self-declared **alpha**; `v2.0.0` introduced breaking
+  changes. Pins the `adcp` SDK exactly with a CI guard that fails on drift.
+- **[adcontextprotocol/adcp](https://github.com/adcontextprotocol/adcp)** —
+  Apache-2.0 (10767B), **8610 refs**, last commit **2026-11-22 (0d)**. The
+  protocol itself: discovery, media buying, creative, audience activation,
+  reporting, carried over MCP + A2A. Ships `CHARTER.md` and `IPR_POLICY.md`.
+  Launched by an adtech coalition in Oct 2025 at v2.0.0; docs now at v3.2.x.
+- **[Setupad/salesagent](https://github.com/Setupad/salesagent)** — Apache-2.0
+  (10767B), 10 refs, 2026-10-19 (34d). A second independent implementation of
+  the sales-agent role.
+
+**The rival standard is a README.**
+[IABTechLab/AAMP](https://github.com/IABTechLab/AAMP) — Apache-2.0 (11356B),
+**5 refs**, 2026-09-22 (61d) — contains **exactly two files, `LICENSE` and
+`README.md`, and one commit.** Trade press describes AdCP and AAMP as rivals
+splitting the industry; the repositories are 8610 refs against 5. This measures
+GitHub presence, not whether a spec document exists elsewhere — but you cannot
+build against AAMP from GitHub today. The AdCP FAQ states the two are **not
+wire-compatible**. Prediction to score later: if AAMP is real competition it
+gains implementation code before **2027-05-22**.
+
+**Dormancy correction — Robyn is not alive, and its branch hides it.**
+[facebookexperimental/Robyn](https://github.com/facebookexperimental/Robyn)'s
+**default branch is `accuracy/allocator_v2_fixes`**, a feature branch last
+touched 2024-11-21. Its `main` is **2025-06-27 — 513 days dormant.** 2026 MMM
+commentary still lists it as one of two "open-source giants" beside Meridian.
+A plain `git clone` gets the stale feature branch; default-branch tooling
+reports a wrong 731 days. **Measure `main` by name.**
+
+**Slug hygiene:** `adcontextprotocol/salesagent` = `prebid/salesagent` —
+identical HEAD `dcd14d0f`, identical 2354 refs, therefore one repo under a
+redirect, not two. Canonical: `prebid/salesagent`.
+
+**Keyword collision, reproduced live:** `retail media network stars:>=10`
+returns three repos and **all three are Windows-7/Minecraft DxDiag dumps**
+(`dovnel/Win-7`, `denman2328/Help`, `Camus777/Minecraft`). Same failure mode as
+cycle 8's Minecraft hopper mod shipped as retail inventory intelligence.
+Nothing from that query was written as data.
+
 ## 2026-11-22 (pass 2)
 
 **Theme: there is no store-operations agent — the agent surface over the store is an MCP server bolted to
