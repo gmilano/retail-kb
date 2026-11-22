@@ -266,3 +266,161 @@ of 75 LATAM e-commerce sites measured.
   British spelling, `.txt` extension, **148 bytes**, pointing at OSL-3.0. A probe of 2 branches × 12 common
   filenames missed it; a shallow clone found it in one call. When a control request succeeds and `README.md`
   also 404s, your filenames are wrong, not the repo.
+
+---
+
+## Pattern 10 — The lawful till: a permissive POS joined to a permissive fiscal library
+
+**The gap this closes.** There is no permissively licensed open-source POS with a working LATAM fiscal
+module. The till exists under MIT, the fiscal libraries exist under MIT/Apache/LGPL, and the join between
+them is either missing or AGPL. `dansanti/l10n_cl_dte_point_of_sale` — the one repo aimed exactly at this
+shape — has **no licence file and died on 2018-06-14**.
+
+**Wiring, Mexico (the zero-copyleft build).**
+
+1. **Till:** [opensourcepos/opensourcepos](https://github.com/opensourcepos/opensourcepos) — **MIT**,
+   4530★, pushed 2026-11-22. PHP/CodeIgniter 4 + MySQL, multi-tier tax already modelled.
+2. **CFDI issuance:** [eclipxe13/CfdiUtils](https://github.com/eclipxe13/CfdiUtils) — **MIT**, 146★ — to
+   build and stamp CFDI 4.0 documents from the sale record.
+3. **SAT catalogues:** [phpcfdi/resources-sat-catalogs](https://github.com/phpcfdi/resources-sat-catalogs) —
+   **Unlicense**, 97★ / 424 refs — product/tax code tables, refreshed from SAT.
+4. **Reconciliation:** [phpcfdi/sat-ws-descarga-masiva](https://github.com/phpcfdi/sat-ws-descarga-masiva) —
+   **MIT**, 198★ — bulk-download issued CFDIs back from SAT to reconcile the register against the authority.
+5. **Agent surface:** expose steps 2–4 as MCP tools so an assistant can answer "which of yesterday's sales
+   never got stamped?" — the question a store manager actually asks.
+
+**Total copyleft obligation of this build: none.** That is unique to Mexico and is the reason to start a
+multi-country LATAM programme there.
+
+**Brazil variant.** Replace steps 2–4 with [wmixvideo/nfe](https://github.com/wmixvideo/nfe)
+(**Apache-2.0**, 770★ / 411f, Java) if the stack is JVM, or
+[nfephp-org/sped-nfe](https://github.com/nfephp-org/sped-nfe) (**LGPL-3.0**, 1635★, PHP) if it is PHP —
+LGPL means link dynamically and the till stays closed. Do **not** reach for `OCA/l10n-brazil`: it is
+AGPL-3.0 (see Pattern 11).
+
+**Chile variant — state the constraint rather than the solution.** The only maintained DTE core,
+`LibreDTE/libredte-lib-core`, is **AGPL-3.0**, and `factura electronica DTE SII stars:>=20` returns **0**.
+Either accept AGPL for the issuance component and isolate it behind a process boundary (Pattern 11), or
+consume LibreDTE's hosted API through its LGPL-3.0 client and accept the third-party dependency. There is
+no third option as of 2026-11-22.
+
+---
+
+## Pattern 11 — Isolating the AGPL fiscal component (the pattern that saves the Odoo engagement)
+
+**The problem, precisely.** Odoo core is **LGPL-3.0**, so proprietary modules are permitted — the fact
+cycle 8 correctly identified as retail's most commercially useful. But the OCA localisations that make an
+Odoo POS *lawful* in LATAM are each **AGPL-3.0**: `OCA/l10n-brazil` (376★), `OCA/l10n-mexico` (20★/56f),
+`OCA/l10n-chile` (10★/41f) — verified by reading `LICENSE` at source, 34523 bytes, first line
+`GNU AFFERO GENERAL PUBLIC LICENSE`. A hosted Odoo that issues NF-e, CFDI or DTE mixes LGPL core with AGPL
+modules, and AGPL's network clause reaches the service the client's customers touch.
+
+**Wiring.**
+
+1. **Keep the AGPL code in its own deployable.** A "fiscal issuer" service containing the OCA localisation
+   (or LibreDTE), with **no Globant IP inside it** and no shared process with the merchandising stack.
+2. **Define the boundary as a documented HTTP/queue contract** — `POST /issue`, `GET /status/{id}`,
+   `POST /cancel` — carrying the sale, returning the authority's response and document ID. The contract,
+   not the code, is what the client's other systems depend on.
+3. **Comply deliberately and cheaply.** Publish the fiscal-issuer source (it is the unmodified upstream
+   plus configuration), with a `NOTICE` naming the AGPL components and a link to the corresponding source.
+   Cost: near zero, since there is nothing proprietary to disclose.
+4. **Put Globant IP strictly on the other side** — pricing, markdown, assortment, store-task orchestration,
+   the agent layer — where Odoo's LGPL core and MPL-2.0 `mcp-server-odoo` leave it closed.
+5. **Agent access:** [ivnvxd/mcp-server-odoo](https://github.com/ivnvxd/mcp-server-odoo) (**MPL-2.0**, 419★,
+   pushed 2026-11-22). MPL is file-level copyleft: new files you add stay proprietary; changes to its own
+   files must be published. For a TypeScript stack use
+   [marcfargas/odoo-toolbox](https://github.com/marcfargas/odoo-toolbox) (LGPL-3.0, 44★).
+
+**Why this is the pattern and not a footnote:** the alternative — discovering the AGPL dependency after the
+statement of work is signed — forces either a licence breach or a rebuild of the compliance layer, which is
+the one layer whose deadline is set by a tax authority.
+
+---
+
+## Pattern 12 — Non-identifying store vision (the only North America-safe shelf build)
+
+**The gap this closes.** `retail loss prevention theft detection stars:>=20` → **0**;
+`footfall people counting retail stars:>=50` → **0**; `shelf monitoring retail stars:>=30` → **1**
+(unlicensed, self-described simulation). Meanwhile the legal exposure in North America is biometric:
+Illinois BIPA requires a published retention policy and informed written release *before* collection, and
+20+ states classify biometrics as sensitive data.
+
+**The design constraint that resolves both at once:** gesture- and behaviour-based detection **does not
+identify an individual shopper** and therefore stays outside the scope of biometric privacy law. Build so
+that no face embedding and no cross-visit re-identifier ever exists.
+
+**Wiring.**
+
+1. **Detection/tracking substrate:** [roboflow/supervision](https://github.com/roboflow/supervision) —
+   **MIT**, 51699★ / 4964f, pushed 2026-11-20. Detector-agnostic tracking, polygon zones, line counters,
+   annotators. This is the whole reason the pattern is licensable.
+2. **Detector — and this is the trap.** Do **not** ship `ultralytics/ultralytics`: it is **AGPL-3.0**
+   (34523-byte `LICENSE`, first line `GNU AFFERO GENERAL PUBLIC LICENSE`), and a hosted store-analytics
+   service triggers its network clause. Use an Apache-2.0 or MIT-licensed detector and weights, and verify
+   the **weights** licence separately from the code — carrying forward the media-pass rule that for native
+   and model dependencies you resolve the licence of what you *link and ship*, not of the repo.
+3. **Shelf semantics:** define zones per bay and count occupancy, not products, as the v1 signal. The
+   planogram-compliance literature is 502 repos whose best entry has 17 stars
+   ([laitalaj/cvpce](https://github.com/laitalaj/cvpce), MIT, 11★, dead 2021 — the only one whose stated
+   purpose is planogram compliance). Treat it as prior art to read, not code to depend on.
+4. **Privacy posture as a deliverable:** no face detection in the pipeline at all; per-frame counts and
+   dwell aggregates only; retention in hours; a written data-flow statement. In Illinois, Texas and
+   Washington this is the difference between a product and a lawsuit.
+5. **Action loop:** feed gaps and queue lengths to the store-task layer — which has **no open source at all**
+   (`retail execution store audit mobile stars:>=5` → 0 results), so it is Globant-built by necessity.
+
+---
+
+## Pattern 13 — Rostering as a solver problem, not a prompt
+
+**The gap this closes.** `workforce scheduling stars:>=150` returns one repo, `Staffjoy/v2` (MIT, 1686★),
+**dead since 2022-12-06**. Retail's largest controllable cost has no maintained open-source platform.
+
+**Wiring.**
+
+1. **Engine:** [TimefoldAI/timefold-solver](https://github.com/TimefoldAI/timefold-solver) — **Apache-2.0**,
+   1879★ / 244f, pushed 2026-11-20. The maintained successor to OptaPlanner
+   (`apache/incubator-kie-optaplanner`, 3512★, now redirecting elsewhere in its own description). Model
+   shifts, skills, availability, contracted hours, break rules and fairness as hard/soft constraints.
+2. **Demand input:** the forecasting repos already in this KB (`NeuralForecast`, `StatsForecast`, both
+   Apache-2.0) convert footfall and transaction history into labour demand per 15-minute bucket.
+3. **Labour rules as data, per country.** This is the billable work and it does not generalise: Brazilian
+   CLT rest rules, French working-time law, Mexican NOM provisions. Keep them as declarative constraint
+   configuration, not code, so one engine serves every market.
+4. **Agent role — and keep it narrow.** The LLM does *not* build the roster. It explains why a shift is
+   unfilled, proposes a swap and re-runs the solver, then surfaces the score delta. Solver for feasibility,
+   agent for negotiation.
+5. **Do not pitch this as integration.** With the only platform four years dead, this is product
+   development — the second confirmed proprietary-IP zone in retail alongside markdown/assortment
+   optimisation.
+
+---
+
+## Method notes added 2026-11-22 (pass 2)
+
+- **`search/repositories` with a `repo:owner/name` qualifier beats the false-negative problem.** It resolved
+  **7 of 7** slugs that keyword search had missed, and returns stars, forks, licence and `pushed_at` —
+  which `gh api repos/<slug>` cannot, since it still 403s for non-attached repos. The false negatives are a
+  keyword-*ranking* artefact, not a missing index. `ls-remote` remains the authority on existence.
+- **`NOASSERTION` means GitHub's classifier failed, not that a licence is absent.** Four cases this pass,
+  four real licences on reading the file: `opensourcepos` = MIT behind a 26-name copyright roster,
+  `sped-nfe` = LGPL-3.0, `odoo` = LGPL-3.0, `oxalis` = **EUPL-1.1 declared in a file named `COPYRIGHT`**.
+- **Add `COPYING.LGPL` and `COPYRIGHT` to the licence-probe filename list.** Oxalis ships both, and they
+  disagree; the operative declaration was in `COPYRIGHT`.
+- **The control request must not assume `README.md` exists either.** `SAT-CFDI/python-satcfdi` 404s on
+  `LICENSE`, `LICENSE.md`, `COPYING` *and* `README.md` across both branches while `ls-remote` reports 205
+  refs — the project is all-lowercase reStructuredText (`license`, `readme.rst`). The media-pass rule held;
+  the fix was a shallow clone, one call.
+- **An oversized MIT file is a copyright roster, not another licence.** Byte fingerprints confirmed today:
+  **34523 = AGPL-3.0**, **35149 = GPL-3.0 plain**, **34916 = GPL-3.0 Markdown**, **7650–8851 = LGPL-3.0**,
+  **16725 = MPL-2.0**, **11325–11358 = Apache-2.0 full**, **10173–10850 = Apache-2.0 appendix-stripped**,
+  **~1050–1130 = MIT**.
+- **For compliance code, rank by forks, not stars.** `OCA/l10n-mexico` 20★/56f and `OCA/l10n-chile` 10★/41f
+  are production dependencies with ratios above 2.8. Nobody stars a tax localisation; they fork it to patch
+  it. A star-gated sweep discards exactly the repos a regional engagement needs.
+- **The keyword-collision list for this plane**, so the next pass does not re-learn it: `self-checkout`
+  matches "**self-hosted**" payment gateways; `rfid inventory` matches home asset managers and a
+  **3D-printer filament manager**; `queue management` matches software job queues; `pos system` matches
+  **pose estimation** (`AlphaPose`, 8630★) and PowerShell SSH. Cycle 8's Minecraft-mod incident
+  (`hopperOptimizations` carried as retail inventory intelligence) was the same failure mode.

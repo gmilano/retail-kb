@@ -117,3 +117,53 @@ stops.
   three Apache-2.0 standards, **only Google's UCP is under active maintenance.** Protocol-neutrality via
   the NVIDIA blueprint remains the right engineering call, but do not describe ACP or AP2 to a client as
   fast-moving: they are, on the evidence of their own default branches, parked.
+
+---
+
+## Added 2026-11-22 (pass 2) — the store plane: agents for the register, the receipt and the shelf
+
+The earlier section on this date added the *product-data* plane. This section adds the plane that was
+missing underneath it: **the physical store**. Grep of all eight files before any search was run returned
+**zero** occurrences of `planogram`, `self-checkout`, `rfid`, `computer vision`, `workforce`, `scheduling`,
+`labor`, `store operations`, `task management`, `point of sale`, `kiosk`, `reverse logistics`,
+`loss prevention` (1 passing mention), `fraud`, `chargeback`, `loyalty`, `customer service`, `e-invoic`,
+`invoice`, `cfdi`, `nf-e` and `peppol`. Retail's own majority channel had no vocabulary in this KB at all.
+
+### The finding that governs this whole section
+
+**There is no store-operations agent.** The agent surface over the store is an **MCP server bolted to the
+incumbent ERP/POS** — because that is where the till, the stock ledger *and* the country tax localisation
+already live. Every row below was verified on 2026-11-22 by `git ls-remote` (existence) and by reading the
+licence file over the raw channel (licence), with stars and last-push read the same day.
+
+| Agent / tool | Repo | Licence (verified at source) | ★ / forks | Last push | What it actually does |
+|---|---|---|---|---|---|
+| Odoo MCP server | [ivnvxd/mcp-server-odoo](https://github.com/ivnvxd/mcp-server-odoo) | **MPL-2.0** (LICENSE 16725 B) | 419★ / 190f | **2026-11-22 (same day)** | The strongest store-plane agent surface found. Exposes Odoo models over MCP — which in Odoo means POS sessions, stock moves, pricelists and the `l10n_*` fiscal modules. MPL-2.0 is file-level copyleft: your own new files stay proprietary. |
+| ERPNext MCP server | [rakeshgangwar/erpnext-mcp-server](https://github.com/rakeshgangwar/erpnext-mcp-server) | MIT (LICENSE 1071 B) | 131★ / 12f | 2026-04-25 | Connects an assistant to an ERPNext instance via the Frappe REST API. ERPNext carries the POS, warehouse and India GST modules. Dormant 211 days — usable, not maintained. |
+| Odoo MCP (extended tools) | [hachecito/odoo-mcp-improved](https://github.com/hachecito/odoo-mcp-improved) | MIT (LICENSE 1072 B) | 49★ / 6f | 2026-11-18 | Adds sales/stock-specific tools on top of the generic Odoo MCP pattern. Small but alive. |
+| Odoo SDK + MCP + skills | [marcfargas/odoo-toolbox](https://github.com/marcfargas/odoo-toolbox) | **LGPL-3.0** (LICENSE 7652 B) | 44★ / 116 refs | 2026-10-26 | TypeScript SDK, CLI and MCP server, CI-tested against live Odoo. LGPL-3.0: link dynamically and your application stays closed. |
+| Frappe/ERPNext CLI + MCP | [nasroykh/foxmayn_frappe_cli](https://github.com/nasroykh/foxmayn_frappe_cli) | MIT | 16★ | 2026-11-11 | CLI, MCP server and desktop app for Frappe/ERPNext. Smallest of the set; listed because it is permissive and current. |
+| Scheduling/rostering solver | [TimefoldAI/timefold-solver](https://github.com/TimefoldAI/timefold-solver) | **Apache-2.0** (LICENSE.txt 11358 B) | 1879★ / 244f | 2026-11-20 | Not an agent, but the only *maintained* engine for the shift-rostering problem retail actually has. The successor to OptaPlanner (`apache/incubator-kie-optaplanner`, 3512★, its own description now redirects elsewhere). Give an agent this as a tool rather than asking an LLM to build a roster. |
+| Shelf-vision primitives | [roboflow/supervision](https://github.com/roboflow/supervision) | **MIT** (LICENSE.md 1065 B) | 51699★ / 4964f | 2026-11-20 | The permissive way to build shelf/queue vision: detector-agnostic tracking, zone counting, annotation. Pair with a non-AGPL detector — see the licence warning below. |
+
+**Seven rows, and that is all there were.** No padding: the measured searches that returned nothing are
+written down under "measured gaps" in `repos/foundations.md` rather than filled with plausible repos.
+
+### The licence trap in this plane — read this before writing any shelf-vision proposal
+
+[ultralytics/ultralytics](https://github.com/ultralytics/ultralytics) — 63669★, 12024 forks, pushed
+2026-11-22, the default YOLO everyone reaches for — is **AGPL-3.0**. Its `LICENSE` is 34523 bytes and its
+first line reads `GNU AFFERO GENERAL PUBLIC LICENSE`. Byte-for-byte the same file as
+`OCA/l10n-brazil`'s. Every student shelf-monitoring repo surfaced by search is built on it, which means
+**the entire visible open-source shelf-vision corpus is AGPL-derived**, and AGPL's network clause reaches a
+hosted store-analytics service. The permissive route is `roboflow/supervision` (MIT) over an
+Apache/MIT-licensed detector, with the Ultralytics weights and package left out of the build.
+
+### Agent-layer measurements that came back empty (2026-11-22)
+
+- `retail execution store audit mobile stars:>=5` → **0 results worldwide.** Store-task execution — the
+  category Yoobic, Zipline and Flip sell into — has no open-source entry point at any star threshold.
+- `order management fulfillment stars:>=100` → **0.** No open-source OMS above 100 stars.
+- `footfall people counting retail stars:>=50` → **0.**
+- `retail loss prevention theft detection stars:>=20` → **0.** Confirms cycle 8's finding with a tighter
+  query; shrink has no open-source floor in either channel.

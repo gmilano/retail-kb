@@ -147,3 +147,119 @@ The engines exist; **none of them knows anything about retail.** This is the who
   of them were plugins.
 - **No permissive MDM.** `master data management stars:>=100` → 4, of which only 2 are real software, and
   both are copyleft (`zingg` AGPL-3.0, `atrocore` GPL-3.0).
+
+---
+
+## Added 2026-11-22 (pass 2) — the store plane, in three steps
+
+Same three-step method as the product-data plane earlier today, applied to the physical store:
+**ring the sale → make it legal → see what is happening**. The gradient is sharper here than in any plane
+this KB has measured, and it bends in an unexpected place: **the middle step is the best equipped**.
+
+### Step 1 — RING IT (the register). Equipped, maintained, and copyleft.
+
+| Repo | Licence (verified at source) | ★ / refs | Last push | Note |
+|---|---|---|---|---|
+| [odoo/odoo](https://github.com/odoo/odoo) | **LGPL-3.0** (43529 B, says LESSER) | 56025★ | 2026-11-22 | POS, stock, pricelists and fiscal localisations in one tree. API reports `NOASSERTION`. LGPL ⇒ proprietary modules are allowed — but see the AGPL inversion in step 2. |
+| [frappe/erpnext](https://github.com/frappe/erpnext) | **GPL-3.0** (`license.txt` 34916 B, Markdown-formatted) | 41543★ / 52198 refs | 2026-11-22 | Full ERP with POS and warehouse. GPL-3.0, so a modified distribution must open. |
+| [opensourcepos/opensourcepos](https://github.com/opensourcepos/opensourcepos) | **MIT** (LICENSE 2537 B) | 4530★ / 1410 refs | 2026-11-22 | The one genuinely permissive, genuinely maintained standalone retail till. API reports `NOASSERTION` only because the file carries a **26-name copyright roster** before the MIT grant. |
+| [Blair2004/NexoPOS](https://github.com/Blair2004/NexoPOS) | **GPL-3.0** (LICENSE 35149 B) | 1310★ / 2125 refs | **2026-11-22 (same day)** | Laravel/Vue POS with inventory and registers. The most actively developed dedicated POS measured. |
+| [Raktim94/nodedr-pos](https://github.com/Raktim94/nodedr-pos) | **AGPL-3.0** | 42★ | 2026-11-22 | Barcode checkout, returns, customer credit. AGPL ⇒ unusable as a hosted multi-tenant till without releasing source. |
+
+**The warning row.** [tngoman/Store-POS](https://github.com/tngoman/Store-POS) — 1058★, 115 refs, pushed
+2026-10-25 — is the **highest-starred result for `point of sale retail stars:>=300` (which returns exactly
+one repo), and it has no licence file at all.** Probed on 2 branches × 8 filenames: nothing. No licence
+means no grant: default copyright, not permission. The best-looking POS on GitHub cannot be used, and a
+keyword-ingest pass would have put it at the top of the table.
+
+### Step 2 — MAKE IT LEGAL (fiscalisation). The best-equipped layer in retail — and the only one whose licence changes by country.
+
+This is the discovery of the pass. Every store transaction must be reported to a tax authority in a
+country-specific format, and **mature open-source exists for each one — under a different licence in each
+jurisdiction.** No other retail capability behaves this way.
+
+| Country / network | Repo | Licence (read at source) | ★ / forks | Last push |
+|---|---|---|---|---|
+| 🇧🇷 Brazil NF-e | [wmixvideo/nfe](https://github.com/wmixvideo/nfe) | **Apache-2.0** (LICENSE 10850 B, appendix stripped) | 770★ / 411f | 2026-11-16 |
+| 🇧🇷 Brazil NF-e | [nfephp-org/sped-nfe](https://github.com/nfephp-org/sped-nfe) | **LGPL-3.0** (`LICENSE.md` 8851 B) | 1635★ / 1169 refs | 2026-11-13 |
+| 🇧🇷 Brazil NF-e | [TadaSoftware/PyNFe](https://github.com/TadaSoftware/PyNFe) | **LGPL-3.0** (LICENSE 7854 B) | 599★ / 237 refs | 2026-02-20 |
+| 🇧🇷 Brazil NF-e | [nfewizard-org/nfewizard-io](https://github.com/nfewizard-org/nfewizard-io) | **GPL-3.0** (`LICENSE.txt` 34618 B) | 330★ | 2026-11-08 |
+| 🇲🇽 Mexico CFDI | [phpcfdi/sat-ws-descarga-masiva](https://github.com/phpcfdi/sat-ws-descarga-masiva) | **MIT** (LICENSE 1106 B) | 198★ | 2026-09-20 |
+| 🇲🇽 Mexico CFDI | [SAT-CFDI/python-satcfdi](https://github.com/SAT-CFDI/python-satcfdi) | **MIT** (`license`, 1056 B) | 169★ / 205 refs | 2026-11-08 |
+| 🇲🇽 Mexico CFDI | [eclipxe13/CfdiUtils](https://github.com/eclipxe13/CfdiUtils) | **MIT** (LICENSE 1111 B) | 146★ | 2026-11-15 |
+| 🇲🇽 Mexico CFDI | [phpcfdi/resources-sat-catalogs](https://github.com/phpcfdi/resources-sat-catalogs) | **Unlicense** (2571 B, public domain) | 97★ / 424 refs | 2026-11-20 |
+| 🇨🇱 Chile DTE | [LibreDTE/libredte-lib-core](https://github.com/LibreDTE/libredte-lib-core) | **AGPL-3.0** (`COPYING` 34520 B) | 228★ / 166f | 2026-11-19 |
+| 🇨🇱 Chile DTE | [LibreDTE/libredte-api-client-php](https://github.com/LibreDTE/libredte-api-client-php) | **LGPL-3.0** | 17★ | 2026-03-23 |
+| 🇪🇺 Peppol AS4 | [phax/phase4](https://github.com/phax/phase4) | **Apache-2.0** (LICENSE 10173 B) | 246★ / 67f | 2026-11-18 |
+| 🇪🇺 EN 16931 | [josemmo/einvoicing](https://github.com/josemmo/einvoicing) | **MIT** (LICENSE 1124 B) | 180★ / 43f | 2026-11-07 |
+| 🇪🇺 Peppol AP | [OxalisCommunity/oxalis](https://github.com/OxalisCommunity/oxalis) | **EUPL-1.1 or later** — see below | 150★ / 280 refs | 2026-04-16 |
+| 🇪🇺 UBL/Peppol | [num-num/ubl-invoice](https://github.com/num-num/ubl-invoice) | **MIT** (LICENSE 1070 B) | 143★ / 236 refs | 2026-11-03 |
+| 🇪🇺 Validation | [phax/phive](https://github.com/phax/phive) | **Apache-2.0** (LICENSE 11325 B) | 79★ / 199 refs | 2026-11-19 |
+| 🇪🇺 Peppol BIS spec | [OpenPeppol/peppol-bis-invoice-3](https://github.com/OpenPeppol/peppol-bis-invoice-3) | **No licence file** (spec repo) | 158★ / 349 refs | 2026-11-06 |
+| 🇮🇳 India GST | [resilient-tech/india-compliance](https://github.com/resilient-tech/india-compliance) | **GPL-3.0** (`license.txt` 35149 B) | 286★ / 4725 refs | 2026-11-20 |
+
+**The licence of being legal, by region:** Mexico **MIT/Unlicense** → Brazil **Apache-2.0 / LGPL-3.0** →
+EU **Apache/MIT libraries over an EUPL access point** → India **GPL-3.0 inside ERPNext** → Chile
+**AGPL-3.0 core**. A single multi-country rollout therefore crosses four licence families, and the
+compliance obligation is not negotiable, so **the licence picks the architecture, not the other way round**.
+
+### The sharpest licence finding of this pass: EUPL, and where it hides
+
+`OxalisCommunity/oxalis` is the reference open-source **Peppol Access Point** — the component Globant would
+run to connect a client to EU *and* Singapore e-invoicing. The GitHub API reports `NOASSERTION`. Probing 2
+branches × 8 filenames found nothing; `README.md` returned 200, so the repo was reachable and the filenames
+were wrong. A shallow clone resolved it in one call, and the repo ships **two disagreeing licence artefacts**:
+
+- `COPYING.LGPL` — the full LGPL-3.0 text (7650 B), a filename no previous probe in this KB had tried.
+- `COPYRIGHT` (799 B) — the **operative declaration**: *"Copyright 2010-2020 Norwegian Agency for Public
+  Management and eGovernment (Difi) … Licensed under the EUPL, Version 1.1 or — as soon they will be
+  approved by the European Commission — subsequent versions of the EUPL."*
+
+**EUPL is the licence family that only appears in EU public-sector-origin infrastructure, and it is exactly
+the family an EMEA compliance engagement walks into.** EUPL-1.2 §3 treats *communicating the work* as
+distribution, so hosting a Peppol access point as a service can trigger source provision much as AGPL
+would — and no SPDX field, badge or source-tree SBOM scan shows it, because the declaration lives in a file
+called `COPYRIGHT`. **Add `COPYING.LGPL` and `COPYRIGHT` to the probe list.**
+
+### Step 3 — SEE IT (shelf, queue, labour). No retail-specific floor at all.
+
+| What was searched (2026-11-22) | Result |
+|---|---|
+| `planogram` | **502 repos — top result has 17★.** [Alijanloo/Retail-Shelf-Monitoring](https://github.com/Alijanloo/Retail-Shelf-Monitoring) MIT, 17★, 2 refs. Then [gamma-opt/ShelfSpaceAllocation.jl](https://github.com/gamma-opt/ShelfSpaceAllocation.jl) MIT 15★ (dead 2020-11-27) and [laitalaj/cvpce](https://github.com/laitalaj/cvpce) MIT 11★, 3 refs (dead 2021-06-24) — the only repo whose stated purpose *is* planogram-compliance evaluation. |
+| `shelf monitoring retail stars:>=30` | **1 repo worldwide**: [mirzayasirabdullahbaig07/SmartStore-AI](https://github.com/mirzayasirabdullahbaig07/SmartStore-AI), 45★, **no licence**, and its own description calls it a *simulation*. |
+| `product detection retail shelf yolo stars:>=100` | **0** |
+| `SKU110K retail product detection dataset stars:>=50` | **0** |
+| `self-checkout stars:>=10` | 28 results, and the top six are **keyword collisions on "self-hosted"** (payment gateways, a robotics framework, a W3C report dump). The only genuine entries: `Ashwinbicholiya/scanpay` MIT 40★ **dead since 2020-10-11** and `angsaikia/Walmart-Smart-Shopping-Cart` 38★ no licence, 2020. |
+| `rfid inventory stars:>=30` | 3 results, **none retail**: a home asset-management app and a 3D-printer filament manager (`TigerTag`). Another false-friend pair. |
+| `workforce scheduling stars:>=150` | **1 repo**: [Staffjoy/v2](https://github.com/Staffjoy/v2), MIT, 1686★, **dead since 2022-12-06**. The single best-starred workforce-management repo in open source has not moved in four years. |
+| `employee shift scheduling stars:>=50` | 3 results, all GPL or unlicensed, best is 130★ and dead since 2019. |
+
+**Conclusion for step 3, stated as a gap because it is one:** the shelf, the queue, the aisle and the roster
+have **no maintained, retail-specific, permissively licensed open-source floor**. What exists is a generic
+substrate — Timefold (Apache-2.0) for the roster, `supervision` (MIT) for the vision — plus a corpus of
+student projects on AGPL weights. Together with cycle 8's finding that markdown/assortment optimisation has
+no floor either, **store execution is now the second confirmed place to build proprietary Globant IP.**
+
+### Method notes earned this pass (reusable across all twelve industries)
+
+- **`search/repositories` with a `repo:owner/name` qualifier defeats the false-negative problem.** Earlier
+  cycles concluded "existence is `ls-remote`, full stop" after keyword queries missed real repos. The
+  qualifier resolved **7 of 7** slugs that keyword search had missed, *and* returns stars, forks, licence
+  and `pushed_at` — which `gh api repos/<slug>` cannot, because it still 403s for non-attached repos. The
+  false negatives are a keyword-ranking artefact, not an index gap. Use `repo:` for a known slug;
+  `ls-remote` remains the authority on existence.
+- **`NOASSERTION` is not "no licence" — it is "GitHub's classifier failed".** Four hit this pass and all
+  four resolved by reading the file: `opensourcepos` = MIT behind a 26-name roster, `sped-nfe` = LGPL-3.0,
+  `odoo` = LGPL-3.0, `oxalis` = EUPL-1.1 declared in `COPYRIGHT`.
+- **An oversized MIT file is a long copyright roster, not a different licence.** MIT is ~1050–1130 B;
+  `opensourcepos` at 2537 B is MIT plus 26 copyright lines. Useful byte fingerprints confirmed today:
+  **34523 = AGPL-3.0**, **35149 = GPL-3.0 plain**, **34916 = GPL-3.0 Markdown**, **7650–8851 = LGPL-3.0**,
+  **16725 = MPL-2.0**, **11325–11358 = Apache-2.0 full**, **10173–10850 = Apache-2.0 appendix-stripped**.
+- **The control request must not assume `README.md` either.** `SAT-CFDI/python-satcfdi` 404s on
+  `LICENSE`, `LICENSE.md`, `COPYING` **and `README.md`** on both branches, yet `ls-remote` gives 205 refs.
+  The project is all-lowercase and reStructuredText: its files are `license` (no extension) and
+  `readme.rst`. The media-pass rule "if README.md also 404s, your filenames are wrong" held — the fix is a
+  shallow clone, and it cost one call.
+- **In compliance code, forks beat stars as an adoption signal.** `OCA/l10n-mexico` has 20★ / **56 forks**
+  and `OCA/l10n-chile` 10★ / **41 forks** (ratios 2.8 and 4.1). Nobody stars a tax localisation; they fork
+  it to patch it for a client. A star-gated query would have discarded both as noise.

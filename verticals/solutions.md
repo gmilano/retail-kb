@@ -127,3 +127,68 @@ act has been adopted yet (see `intel/market.md` → EMEA), so every platform her
 moving target. The defensible engagement today is **getting identity and attributes right** (steps 1–3 in
 `repos/foundations.md`), because that work is required by DPP, by Sunrise 2027 *and* by agentic commerce —
 regardless of which DPP platform eventually wins.
+
+---
+
+## Added 2026-11-22 (pass 2) — till platforms, fiscal platforms and the AGPL inversion
+
+### Point-of-sale platforms that can be customised with AI on top
+
+The retail equivalent of Odoo-for-ERP or OpenMRS-for-healthcare. Verified 2026-11-22 by `ls-remote` plus a
+read of the licence file; API licence fields are noted where they disagree with the file.
+
+| Platform | Repo | Licence (read at source) | ★ | Last push | Customisation posture |
+|---|---|---|---|---|---|
+| **Odoo** (POS + stock + fiscal) | [odoo/odoo](https://github.com/odoo/odoo) | **LGPL-3.0** (API says `NOASSERTION`) | 56025★ | 2026-11-22 | The reference choice. LGPL ⇒ proprietary add-on modules are permitted, which is why Odoo is the standard base for billable vertical work. **But read the AGPL inversion below before promising it for LATAM.** |
+| **ERPNext / Frappe** | [frappe/erpnext](https://github.com/frappe/erpnext) | **GPL-3.0** (`license.txt`, Markdown) | 41543★ | 2026-11-22 | POS, warehouse, and the India GST localisation in-tree. GPL ⇒ a modified distribution must be opened; hosting it for one client is fine. |
+| **Open Source Point of Sale** | [opensourcepos/opensourcepos](https://github.com/opensourcepos/opensourcepos) | **MIT** (2537 B incl. 26-name roster) | 4530★ | 2026-11-22 | The only permissive *and* maintained standalone till. PHP/CodeIgniter 4 + MySQL, Docker install, multi-tier tax. The clean base when the client wants to own the result outright. |
+| **NexoPOS** | [Blair2004/NexoPOS](https://github.com/Blair2004/NexoPOS) | **GPL-3.0** | 1310★ | 2026-11-22 | Laravel/Vue, registers, inventory, most actively developed dedicated POS measured. |
+| **Apache OFBiz** | [apache/ofbiz-framework](https://github.com/apache/ofbiz-framework) | **Apache-2.0** | 1151★ / 770f | 2026-11-22 | Still the only Apache-licensed full ERP with a POS module. **Use this slug:** `apache/ofbiz` is archived (last push 2020-04-27) and is what most listicles still link — carried forward from cycle 8. |
+
+**Not usable, despite appearances:** [tngoman/Store-POS](https://github.com/tngoman/Store-POS), 1058★ — the
+single highest-starred result for `point of sale retail stars:>=300` — **ships no licence file**.
+
+### Fiscalisation platforms — the layer that makes a till lawful
+
+A POS without fiscalisation is a demo. These are the platform-grade projects, not just libraries:
+
+| Platform | Repo | Licence | ★ | Scope |
+|---|---|---|---|---|
+| **LibreDTE** (Chile) | [LibreDTE/libredte-app-community](https://github.com/LibreDTE/libredte-app-community) | **AGPL-3.0** | 42★ | Full web application for Chilean DTE/boleta issuance against the SII. Core library `libredte-lib-core` is also AGPL-3.0 (228★ / 166 forks, pushed 2026-11-19). The PHP/Python **API clients are LGPL-3.0**, but they call LibreDTE's *hosted* service — so the permissive path is a dependency on someone else's SaaS, not self-hosting. |
+| **Oxalis** (Peppol AP) | [OxalisCommunity/oxalis](https://github.com/OxalisCommunity/oxalis) | **EUPL-1.1+** (declared in `COPYRIGHT`; repo also ships `COPYING.LGPL`) | 150★ | The reference Peppol Access Point, originally built by the Norwegian government agency Difi. Required shape for EU **and** Singapore InvoiceNow. Dormant since 2026-04-16 — the live alternative is `phax/phase4` (Apache-2.0, pushed 2026-11-18). |
+| **india-compliance** (India) | [resilient-tech/india-compliance](https://github.com/resilient-tech/india-compliance) | **GPL-3.0** | 286★ / 4725 refs | GST e-invoicing and e-way bills as a Frappe/ERPNext app. The cleanest example in retail of fiscal compliance shipped *as an ERP module* rather than a library. |
+| **Odoo OCA localisations** | [OCA/l10n-brazil](https://github.com/OCA/l10n-brazil) · [OCA/l10n-mexico](https://github.com/OCA/l10n-mexico) · [OCA/l10n-chile](https://github.com/OCA/l10n-chile) | **AGPL-3.0** — all three | 376★ / 20★ / 10★ | The modules that make an Odoo POS legal in Brazil, Mexico and Chile. See below. |
+
+### ⚠️ The AGPL inversion — the single most commercially important fact in this pass
+
+Cycle 8 established, correctly, that **Odoo core is LGPL-3.0, not GPL**, and concluded that *proprietary
+Odoo modules are allowed* — calling it the most useful licence fact in retail.
+
+**That conclusion inverts the moment the deployment needs LATAM fiscal compliance.** The OCA country
+localisations — `l10n-brazil`, `l10n-mexico`, `l10n-chile` — are each **AGPL-3.0**, verified by reading
+`LICENSE` at source: 34523 bytes, first line `GNU AFFERO GENERAL PUBLIC LICENSE`, byte-identical to
+Ultralytics'. A hosted Odoo that issues NF-e, CFDI or DTE therefore combines LGPL core with **AGPL**
+modules, and AGPL's network clause reaches the service your client's customers touch.
+
+Practical consequences, in order of usefulness:
+
+1. **Do not tell a LATAM client "Odoo is LGPL so your modules stay closed."** It is true of the core and
+   false of the part that makes them legal.
+2. **Keep the fiscal boundary at a process edge.** Run issuance as a separate service speaking a documented
+   API, so the AGPL obligation attaches to a replaceable compliance component, not to the client's
+   merchandising IP.
+3. **Or avoid the Odoo localisation entirely** and build issuance on the permissive national libraries:
+   Mexico MIT (`phpcfdi/*`, `python-satcfdi`), Brazil Apache-2.0 (`wmixvideo/nfe`) or LGPL-3.0
+   (`sped-nfe`). Chile has no permissive option — `libredte-lib-core` is AGPL-3.0 and there is nothing else:
+   `factura electronica DTE SII stars:>=20` returns **0 results**.
+4. **Forks, not stars, tell you these are in production.** `l10n-mexico` 20★ / 56 forks, `l10n-chile`
+   10★ / 41 forks. They are patched per client, which is also why their licence matters.
+
+### Workforce platforms — the genuinely empty shelf
+
+There is no open-source retail workforce-management platform. `workforce scheduling stars:>=150` returns
+exactly one repo, [Staffjoy/v2](https://github.com/Staffjoy/v2) (MIT, 1686★), **abandoned since
+2022-12-06**. The honest build is [TimefoldAI/timefold-solver](https://github.com/TimefoldAI/timefold-solver)
+(Apache-2.0, 1879★, pushed 2026-11-20) as the constraint engine, with the labour rules, the UI and the
+mobile app as Globant-owned work. That is a product, not an integration — and it is the correct way to
+describe it in a proposal.

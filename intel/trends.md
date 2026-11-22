@@ -203,3 +203,76 @@ open source is strongest (trend #9, step 1), so the build is cheap and the margi
 - **LATAM AI regulation status** (Brazil PL 2338 with ANPD as enforcement authority; Mexico LFPDPPP plus
   INAI guidance on automated decisions) is sourced to a consultancy marketing blog and was not verified
   against the Brazilian Congress or INAI.
+
+---
+
+## Added 2026-11-22 (pass 2) — the store plane
+
+### 13. Retail's majority channel had no vocabulary in this knowledge base
+
+Measured by grep across all eight files **before** any search was run: zero occurrences of `planogram`,
+`self-checkout`, `rfid`, `computer vision`, `workforce`, `scheduling`, `store operations`, `point of sale`,
+`reverse logistics`, `fraud`, `loyalty`, `customer service`, `e-invoic`, `cfdi`, `nf-e` or `peppol`. Eight
+cycles of this KB described retail entirely as e-commerce and agentic commerce. **Most retail revenue is
+rung up in a store**, and this is the trend note that records the omission as well as closing it.
+
+### 14. The open-source gradient in the store inverts the usual shape: the *middle* is best equipped
+
+Every plane this KB has measured — healthcare's identifiers, media's rights reservation, retail's product
+data — degrades monotonically: declaring is easy, moving is harder, judging is empty. **The store plane does
+not.** Ringing the sale is adequately served but copyleft (NexoPOS GPL-3.0, ERPNext GPL-3.0, Odoo LGPL-3.0,
+with `opensourcepos` MIT as the one permissive maintained till). **Making the sale lawful is the
+best-equipped layer in retail open source.** Seeing what is actually happening on the shelf, in the queue
+and on the roster is empty. The compulsory middle is where the code is, because **a tax authority is a
+specification that cannot be ignored, deferred or A/B tested** — which is precisely what a standards body
+is not.
+
+### 15. Compliance is the one retail capability whose licence is a function of geography
+
+Mexico CFDI is MIT and Unlicense. Brazil NF-e is Apache-2.0 and LGPL-3.0. Chile DTE is AGPL-3.0 with no
+alternative. The EU is Apache/MIT libraries over an **EUPL-1.1** access point. India is GPL-3.0 inside
+ERPNext. The United States has no mandate at all. **A single multi-country retail rollout therefore crosses
+four licence families, and because the obligation is not optional, the licence chooses the architecture.**
+No other layer in this KB behaves this way: a recommender or a search index has the same licence everywhere.
+
+### 16. The entire visible shelf-vision corpus is AGPL-derived, and nobody says so
+
+`ultralytics/ultralytics` — 63669★, 12024 forks, pushed the day of this pass — is **AGPL-3.0**, and it is
+what every shelf-monitoring repo surfaced by search is built on. `planogram` returns 502 repos whose top
+result has **17 stars**; `shelf monitoring retail stars:>=30` returns **one** repo, unlicensed, describing
+itself as a simulation. So the picture is not "open source is behind on shelf vision" but something sharper:
+**the demos are abundant, uniformly tiny, and uniformly copyleft at the weights layer.** The permissive
+route exists (`roboflow/supervision`, MIT, 51699★) but requires deliberately not using the default detector.
+
+### 17. Workforce management is the starkest single-repo result this KB has recorded
+
+`workforce scheduling stars:>=150` → **one repo worldwide**: `Staffjoy/v2`, MIT, 1686★, **last pushed
+2022-12-06.** Four years dead, and still the best-starred workforce-management project in open
+source. Retail's single largest controllable cost line has one abandoned repo above 150 stars. Compare
+media's "music royalty accounting" (14 results, top six summing to 0 stars): the shape is the same — the
+work that costs the most money attracts the least open code.
+
+### 18. Peppol is no longer a European competence
+
+Singapore's GST InvoiceNow mandate requires connection to the **Peppol** network through an
+IMDA-accredited Access Point. The same architecture, and the same EUPL-licensed reference implementation,
+serves EU and APAC compliance. A capability built for a French mandate is sellable in Singapore — the only
+cross-region capability transfer this KB has been able to demonstrate from primary mechanics rather than
+analogy.
+
+### Source-quality notes for this section
+
+- France's 1 September 2026 go-live is well sourced but **enforcement is contested**: one source says DGFiP
+  will not automatically sanction good-faith efforts, another says no grace period exists in law.
+- **Belgium (1 January 2026) and Poland KSeF (1 February 2026) are single-sourced** from a vendor timeline.
+- The claim that **Germany's 2027 rules include "e-Kasa" fiscalisation for B2C retail is recorded as not
+  verified and probably conflated** — *e-Kasa* is Slovakia's system; Germany uses KassenSichV/TSE.
+- **Frontline AI adoption figures conflict by a factor of two**: a BCG 2026 survey cited by a vendor reports
+  74% of frontline workers using AI daily or several times weekly; a UKG survey reports 33% for retail,
+  hospitality and food service. Different measures, not a settled number.
+- Vendor-reported store outcomes (e.g. Hugo Boss: 25% of administrative time saved, 3% incremental revenue)
+  come from the vendor that sold the system. Directional only.
+- APAC deployment counts (CloudPick 1,200+ locations; a 15,000-store FamilyMart/7-Eleven commitment) trace
+  to a single market-research page. **Unverified.**
+- North America remains the weakest-sourced region, a second cycle running; the reported FTC order barring a
+  retailer from facial recognition for five years **does not name the retailer** in the source.

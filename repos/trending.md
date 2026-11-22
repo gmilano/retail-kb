@@ -10,6 +10,42 @@ updated: 2026-11-22
 > protocol and platform repos**. For agents and agent-facing tooling see `agents/trending.md` — until today
 > the two files were byte-identical and this distinction did not exist.
 
+## 2026-11-22 (pass 2)
+
+**Theme: fiscalisation is the best-equipped layer in retail open source, and its licence changes at every
+border.** Earlier today this file added the product-data plane. This section adds the layer underneath the
+till: the code that makes a sale lawful. It is the only retail capability where mature, maintained open
+source exists for each jurisdiction *under a different licence in each one*. All rows measured 2026-11-22.
+
+| Movement | Repo | License (read at source) | ★ / forks | Last push | Why it is trending |
+|---|---|---|---|---|---|
+| New — 🇧🇷 | [nfephp-org/sped-nfe](https://github.com/nfephp-org/sped-nfe) | **LGPL-3.0** (`LICENSE.md` 8851 B) | 1635★ / 1169 refs | 2026-11-13 | Largest fiscal library in retail open source. API reports `NOASSERTION`; the file says LESSER GPL, so dynamic linking keeps your till closed. **Keyword search never returned it** — found only via a `repo:` qualifier. |
+| New — 🇧🇷 | [wmixvideo/nfe](https://github.com/wmixvideo/nfe) | **Apache-2.0** (10850 B, appendix stripped) | 770★ / 411f | 2026-11-16 | The permissive Brazilian option, and the JVM one. Highest-value row in this table for a Java retail stack. |
+| New — 🇧🇷 | [TadaSoftware/PyNFe](https://github.com/TadaSoftware/PyNFe) | **LGPL-3.0** (7854 B) | 599★ / 237 refs | 2026-02-20 | Python NF-e. API says `NOASSERTION`; the file is a reformatted LGPL-3.0. Dormant 9 months. |
+| New — 🇲🇽 | [phpcfdi/sat-ws-descarga-masiva](https://github.com/phpcfdi/sat-ws-descarga-masiva) · [SAT-CFDI/python-satcfdi](https://github.com/SAT-CFDI/python-satcfdi) · [eclipxe13/CfdiUtils](https://github.com/eclipxe13/CfdiUtils) | **MIT** × 3 (1106 / 1056 / 1111 B) | 198★ · 169★ · 146★ | 2026-09-20 · 2026-11-08 · 2026-11-15 | **Mexico is the only country in retail where the compulsory layer can be built with zero copyleft obligation.** `python-satcfdi`'s licence lives in a file called `license` with no extension, beside a `readme.rst`. |
+| New — 🇲🇽 | [phpcfdi/resources-sat-catalogs](https://github.com/phpcfdi/resources-sat-catalogs) | **Unlicense** (2571 B, public domain) | 97★ / 424 refs | 2026-11-20 | SAT product/tax catalogues, public domain. The rarest licence in this KB. |
+| New — 🇨🇱 | [LibreDTE/libredte-lib-core](https://github.com/LibreDTE/libredte-lib-core) | **AGPL-3.0** (`COPYING` 34520 B) | 228★ / 166f | 2026-11-19 | Chile's only maintained DTE core, and it is AGPL. `factura electronica DTE SII stars:>=20` → **0 results**, so there is no alternative to find. |
+| New — 🇪🇺 | [phax/phase4](https://github.com/phax/phase4) | **Apache-2.0** (10173 B) | 246★ / 67f | 2026-11-18 | Peppol AS4 client/server, and the *maintained* access-point option. |
+| **Licence alert — 🇪🇺** | [OxalisCommunity/oxalis](https://github.com/OxalisCommunity/oxalis) | **EUPL-1.1 or later** (declared in `COPYRIGHT`, 799 B; repo also ships `COPYING.LGPL`) | 150★ / 280 refs | 2026-04-16 | The reference Peppol Access Point, built by Norway's Difi. Two disagreeing licence artefacts, API says `NOASSERTION`, and **EUPL treats *communicating the work* as distribution** — hosting it as a service can trigger source provision like AGPL. Invisible to every SPDX field and SBOM scan of the source tree. Dormant since April. |
+| New — 🇪🇺 | [josemmo/einvoicing](https://github.com/josemmo/einvoicing) · [num-num/ubl-invoice](https://github.com/num-num/ubl-invoice) · [phax/phive](https://github.com/phax/phive) | **MIT** · **MIT** · **Apache-2.0** | 180★ · 143★ · 79★ | 2026-11-07 · 2026-11-03 · 2026-11-19 | EN 16931 reading/writing, UBL/Peppol BIS generation, and document validation. All permissive, all pushed this month. |
+| New — 🇮🇳 | [resilient-tech/india-compliance](https://github.com/resilient-tech/india-compliance) | **GPL-3.0** (`license.txt` 35149 B) | 286★ / 4725 refs | 2026-11-20 | GST e-invoicing and e-way bills **as an ERPNext app** — compliance shipped inside the ERP rather than beside it. |
+| **Licence alert — LATAM** | [OCA/l10n-brazil](https://github.com/OCA/l10n-brazil) · [OCA/l10n-mexico](https://github.com/OCA/l10n-mexico) · [OCA/l10n-chile](https://github.com/OCA/l10n-chile) | **AGPL-3.0** × 3 (34523 B each) | 376★/339f · 20★/**56f** · 10★/**41f** | 2026-11-21 · 2026-11-09 · 2026-11-22 | **The inversion of cycle 8's headline.** Odoo core is LGPL so proprietary modules are allowed — but the modules that make the POS *lawful* in LATAM are AGPL. Note the fork:star ratios for Mexico and Chile — 2.8 and 4.1: nobody stars a tax localisation, they fork it to patch it. |
+| New — till layer | [opensourcepos/opensourcepos](https://github.com/opensourcepos/opensourcepos) | **MIT** (2537 B incl. 26-name roster) | 4530★ / 1410 refs | 2026-11-22 | The only permissive **and** maintained standalone retail till. API says `NOASSERTION` purely because of the copyright roster above the grant. |
+| New — till layer | [Blair2004/NexoPOS](https://github.com/Blair2004/NexoPOS) | **GPL-3.0** (35149 B) | 1310★ / 2125 refs | **2026-11-22 (same day)** | Most actively developed dedicated POS measured. |
+| **Do not use** | [tngoman/Store-POS](https://github.com/tngoman/Store-POS) | **No licence file** (2 branches × 8 filenames probed) | 1058★ / 115 refs | 2026-10-25 | The single highest-starred result for `point of sale retail stars:>=300` — a query that returns exactly one repo — **and it carries no grant at all.** A keyword-ingest pass would have put it first. |
+
+**Per-row audit:** 14 rows / 24 distinct repos, every one verified by `ls-remote` for existence and by
+reading the licence file at source. Five GitHub API `NOASSERTION` fields resolved to real licences; one
+repo (`Store-POS`) confirmed genuinely unlicensed; one new licence family entered this KB (**EUPL**) and
+two new licence filenames (`COPYING.LGPL`, `COPYRIGHT`, plus lowercase `license` with no extension).
+
+**Measured empty, and recorded as empty:** `planogram` → 502 repos whose **top result has 17 stars**;
+`shelf monitoring retail stars:>=30` → **1** (unlicensed, self-described simulation);
+`workforce scheduling stars:>=150` → **1**, dead since 2022-12-06; `retail loss prevention theft detection
+stars:>=20` → **0**; `footfall people counting retail stars:>=50` → **0**;
+`product detection retail shelf yolo stars:>=100` → **0**; `factura electronica DTE SII stars:>=20` → **0**.
+---
+
 ## 2026-11-22
 
 **Theme of the week: the product-data plane enters this KB.** Eight files, and not one of them previously

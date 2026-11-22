@@ -10,6 +10,34 @@ updated: 2026-11-22
 > agent-facing tooling**. For infrastructure and platform repos see `repos/trending.md` — until today the
 > two files were byte-identical, so the agents/repos distinction never actually existed in this KB.
 
+## 2026-11-22 (pass 2)
+
+**Theme: there is no store-operations agent — the agent surface over the store is an MCP server bolted to
+the ERP.** Earlier today this file tracked the agent layer above the *catalogue*. The measurement that
+matters now is that the agent layer above the *store* does not exist as agents at all; it exists as
+wrappers around Odoo and ERPNext, because that is where the till, the stock ledger and the country tax
+localisation already live. All rows measured 2026-11-22.
+
+| Movement | Repo | License | ★ / forks | Last push | Why it is trending |
+|---|---|---|---|---|---|
+| New to this KB | [ivnvxd/mcp-server-odoo](https://github.com/ivnvxd/mcp-server-odoo) | **MPL-2.0** (LICENSE 16725 B) | 419★ / 190f | **2026-11-22 (same day)** | The strongest store-plane agent surface in open source. Exposes Odoo models over MCP, which means POS sessions, stock moves, pricelists and `l10n_*` fiscal modules. MPL-2.0 is file-level copyleft — new files stay proprietary. |
+| New to this KB | [marcfargas/odoo-toolbox](https://github.com/marcfargas/odoo-toolbox) | **LGPL-3.0** (7652 B) | 44★ / 116 refs | 2026-10-26 | TypeScript SDK + CLI + MCP server + skill modules, CI-tested against live Odoo. The TS-stack counterpart to the row above. |
+| New to this KB | [hachecito/odoo-mcp-improved](https://github.com/hachecito/odoo-mcp-improved) | MIT (1072 B) | 49★ / 6f | 2026-11-18 | Sales- and stock-specific MCP tools rather than generic model access. |
+| New to this KB | [nasroykh/foxmayn_frappe_cli](https://github.com/nasroykh/foxmayn_frappe_cli) | MIT | 16★ | 2026-11-11 | Frappe/ERPNext CLI, MCP server and desktop app. Small, permissive, current. |
+| **Maintenance alert** | [rakeshgangwar/erpnext-mcp-server](https://github.com/rakeshgangwar/erpnext-mcp-server) | MIT (1071 B) | 131★ / 12 refs | **2026-04-25 (211 days)** | The best-known ERPNext MCP server has not moved in seven months. Usable, not maintained — and ERPNext is where the India GST localisation lives. |
+| **Licence alert** | [ultralytics/ultralytics](https://github.com/ultralytics/ultralytics) | **AGPL-3.0** (34523 B) | 63669★ / 12024f | 2026-11-22 | Not new, but newly relevant: every shelf-vision repo surfaced by search is built on it, so **the entire visible open-source shelf-vision corpus is AGPL-derived.** The network clause reaches a hosted store-analytics service. |
+| **The permissive alternative** | [roboflow/supervision](https://github.com/roboflow/supervision) | **MIT** (LICENSE.md 1065 B) | 51699★ / 4964f | 2026-11-20 | Detector-agnostic tracking, polygon zones, line counters. The reason a licensable store-vision build is possible at all — see `compose/patterns.md` Pattern 12. |
+| **Tool, not agent** | [TimefoldAI/timefold-solver](https://github.com/TimefoldAI/timefold-solver) | **Apache-2.0** (11358 B) | 1879★ / 244f | 2026-11-20 | Listed here because the correct use is *as an agent's tool*: solver for feasibility, agent for negotiation. Maintained successor to OptaPlanner (3512★), whose own description now redirects elsewhere. |
+
+**Per-row audit of claims made about the agent layer this week:** 8 of 8 rows verified by `ls-remote` for
+existence and by reading the licence file at source. Four repos whose GitHub API licence field reads
+`NOASSERTION` were resolved to real licences by reading the file — none of them was actually unlicensed.
+
+**Measured empty, and recorded as empty:** `retail execution store audit mobile stars:>=5` → **0 results
+worldwide**. The store-task-execution category that Yoobic, Zipline and Flip sell into has no open-source
+entry point at any star threshold. `order management fulfillment stars:>=100` → **0**.
+---
+
 ## 2026-11-22
 
 **Theme of the week: the catalogue, not the checkout.** Last week's section tracked protocol
