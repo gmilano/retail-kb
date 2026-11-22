@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-21
+updated: 2026-11-22
 ---
 
 # 🏗️ Foundational Repos — Retail & Consumer
@@ -73,3 +73,77 @@ effectively empty:
   Catalogue deduplication across suppliers remains unsolved in the open.
 - **Shrink / loss prevention:** no open tooling surfaced in either GitHub or web search. Vision-based shelf
   and theft analytics is entirely vendor territory.
+
+---
+
+## Added 2026-11-22 — the product-data plane, in three steps
+
+The agentic-commerce layer above assumes a catalogue an agent can read. This section is that catalogue
+layer, and it splits cleanly into three steps whose open-source health is **completely different**. All
+rows verified 2026-11-22: existence by `git ls-remote`, stars/forks/last-push from one
+`search/repositories` call, licence by reading the file.
+
+### Step 1 — DECLARE what the product is (identity). Well equipped, permissive, alive.
+
+| Repo | License | ★ / forks | Last push | Role |
+|---|---|---|---|---|
+| [gs1/GS1_DigitalLink_Resolver_CE](https://github.com/gs1/GS1_DigitalLink_Resolver_CE) | Apache-2.0 (read, 11357 B) | 65★ / 45f | 2026-11-02 | GS1's own resolver: GTIN → the authoritative set of URIs for that product. The piece Sunrise 2027 and DPP both need. |
+| [gs1/GS1DigitalLinkToolkit.js](https://github.com/gs1/GS1DigitalLinkToolkit.js) | Apache-2.0 | 20★ / 6f | 2025-05-01 | Translates GS1 element strings ↔ Digital Link URIs; validates check digits and GCP length. |
+| [gs1/GS1DL-resolver-testsuite](https://github.com/gs1/GS1DL-resolver-testsuite) | Apache-2.0 | 15★ / 8f | 2026-08-07 | Conformance suite for a resolver against the Digital Link spec — i.e. you can *prove* an implementation correct. |
+| [zxing/zxing](https://github.com/zxing/zxing) | Apache-2.0 | 34217★ / 9428f | 2026-11-21 | The 1D/2D barcode decoding floor for the whole industry. DataMatrix and QR included. |
+| [journeyapps/zxing-android-embedded](https://github.com/journeyapps/zxing-android-embedded) | Apache-2.0 | 5932★ / — | 2024-08-04 | Android scanning wrapper on ZXing. Widely used; dormant 2+ years. |
+| [EventideSystems/brocade.io](https://github.com/EventideSystems/brocade.io) | AGPL-3.0 | 142★ / 9f | 2025-12-21 | Open GTIN/barcode product database. **The only repo above 100★ for `gtin barcode` — and it is AGPL,** so treat as a data service to call, not code to vendor. |
+
+### Step 2 — MOVE it (events and trade messages). Also well equipped, mostly permissive.
+
+| Repo | License | ★ / forks | Last push | Role |
+|---|---|---|---|---|
+| [openepcis/epcis-repository-ce](https://github.com/openepcis/epcis-repository-ce) | Apache-2.0 (read, 11357 B) | 17★ / 6f | 2026-10-22 | EPCIS 2.0 event repository (Quarkus + Kafka + OpenSearch). Open-core: a commercial Business Edition sits on top, so scope the CE boundary before promising features. |
+| [openepcis/openepcis-epc-digitallink-translator](https://github.com/openepcis/openepcis-epc-digitallink-translator) | Apache-2.0 | 7★ / 4f | 2026-09-13 | EPC URN ↔ GS1 Digital Link, with GS1-rule validation. The join between step 1 and step 2. |
+| [openepcis/epcis-testdata-generator](https://github.com/openepcis/epcis-testdata-generator) | Apache-2.0 | 8★ / 2f | 2026-10-28 | Generates valid EPCIS 2.0 / CBV 2.0 events — how you test a traceability integration without a client's real data. |
+| [JaewookByun/epcis](https://github.com/JaewookByun/epcis) (Oliot) | Apache-2.0 | 51★ / 57f | 2026-01-15 | Academic-lineage EPCIS/CBV 2.0.0 implementation. Fork count (57) exceeds stars (51) — unusual, and the mark of a reference people actually modify. |
+| [louisaxel-ambroise/epcis](https://github.com/louisaxel-ambroise/epcis) | Apache-2.0 — **declared in a 560 B pointer file**, API reports `NOASSERTION` | 36★ / 14f | 2026-11-22 | EPCIS 1.x + 2.0 on .NET 10. The only actively-pushed .NET option (committed the day of this pass). |
+| [webofthings/epcis2.js](https://github.com/webofthings/epcis2.js) | Apache-2.0 | 37★ / 3f | 2025-09-26 | EPCIS 2.0 JavaScript SDK. |
+| [ift-gftc/opentraceability](https://github.com/ift-gftc/opentraceability) | MIT | 8★ / 5f | 2026-09-24 | IFT/GFTC food-traceability libraries (C#). Partial protocol coverage by its own admission — read the caveat before promising conformance. |
+| [indice-co/EDI.Net](https://github.com/indice-co/EDI.Net) | MIT (read, 1074 B) | 491★ / 172f | 2025-12-01 | EDIFACT + X12 + TRADACOMS serialiser/deserialiser. The best-licensed general EDI library found. |
+| [kputnam/stupidedi](https://github.com/kputnam/stupidedi) | BSD-3-Clause | 293★ / 146f | 2026-09-16 | ASC X12 parse/generate in Ruby; high fork ratio, still maintained. |
+| [nerdocs/pydifact](https://github.com/nerdocs/pydifact) | MIT (read, 1081 B) | 191★ / 54f | 2026-11-16 | EDIFACT in Python. Actively maintained. |
+| [tastypackets/x12-parser](https://github.com/tastypackets/x12-parser) | MIT (read, 1071 B) | 63★ / 12f | 2026-11-18 | Streaming X12 parser in TypeScript. Smallest but freshest. |
+| [php-edifact/edifact](https://github.com/php-edifact/edifact) | LGPL-3.0 | 289★ / 89f | 2025-10-30 | EDIFACT for PHP — relevant because the PIM/commerce layer in EMEA is overwhelmingly PHP. LGPL: dynamic linking is fine, modification is not free. |
+
+### Step 3 — JUDGE whether the catalogue is *right*. No retail-specific floor at all.
+
+The engines exist; **none of them knows anything about retail.** This is the whole finding.
+
+| Repo | License | ★ / forks | Last push | Role |
+|---|---|---|---|---|
+| [unionai-oss/pandera](https://github.com/unionai-oss/pandera) | MIT | 4533★ / 527f | 2026-11-19 | Declarative dataframe validation. The most practical place to encode catalogue rules in Python. |
+| [awslabs/deequ](https://github.com/awslabs/deequ) | Apache-2.0 | 3660★ / 584f | 2026-10-20 | Spark-scale data "unit tests" — the right fit for a multi-million-SKU catalogue. |
+| [great-expectations/great_expectations](https://github.com/great-expectations/great_expectations) | Apache-2.0 | — (see note) | — | The best-known data-quality framework. **`search/repositories` returned HTTP 422 "cannot be searched" for this live repo** (`ls-remote` gives 11430 refs) — a fifth measurement of the search channel's false negatives, and the first where the failure was a 422 rather than an empty result. Stars left blank rather than guessed. |
+| [sodadata/soda-core](https://github.com/sodadata/soda-core) | `NOASSERTION` — **not read this pass, treat as unverified** | 2463★ | 2026-11-22 | Data-contracts engine. Listed for completeness with its licence explicitly unresolved. |
+| [dedupeio/dedupe](https://github.com/dedupeio/dedupe) | MIT | 4531★ / 578f | 2025-07-29 | Fuzzy matching / record dedup. The realistic basis for supplier-catalogue reconciliation. 16 months without a push. |
+| [zinggAI/zingg](https://github.com/zinggAI/zingg) | AGPL-3.0 | 1275★ / 178f | 2026-11-03 | ML entity resolution / MDM. Alive, but AGPL — fine as a service behind an API, not for embedding in a client's product. |
+
+### Measured gaps in this plane — searched for on 2026-11-22, genuinely not there
+
+- **Product taxonomy classification: `product taxonomy classification stars:>=50` → 0. A literal zero.**
+  Nothing open source maps a merchant's products onto a standard taxonomy, even though ACP's own feed
+  schema has a `Category.taxonomy` field that is just a free-text string (see `intel/trends.md`).
+- **`product description generation ai stars:>=30` → 0** and **`visual search product embedding stars:>=100`
+  → 0.** The two most-demonstrated retail GenAI demos of the last two years have no open implementation
+  above hobby scale.
+- **Product attribute extraction is a 2019–2022 research graveyard.** `attribute extraction product
+  stars:>=50` → **3**: `lonePatient/BERT-Attribute-Value-Extract` (62★, **no licence**, last push
+  2020-02-18), `google-research-datasets/MAVE` (160★, `NOASSERTION`, 2022-12-16),
+  `hackerxiaobai/OpenTag_2019` (84★, **no licence**, 2019-09-11). Not one is maintained and not one is
+  usably licensed.
+- **Product feeds — the false-abundance trap of this pass.** `product feed stars:>=100` returns **7 repos
+  and not one is a retail product feed tool**: `feedbackjar` (product-team feedback), `RSSence` (RSS
+  screensaver), `hacker-feeds-cli`, a Magento extension directory, a generic project list. The closest
+  thing is `Czarto/ShopifyScripts` (MIT, 136★, dormant since 2024-05-24). Everything purpose-built for
+  Google Merchant Center sits at 0–10 stars, often unlicensed, as single-platform plugins. **The layer the
+  2026 trade press calls "the primary ranking layer of agentic commerce" has no open-source floor
+  whatsoever.** Read the results, not the total: 99 repos matched `product feed merchant center`, and all
+  of them were plugins.
+- **No permissive MDM.** `master data management stars:>=100` → 4, of which only 2 are real software, and
+  both are copyleft (`zingg` AGPL-3.0, `atrocore` GPL-3.0).

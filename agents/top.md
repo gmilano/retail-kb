@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-21
+updated: 2026-11-22
 ---
 
 # 🎯 AI Agents & Commerce Intelligence — Retail & Consumer
@@ -79,3 +79,41 @@ here is sloppiness, not a consistent direction — two of six were understated.
 returns false negatives and 422s on live repos, and `curl -sI github.com` is blind through this proxy);
 stars and `pushed_at` from one `search/repositories` call; licenses read from raw.githubusercontent.com
 whenever the API said `NOASSERTION` or returned nothing.*
+
+---
+
+## Added 2026-11-22 — the product-data plane (agents that make a catalogue machine-readable)
+
+Yesterday's pass established that the **access** layer is populated: UCP, ACP, AP2, x402 and the NVIDIA
+blueprint let an agent reach a storefront and complete a purchase. This pass asked the question underneath
+it: once the agent arrives, **can it tell what the product is?** The answer is where the open-source floor
+stops.
+
+### The agent-shaped layer is one repo wide — measured, not estimated
+
+| Agent / service | Repo | License | ★ / forks | Last push | What it does |
+|---|---|---|---|---|---|
+| NVIDIA Retail Catalog Enrichment | [NVIDIA-AI-Blueprints/Retail-Catalog-Enrichment](https://github.com/NVIDIA-AI-Blueprints/Retail-Catalog-Enrichment) | Apache-2.0 (read, 11347 B) | 47★ / 26f | 2026-11-18 | GenAI pipeline that turns bare product images into structured catalogue copy and attributes. **The only result worldwide for `catalog enrichment ai stars:>=20`.** |
+| Shopify MCP server | [GeLi2001/shopify-mcp](https://github.com/GeLi2001/shopify-mcp) | MIT | 238★ / 121f | 2026-04-05 | Typed access to Shopify Admin API (products, variants, inventory) for MCP hosts. Most-starred third-party commerce MCP server; 7 months since last push. |
+| SAP Commerce (Hybris) MCP | [Emenowicz/hybris-mcp](https://github.com/Emenowicz/hybris-mcp) | MIT | 17★ / 6f | 2026-09-24 | FlexibleSearch, ImpEx, Groovy and cron access to SAP Commerce Cloud — the enterprise catalogue most Globant retail clients actually run. |
+| GS1 Digital Link Resolver CE | [gs1/GS1_DigitalLink_Resolver_CE](https://github.com/gs1/GS1_DigitalLink_Resolver_CE) | Apache-2.0 (read, 11357 B) | 65★ / 45f | 2026-11-02 | Resolves a GTIN/Digital Link URI to the set of URIs for that product (spec sheet, DPP, recall, recipe). **The standards body's own reference implementation, permissively licensed and alive.** Usable directly as an agent tool: one identifier in, authoritative links out. |
+
+**That is the whole list.** The queries that returned nothing are listed in `repos/foundations.md` under the
+2026-11-22 gap section. `product description generation ai stars:>=30` → **0**.
+`visual search product embedding stars:>=100` → **0**. `product taxonomy classification stars:>=50` → **0**.
+
+### Corrections and refinements to earlier cycles of this file
+
+- **Refinement to the 2026-11-21 "product matching / entity resolution = 0" gap.** That measurement was
+  right for the *retail-specific* query and wrong as a general conclusion. Generic entity resolution is well
+  equipped: [dedupeio/dedupe](https://github.com/dedupeio/dedupe) (MIT, 4531★ / 578f, last push
+  2025-07-29) and [zinggAI/zingg](https://github.com/zinggAI/zingg) (AGPL-3.0, 1275★ / 178f, 2026-11-03).
+  The accurate statement is: **the engines exist, the retail rule packs do not.** That is a better
+  commercial position than a bare gap, and it changes the recipe — compose, do not build from zero.
+- **Protocol maintenance re-measured, and it changes yesterday's picture.** Yesterday's rows carried stars
+  but not last-push for the three standards. Measured today: ACP (`agentic-commerce-protocol`) 1610★,
+  **last push 2026-07-18 — 127 days**; AP2 (`google-agentic-commerce/AP2`) 3283★, **last push 2026-06-17 —
+  158 days**; UCP (`Universal-Commerce-Protocol/ucp`) 3516★, **last push 2026-11-21 — yesterday**. Of the
+  three Apache-2.0 standards, **only Google's UCP is under active maintenance.** Protocol-neutrality via
+  the NVIDIA blueprint remains the right engineering call, but do not describe ACP or AP2 to a client as
+  fast-moving: they are, on the evidence of their own default branches, parked.

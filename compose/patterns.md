@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-21
+updated: 2026-11-22
 ---
 
 # 🧩 Composition Patterns — Retail & Consumer
@@ -145,6 +145,97 @@ stars:>=100` returns no retail repos at all. That is not a failure of the search
 is the best place to build proprietary Globant IP. Also respect robots/ToS on collection; Apify handles the
 mechanics but not the client's legal exposure.
 
+## Pattern 7 — Catalogue readiness pipeline (the prerequisite nobody sells yet)
+
+Added 2026-11-22. **Problem:** the client has an agentic-commerce project and a catalogue the agent cannot
+read. Measured reality: nothing open source judges whether a catalogue is right (`repos/foundations.md`,
+step 3), so this is composed from generic engines plus retail rule packs you own.
+
+**Wiring:**
+
+1. **Ingest** from the client's PIM. If greenfield, [`unopim/unopim`](https://github.com/unopim/unopim)
+   (MIT, 11080★) — the only permissive maintained PIM. If they run Akeneo (OSL-3.0) or Pimcore (**POCL,
+   not open source** — check this before quoting), integrate, do not fork.
+2. **Normalise identity** with [`gs1/GS1DigitalLinkToolkit.js`](https://github.com/gs1/GS1DigitalLinkToolkit.js)
+   (Apache-2.0): validate GTIN check digits and GCP length, reject restricted prefixes (02, 04, 2, 05, 98,
+   99), and translate element strings ↔ Digital Link URIs.
+3. **Validate attributes** with [`unionai-oss/pandera`](https://github.com/unionai-oss/pandera) (MIT) for
+   Python-scale catalogues or [`awslabs/deequ`](https://github.com/awslabs/deequ) (Apache-2.0) on Spark for
+   multi-million-SKU retailers. **The rule pack is the deliverable and the IP** — completeness per category,
+   unit-of-measure sanity, price/availability freshness, image presence, cross-field consistency.
+4. **Deduplicate** supplier overlaps with [`dedupeio/dedupe`](https://github.com/dedupeio/dedupe) (MIT).
+   Use [`zinggAI/zingg`](https://github.com/zinggAI/zingg) (AGPL-3.0) only behind a service boundary.
+5. **Enrich the gaps** with
+   [`NVIDIA-AI-Blueprints/Retail-Catalog-Enrichment`](https://github.com/NVIDIA-AI-Blueprints/Retail-Catalog-Enrichment)
+   (Apache-2.0) — images in, structured attributes and copy out — with a **human review queue**, because
+   enrichment writes into the record of truth.
+6. **Emit** an ACP `schema.feed.json`-shaped feed (20 objects / 62 properties, spec version `2026-04-17`)
+   and a Merchant Center feed, then assert the two agree with the on-page schema.org markup.
+
+**Why it sells:** it is the common prerequisite of every other pattern in this file, it is measurable before
+and after (GTIN coverage %, attribute completeness %, feed/markup agreement %), and **the licences are
+clean end to end** — MIT and Apache-2.0 at every step.
+
+**Honest scoping note:** step 3's rule packs and taxonomy mapping do not exist in open source
+(`product taxonomy classification stars:>=50` → **0**). Budget them as build, not integrate.
+
+## Pattern 8 — One identifier programme, four compliance budgets (EMEA)
+
+Added 2026-11-22. **Problem:** an EMEA retailer faces PPWR data carriers, the battery passport
+(**2027-02-18**), EUDR (**2026-12-30** for own-import cocoa/coffee/wood/paper), and Sunrise 2027 as four
+separate projects with four budgets. They share one prerequisite.
+
+**Wiring:**
+
+1. **Resolver** — deploy [`gs1/GS1_DigitalLink_Resolver_CE`](https://github.com/gs1/GS1_DigitalLink_Resolver_CE)
+   (Apache-2.0, 65★, pushed 2026-11-02). One GTIN resolves to spec sheet, passport, recall notice, recycling
+   instructions — per-link, per-market, per-language.
+2. **Prove it correct** with [`gs1/GS1DL-resolver-testsuite`](https://github.com/gs1/GS1DL-resolver-testsuite)
+   (Apache-2.0). Conformance evidence is the audit artefact; it is why this is a compliance deliverable and
+   not an IT project.
+3. **Event store** — [`openepcis/epcis-repository-ce`](https://github.com/openepcis/epcis-repository-ce)
+   (Apache-2.0) for EPCIS 2.0 commission/ship/receive events, which is what EUDR due diligence actually
+   needs. Join identity to events via
+   [`openepcis/openepcis-epc-digitallink-translator`](https://github.com/openepcis/openepcis-epc-digitallink-translator).
+   **Scope the CE/Business-Edition boundary in writing** — OpenEPCIS is open-core.
+4. **Test without client data** using
+   [`openepcis/epcis-testdata-generator`](https://github.com/openepcis/epcis-testdata-generator) (Apache-2.0).
+5. **Trade messages** — `pydifact` (MIT) or `EDI.Net` (MIT) where supplier data arrives as EDIFACT/X12,
+   which in European grocery it still does.
+6. **Passport presentation** — model on
+   [`eclipse-tractusx/digital-product-pass`](https://github.com/eclipse-tractusx/digital-product-pass)
+   (Apache-2.0) but **do not depend on it: 14 months without a push.** Treat DPP presentation as the last
+   and most replaceable layer, because **no ESPR product-group delegated act has been adopted yet.**
+
+**Why it sells:** the identifier work is required under every scenario, so it is defensible even if every
+DPP date slips — and the dates slipping is the base case, not the risk case.
+
+## Pattern 9 — "Identifier to shelf" for LATAM merchants (high volume, low ticket)
+
+Added 2026-11-22. **Problem:** GS1 México reports ~**3,000 companies a year requesting a first barcode**,
+mostly small, and yesterday's measured finding was that agents can browse LATAM e-commerce but cannot buy.
+Both halves of that gap sit in the same merchant.
+
+**Wiring (deliberately thin — this must be repeatable, not bespoke):**
+
+1. **Identity** — register the GTIN correctly, then publish it through the shared
+   `GS1_DigitalLink_Resolver_CE` (Apache-2.0) deployment as a multi-tenant service. One resolver, many
+   merchants.
+2. **Minimum viable attributes** — a fixed `pandera` (MIT) rule pack per retail category. Target the ACP
+   floor first (`Variant.required` is only `id` + `title`), then the Merchant Center bar, which is the one
+   that actually governs visibility.
+3. **Storefront** — Medusa (MIT) or Bagisto (MIT) from `verticals/solutions.md`; no new platform decision.
+4. **Checkout the agent can complete** — UCP and/or ACP through
+   `NVIDIA-AI-Blueprints/Retail-Agentic-Commerce` (Apache-2.0). Note UCP is the only actively maintained
+   protocol (pushed 2026-11-21 vs ACP 2026-07-18); if you implement one, implement UCP.
+5. **Payment** — Pix in Brazil. Per yesterday's finding, `bacen/pix-api` has **no licence file**: generate
+   clients at build time from the published spec, never vendor the repo.
+6. **Conversational surface** — WhatsApp, per the regional patterns already in this file.
+
+**Why it sells:** the cohort is continuously replenished, the deliverable is identical each time, and the
+outcome is measurable as "this merchant is now purchasable by an agent" — the exact gap the April 2026 scan
+of 75 LATAM e-commerce sites measured.
+
 ## Anti-patterns — learned the hard way in this KB
 
 - **Do not trust a star count carried in a rotation note.** Three cycles recorded Gorse at 12.5k (really
@@ -160,3 +251,18 @@ mechanics but not the client's legal exposure.
   marketing/SEO skill packs that are not retail tooling at all.
 - **Do not build on a retail agent because it exists.** Only 2 retail agents worldwide were created in the
   last ~6 months with ≥50 stars. Build at the typed-access layer instead.
+- **Do not call Pimcore open source.** Since **June 2025** it ships under the bespoke **Pimcore Open Core
+  License (POCL)**, a 24927-byte vendor agreement. Listicles — including well-known "open source
+  alternative" articles — still say GPLv3. Read the file.
+- **Do not promise "DPP compliance" in 2026.** No ESPR product-group delegated act has been adopted. Sell
+  the identifier and attribute work that every version of the rule will require.
+- **Do not treat ACP conformance as agent visibility.** ACP's feed schema requires only `id` and `title` on
+  a variant; the surfaces (Merchant Center and its trust layers) set the real bar, and they want GTINs.
+- **Do not promise a taxonomy classifier as integration work.** `product taxonomy classification
+  stars:>=50` returns **0**, and ACP's own `Category.taxonomy` is an unconstrained string. That is a build.
+- **Do not read a star count as momentum.** ACP and AP2 both gained stars this quarter while their default
+  branches sat untouched for 127 and 158 days respectively. Always pull `pushed_at` from the same call.
+- **Do not conclude a licence is missing because `LICENSE` 404s.** Akeneo's is in **`LICENCE.txt`** —
+  British spelling, `.txt` extension, **148 bytes**, pointing at OSL-3.0. A probe of 2 branches × 12 common
+  filenames missed it; a shallow clone found it in one call. When a control request succeeds and `README.md`
+  also 404s, your filenames are wrong, not the repo.

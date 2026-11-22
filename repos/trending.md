@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-21
+updated: 2026-11-22
 ---
 
 # 📈 Repos Trending — Retail & Consumer
@@ -9,6 +9,28 @@ updated: 2026-11-21
 > **Append-only.** Newest dated section on top; history preserved below. This file tracks **infrastructure,
 > protocol and platform repos**. For agents and agent-facing tooling see `agents/trending.md` — until today
 > the two files were byte-identical and this distinction did not exist.
+
+## 2026-11-22
+
+**Theme of the week: the product-data plane enters this KB.** Eight files, and not one of them previously
+contained the strings `gs1`, `gtin`, `barcode`, `pim`, `epcis`, `traceability`, `digital product passport`
+or `supply chain`. Measured by grep before any search was run — the largest vocabulary gap found in this
+KB to date.
+
+| Movement | Repo | License | ★ / forks | Last push | Why it is trending |
+|---|---|---|---|---|---|
+| New — identity | [gs1/GS1_DigitalLink_Resolver_CE](https://github.com/gs1/GS1_DigitalLink_Resolver_CE) | Apache-2.0 | 65★ / 45f | 2026-11-02 | GS1's reference resolver. Required infrastructure for both Sunrise 2027 and DPP. |
+| New — identity | [zxing/zxing](https://github.com/zxing/zxing) | Apache-2.0 | 34217★ / 9428f | 2026-11-21 | The barcode-decoding floor, still being pushed daily at 34k stars. The 2D (DataMatrix/QR) support is what Sunrise 2027 needs. |
+| New — events | [openepcis/epcis-repository-ce](https://github.com/openepcis/epcis-repository-ce) | Apache-2.0 | 17★ / 6f | 2026-10-22 | EPCIS 2.0 repository, Quarkus/Kafka/OpenSearch. Open-core — a commercial Business Edition exists above the CE. |
+| New — events | [louisaxel-ambroise/epcis](https://github.com/louisaxel-ambroise/epcis) | Apache-2.0 (560 B pointer; API says `NOASSERTION`) | 36★ / 14f | 2026-11-22 | Committed on the day of this pass; the only live .NET EPCIS. |
+| New — messages | [nerdocs/pydifact](https://github.com/nerdocs/pydifact) | MIT | 191★ / 54f | 2026-11-16 | EDIFACT in Python, actively maintained. EDI is still how retail trade documents actually move. |
+| New — messages | [tastypackets/x12-parser](https://github.com/tastypackets/x12-parser) | MIT | 63★ / 12f | 2026-11-18 | Freshest X12 parser; TypeScript, streaming. |
+| New — platform | [unopim/unopim](https://github.com/unopim/unopim) | MIT (verified by reading, 1078 B) | 11080★ / 193f | 2026-11-20 | The only permissive, maintained PIM. 57:1 star/fork ratio, so attention far exceeds deployment. |
+| **Licence change caught** | [pimcore/pimcore](https://github.com/pimcore/pimcore) | ❌ **POCL** (bespoke vendor agreement, "Last Update: June 2025") | 3891★ / 1513f | 2026-11-22 | Universally still described as GPLv3 community edition. It is not GPL and has not been since June 2025. 24927-byte custom agreement. |
+| New — DPP | [open-dpp/open-dpp](https://github.com/open-dpp/open-dpp) | AGPL-3.0 | 35★ / 19f | 2026-11-22 | Most active open DPP platform; pushed the day of this pass. |
+
+*Per-row audit of the 2026-11-21 section below: re-checked, no dead slugs introduced. The protocol rows in
+that section are revised upward in honesty — see `agents/trending.md` for the last-push measurements.*
 
 ## 2026-11-21
 

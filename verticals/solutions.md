@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-21
+updated: 2026-11-22
 ---
 
 # 🏭 Vertical Platforms — Retail & Consumer
@@ -80,3 +80,50 @@ permissive base — the client cannot get it off the shelf.
 4. **Add agents per domain** — merchandising, demand planning, service — each with a scoped tool set.
 5. **Keep a human approval step on anything that moves money or price.** Agent-initiated payment consent is
    exactly what AP2 exists to record.
+
+---
+
+## Added 2026-11-22 — PIM, WMS and Digital Product Passport platforms
+
+Yesterday's audit covered storefronts and ERP. The layer missing from this KB entirely was **where product
+data actually lives**: the PIM. It is also, measured today, the layer with the *worst* public licence
+reporting in all of retail — **three of five PIM licence claims in circulation are wrong.**
+
+### Product Information Management — read the licence table before the feature table
+
+| Platform | Repo | License (as verified 2026-11-22) | ★ / forks | Last push | Verdict for client work |
+|---|---|---|---|---|---|
+| UnoPim | [unopim/unopim](https://github.com/unopim/unopim) | **MIT** — read, 1078 B, full MIT text, Webkul Software | 11080★ / 193f | 2026-11-20 | ✅ **The only permissive, maintained PIM.** Laravel/PHP, PIM + DAM, vendor markets it with agentic-AI features. Its own vendor page claims MIT in one place and Apache-2.0 in another; the file says MIT. |
+| Akeneo Community Edition | [akeneo/pim-community-dev](https://github.com/akeneo/pim-community-dev) | **OSL-3.0** — declared in a **148-byte file named `LICENCE.txt`** (British spelling, `.txt`) | 1053★ / 536f | 2026-11-22 | ⚠️ The de-facto industry standard PIM, but OSL-3.0 is strongly reciprocal with an external-deployment trigger. Not in Globant's permissive set. Also note the copyright line still reads **2013–2017** on a repo pushed today. |
+| Pimcore | [pimcore/pimcore](https://github.com/pimcore/pimcore) | ❌ **Pimcore Open Core License (POCL)** — a bespoke 24927-byte vendor agreement, "Last Update: June 2025". **Not an OSI licence.** | 3891★ / 1513f | 2026-11-22 | ❌ **Do not describe Pimcore as open source.** Every listicle — including long-standing "open source alternative" write-ups — still calls the community edition GPLv3. It has not been GPL since June 2025. Highest fork count in the layer (1513), so it does have the real install base; that makes the misreporting more dangerous, not less. |
+| AtroPIM / AtroCore | [atrocore/atropim](https://github.com/atrocore/atropim) | GPL-3.0 — read, `master/LICENSE.txt`, 35150 B | 213★ / 36f | 2026-11-19 | ⚠️ Honest, maintained, genuinely configurable. GPL-3.0 rules out proprietary derivative modules. |
+| Pimify | [pimify/pimify](https://github.com/pimify/pimify) | Apache-2.0 — read, 11357 B | 23★ / 4f | 2026-11-14 | ⚠️ Correct licence, Python/Django, but 23★ / 4 forks. A starting point to fork, not a platform to stake a programme on. |
+
+**The commercially useful sentence:** in the PIM layer exactly **one of five options is both permissive and
+maintained** — UnoPim (MIT). Note also the star/fork anomaly: UnoPim has 11080★ against 193 forks (57:1),
+while Akeneo has 1053★ against 536 forks (2:1) and Pimcore 1513 forks. **Stars measure attention; forks
+measure deployment.** UnoPim is the right licence bet; Akeneo and Pimcore are where the installed base is.
+Plan migrations accordingly rather than assuming the star leader is what the client is running.
+
+### Warehouse / inventory platforms
+
+| Platform | Repo | License | ★ / forks | Last push | Notes |
+|---|---|---|---|---|---|
+| GreaterWMS | [GreaterWMS/GreaterWMS](https://github.com/GreaterWMS/GreaterWMS) | Apache-2.0 | 4462★ / 1180f | 2026-10-26 | ✅ Largest permissive WMS; originated in Ford Asia-Pacific after-sales logistics. Python/Vue. Strong fork count = real deployments. |
+| OpenWMS | [openwms/org.openwms](https://github.com/openwms/org.openwms) | Apache-2.0 | 764★ / 223f | 2026-07-13 | ✅ Java/Spring, modular, more "framework" than product. 4 months since last push. |
+| OpenBoxes | [openboxes/openboxes](https://github.com/openboxes/openboxes) | EPL-1.0 | 935★ / 518f | 2026-11-22 | ⚠️ Very active (pushed the day of this pass), strong in health-supply logistics. EPL-1.0 is weak copyleft — file-level reciprocity, generally workable, but it is **not** on the MIT/Apache list. |
+| OCA WMS (Odoo) | [OCA/wms](https://github.com/OCA/wms) | AGPL-3.0 | 229★ / 228f | 2026-11-18 | ⚠️ The right answer **if the client already runs Odoo** — and remember Odoo core is LGPL-3.0, so proprietary modules are allowed, but these OCA modules are AGPL. Fork count ≈ star count: pure practitioner repo. |
+
+### Digital Product Passport platforms (EMEA-driven, early)
+
+| Platform | Repo | License | ★ / forks | Last push | Notes |
+|---|---|---|---|---|---|
+| Eclipse Tractus-X Digital Product Pass | [eclipse-tractusx/digital-product-pass](https://github.com/eclipse-tractusx/digital-product-pass) | Apache-2.0 — read, 11505 B | 50★ / 31f | 2025-09-18 | ✅ Best-licensed DPP viewer, Catena-X/automotive lineage, so it assumes a dataspace. **14 months without a push** — use as a reference implementation, not a dependency. |
+| open-dpp | [open-dpp/open-dpp](https://github.com/open-dpp/open-dpp) | AGPL-3.0 — read, 34523 B | 35★ / 19f | 2026-11-22 | ⚠️ The most active DPP platform (pushed the day of this pass), TypeScript. AGPL: run it as a service, do not embed. |
+| DPPO (ontology) | [LiUSemWeb/DPPO](https://github.com/LiUSemWeb/DPPO) | ❌ **no licence file** | 11★ | 2026-06-30 | Digital Product Passport ontology from Linköping University. Useful vocabulary, **no grant of rights** — model after it, do not copy it in. |
+
+**State of this sub-layer, stated honestly:** DPP tooling is pre-standard. No ESPR product-group delegated
+act has been adopted yet (see `intel/market.md` → EMEA), so every platform here is building against a
+moving target. The defensible engagement today is **getting identity and attributes right** (steps 1–3 in
+`repos/foundations.md`), because that work is required by DPP, by Sunrise 2027 *and* by agentic commerce —
+regardless of which DPP platform eventually wins.

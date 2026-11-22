@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-21
+updated: 2026-11-22
 ---
 
 # 📈 Agents Trending — Retail & Consumer
@@ -9,6 +9,24 @@ updated: 2026-11-21
 > **Append-only.** Newest dated section on top; history preserved below. This file tracks **agents and
 > agent-facing tooling**. For infrastructure and platform repos see `repos/trending.md` — until today the
 > two files were byte-identical, so the agents/repos distinction never actually existed in this KB.
+
+## 2026-11-22
+
+**Theme of the week: the catalogue, not the checkout.** Last week's section tracked protocol
+implementations. This week the measurement that matters is that the agent layer *above* the catalogue is
+one repo wide.
+
+| Movement | Repo | License | ★ / forks | Last push | Why it is trending |
+|---|---|---|---|---|---|
+| New to this KB | [NVIDIA-AI-Blueprints/Retail-Catalog-Enrichment](https://github.com/NVIDIA-AI-Blueprints/Retail-Catalog-Enrichment) | Apache-2.0 | 47★ / 26f | 2026-11-18 | Pushed four days before this pass. NVIDIA now ships **both** halves of agentic retail: the commerce agent (`Retail-Agentic-Commerce`, 89★, pushed 2026-11-20) and the catalogue enrichment that feeds it. The only `catalog enrichment ai stars:>=20` result worldwide. |
+| New to this KB | [gs1/GS1_DigitalLink_Resolver_CE](https://github.com/gs1/GS1_DigitalLink_Resolver_CE) | Apache-2.0 | 65★ / 45f | 2026-11-02 | The standards body itself maintains a permissive resolver — the inverse of what this KB's media pass found, where the standards bodies' code was unlicensed or closed. Directly usable as an agent tool. |
+| **Maintenance alert** | [agentic-commerce-protocol](https://github.com/agentic-commerce-protocol/agentic-commerce-protocol) | Apache-2.0 | 1610★ | **2026-07-18 (127 days)** | ACP's default branch has not moved in over four months, and its product-feed RFC is still marked `Status: Proposal / Version: unreleased`. Stars kept rising; the repo did not. |
+| **Maintenance alert** | [google-agentic-commerce/AP2](https://github.com/google-agentic-commerce/AP2) | Apache-2.0 | 3283★ | **2026-06-17 (158 days)** | The payment-mandate standard is the *most* dormant of the three. |
+| Still alive | [Universal-Commerce-Protocol/ucp](https://github.com/Universal-Commerce-Protocol/ucp) | Apache-2.0 | 3516★ | 2026-11-21 | The only one of the three standards under active maintenance. |
+| Active, unverified licence | [sodadata/soda-core](https://github.com/sodadata/soda-core) | `NOASSERTION` (not read) | 2463★ | 2026-11-22 | Logged because data contracts are the obvious vehicle for catalogue rules — and logged *with* its licence marked unresolved rather than guessed. |
+
+*Per-row audit of the 2026-11-21 section below: all rows re-checked, none found dead. ACP and AP2 are
+re-listed above because their **last-push dates** were not recorded yesterday and change the reading.*
 
 ## 2026-11-21
 
