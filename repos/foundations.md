@@ -875,3 +875,156 @@ Non-GitHub hosts remain unreachable from this session (`eur-lex.europa.eu`,
 through the proxy, re-tested 2026-11-23). Every legal date and market number in
 this pass is **search-result-derived and not fetch-verified**, and is marked as
 such where it appears. Read the official text before any of it reaches a client.
+
+---
+
+## Added 2026-11-23 (pass 6) — the fulfilment plane (order → doorstep), in seven steps
+
+Measured 2026-11-23. Stars and push dates from `gh api search/repositories`; existence from
+`git ls-remote`; every licence below read from the raw file on the repo's **actual default branch**.
+
+### The shape of this plane in one sentence
+
+Steps 4 and 5 — routing the vehicle and resolving the address — are the best-equipped, most
+permissive layers this KB has measured in any industry. Steps 1, 6 and 7 — promising a date,
+printing a carrier label, proving delivery — are effectively empty. **The open-source floor covers
+the part a mathematician recognises and stops at the part a retailer is actually judged on.**
+
+### Step 1 — PROMISE it (available-to-promise, delivery date). Empty.
+
+`available to promise inventory` returns **7 repositories worldwide**, and the highest star count
+among them is **1**. Not one is a usable library. The full list of what exists, so nobody re-runs this:
+
+| Repo | Stars | License | Last push | Note |
+|---|---|---|---|---|
+| https://github.com/netsphere-labs/bonsaiERP3 | 0 | AGPL-3.0 | 2026-11-02 | Ruby ERP that names ATP in its description; a general ERP, not an ATP engine |
+| https://github.com/Mohith26/stockfind | 0 | No licence | 2026-09-08 | B2B multi-warehouse availability API, single author |
+| https://github.com/pankaj-gyaanora-ai/gyaanora-inventory-visibility | 0 | No licence | 2026-09-17 | Multi-source inventory reconciliation, single author |
+| https://github.com/SumiX21-beep/OMS-System | 1 | No licence | 2026-07-01 | Sourcing logic (which node ships) as a student-scale project |
+
+This is the sixth confirmation of the structural law this KB keeps re-deriving: **the step the
+business is judged on is the step with no open-source floor.** A retailer's delivery promise is the
+single most visible number on the product page, and there is nothing to fork.
+
+### Step 2 — ORCHESTRATE it (order management, order routing). Equipped, and almost entirely non-permissive.
+
+| Repo | Stars | License | Last push | Note |
+|---|---|---|---|---|
+| https://github.com/fleetbase/fleetbase | 4,799 | AGPL-3.0 | 2026-11-20 | Modular logistics operating system; the largest on-plane platform |
+| https://github.com/openshiporg/openship | 1,680 | AGPL-3.0 | 2026-11-17 | Order router: sales channels → fulfilment partners and 3PLs |
+| https://github.com/berndruecker/flowing-retail | 1,331 | Apache-2.0 | 2024-08-01 | **A sample, not a product** — order fulfilment decomposed into sagas/microservices. Dormant since 2024, still the clearest reference architecture for the step |
+| https://github.com/apache/ofbiz-framework | 1,151 | Apache-2.0 | 2026-11-22 | ERP with order management in-tree; permissive and genuinely alive |
+| https://github.com/openoms-org/openoms | 33 | **Elastic License 2.0** | 2026-09-02 | See the correction below |
+| https://github.com/hotwax/fulfillment | 9 | Apache-2.0 | 2026-11-17 | Store-fulfilment app (pick/pack/ship in-store); tiny but permissive and current |
+
+**⚠️ Two source errors caught at this step.**
+
+1. **`openoms-org/openoms` is not MIT.** A libraries.io mirror lists it as MIT. Its `LICENSE` file is
+   3,899 bytes and reads `Elastic License 2.0`. ELv2 is **source-available, not open source** — it
+   forbids providing the software to third parties as a managed service. For a studio whose output is
+   often exactly that, this is a hard blocker, and the public claim points the wrong way.
+2. **`hotwax/poorti` does not exist.** A search result and an ecosyste.ms listing both cite
+   `github.com/hotwax/poorti` as an Apache-2.0 store-fulfilment suite. `git ls-remote` on it fails
+   authentication (the 404 signature). The live HotWax slug is `hotwax/fulfillment`. Another dead slug
+   arriving with a plausible licence and a plausible description attached.
+
+### Step 3 — PICK it (warehouse / inventory of record). Equipped; licences are mixed but workable.
+
+| Repo | Stars | License | Last push | Note |
+|---|---|---|---|---|
+| https://github.com/inventree/InvenTree | 7,890 | MIT | 2026-11-23 | Inventory management, MIT, committing today. The permissive anchor of this step |
+| https://github.com/openboxes/openboxes | 936 | **EPL-1.0** | 2026-11-22 | WMS with stock movement and lot tracking. Eclipse Public License — weak copyleft, file-level; compatible with commercial work but not GPL-compatible in the usual direction |
+
+### Step 4 — ROUTE it (the vehicle routing problem). Richly equipped and overwhelmingly permissive.
+
+| Repo | Stars | License | Last push | Note |
+|---|---|---|---|---|
+| https://github.com/google/or-tools | 14,430 | Apache-2.0 | 2026-11-20 | The general solver; its routing library is the industry default |
+| https://github.com/VROOM-Project/vroom | 1,924 | BSD-2-Clause | 2026-11-17 | Purpose-built VRP engine, pairs directly with OSRM/Valhalla |
+| https://github.com/TimefoldAI/timefold-solver | 1,879 | Apache-2.0 | 2026-11-23 | Constraint solver for routing **and** rostering; committing today |
+| https://github.com/graphhopper/jsprit | 1,842 | Apache-2.0 | 2026-11-19 | Java VRP toolkit with rich constraints |
+| https://github.com/PyVRP/PyVRP | 734 | MIT | 2026-11-19 | Modern, well-documented Python VRP solver |
+| https://github.com/reinterpretcat/vrp | 512 | Apache-2.0 | 2026-10-28 | Rust VRP solver |
+
+### Step 5 — PLACE it on a map (routing engine + geocoding). Equipped; this is where the copyleft is.
+
+| Repo | Stars | License | Last push | Note |
+|---|---|---|---|---|
+| https://github.com/Project-OSRM/osrm-backend | 8,237 | BSD-2-Clause | 2026-11-22 | Routing engine; permissive |
+| https://github.com/graphhopper/graphhopper | 6,828 | Apache-2.0 | 2026-11-20 | Routing engine; permissive |
+| https://github.com/valhalla/valhalla | 6,481 | **MIT** (see note) | 2026-11-21 | Routing engine with time-dependent costing. API reports `NOASSERTION`; the real licence is MIT in `COPYING` |
+| https://github.com/openvenues/libpostal | 4,925 | MIT | 2026-05-13 | Statistical international address parser. **The single most useful repo on this plane for LATAM** |
+| https://github.com/osm-search/Nominatim | 4,575 | GPL-3.0 | 2026-11-21 | Geocoder; copyleft |
+| https://github.com/pelias/pelias | 3,608 | MIT | 2026-07-24 | Modular geocoder; permissive |
+| https://github.com/komoot/photon | 3,205 | Apache-2.0 | 2026-11-20 | Geocoder; permissive |
+| https://github.com/GIScience/openrouteservice | 1,996 | GPL-3.0 | 2026-11-23 | Routing API with many profiles; copyleft |
+
+**The licence pattern is clean and worth memorising:** on this plane the *engines* are permissive
+(BSD-2 / Apache / MIT) and the *geocoders* split — Pelias MIT and Photon Apache-2.0 against Nominatim
+GPL-3.0 and openrouteservice GPL-3.0. There is always a permissive option at every step of 4 and 5,
+so **no routing engagement needs to accept copyleft.** That is not true of any other step on this plane.
+
+### Step 6 — HAND IT OFF (carrier labels, manifests). Near-empty, and what exists is per-carrier and copyleft.
+
+`shipping carrier label api stars:>=100` → **0**. `shipping label carrier stars:>=30` → **0**.
+Shortening to `shipping label stars:>=50` → 5 repos, and reading them (not the total) is the finding:
+
+| Repo | Stars | License | Last push | Why it does not fill the gap |
+|---|---|---|---|---|
+| https://github.com/Automattic/woocommerce-services | 112 | GPL-2.0 | 2026-11-20 | Alive, but a WooCommerce plugin bound to hosted services |
+| https://github.com/poundifdef/ClassicUPS | 58 | NOASSERTION | 2024-04-03 | One carrier (UPS), dormant 2 years |
+| https://github.com/postnl/postnl-magento2 | 58 | No licence file | 2026-09-16 | One carrier, one storefront, no licence |
+| https://github.com/typingbeaver/snake-label | 53 | GPL-3.0 | 2026-02-10 | Converts German DHL/Hermes labels for a label printer |
+
+**There is no carrier-neutral, permissive, maintained shipping-label library in the world** — with one
+regional exception, which is the LATAM finding below and the most commercially interesting result of
+this pass.
+
+### Step 7 — PROVE it (tracking the merchant can read, proof of delivery, eCMR). Effectively zero.
+
+- `tracking number carrier stars:>=50` → **0**.
+- `parcel tracking stars:>=100` → **2**, and both are *consumer* apps under GPL-3.0:
+  https://github.com/itsvic-dev/deliveries (258★, 2026-09-19) and
+  https://github.com/proninyaroslav/libretrack (371★, 2026-06-30). The tracking that exists is built
+  for the person waiting for the parcel, not the retailer answering "where is it".
+- `proof of delivery stars:>=30` → 2, both keyword collisions ("content delivery", a terms-of-use dump).
+- `ecmr electronic consignment note` → **1 repo, 0 stars, no licence**
+  (https://github.com/cargoffer/ecmr-mcp-skybridge, 2026-05-25). Against an EU regulation with a
+  2027 date on it (see `intel/market.md` → EMEA), that is the whole open-source response.
+
+Adjacent and genuinely useful, though not parcel-level:
+https://github.com/traccar/traccar (8,176★, Apache-2.0, 2026-11-22) — GPS fleet tracking with 200+
+device protocols. If you need to prove a *vehicle* was at an address, this is the permissive floor.
+It will not tell you which parcel came off the van.
+
+### ⚠️ The LATAM exception — the empty step is filled, in one MIT repo
+
+https://github.com/codespar/mcp-dev-latam (279★, MIT, pushed 2026-11-13) wraps regional carriers as
+MCP servers. Verified by cloning the repo and reading the tool definitions, not the README:
+
+| Package in-tree | Country | Tools it actually exposes |
+|---|---|---|
+| `packages/ecommerce/melhor-envio` | Brazil | `calculate_shipping`, `create_shipment`, **`generate_label`**, `get_tracking_history`, `list_agencies`, `cancel_shipment` |
+| `packages/ecommerce/correios` | Brazil | `calculate_shipping`, **`buy_label_range`**, `create_prepost`, **`create_reverse`**, `find_cep` |
+| `packages/ecommerce/superfrete` | Brazil | multi-carrier freight |
+| `packages/mexico/skydropx` | Mexico | multi-carrier shipping |
+| `packages/argentina/andreani` | Argentina | carrier integration |
+| `packages/colombia/coordinadora` | Colombia | carrier integration |
+
+So steps 6 and 7 — measured as **zero worldwide** — are covered for six LATAM countries by one
+MIT-licensed, actively maintained repo, already shaped as agent tools. `create_reverse` on Correios
+also fills part of the returns plane's empty "authorize the return" step from pass 4.
+
+**Method note earned here:** `ls packages/logistics/` returned nothing and I nearly recorded the
+README as overstated. The packages are real; they live under `packages/ecommerce/` and under country
+folders. **Do not conclude from one path guess — grep the tree.** A directory that is missing where
+you expected it is evidence about your expectation, not about the repo.
+
+### Measured gaps in this plane — searched for on 2026-11-23, genuinely not there
+
+- **No open-source delivery-promise / ATP engine** (7 repos, max 1 star).
+- **No carrier-neutral label library** outside LATAM (0 repos ≥30★).
+- **No merchant-side parcel-tracking library** (0 repos ≥50★).
+- **No proof-of-delivery library** (0 real repos ≥30★).
+- **No eCMR implementation of any size** (1 repo, 0★, unlicensed).
+- **No autonomous supply-chain agent** (`supply chain agent stars:>=100` → 11, all off-plane).

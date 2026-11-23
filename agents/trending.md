@@ -10,6 +10,47 @@ updated: 2026-11-23
 > agent-facing tooling**. For infrastructure and platform repos see `repos/trending.md` — until today the
 > two files were byte-identical, so the agents/repos distinction never actually existed in this KB.
 
+## 2026-11-23 (pass 6) — the fulfilment plane
+
+**Plane opened this pass:** everything after the money moves — promise, pick, label, route, prove.
+Chosen because the five planes already in this KB (product data, store, retail media, returns, price)
+all stop at checkout, and the reverse flow was mapped in pass 4 while the *forward* flow never was.
+
+**New agent rows (all verified by `git ls-remote` + raw-file licence read, 2026-11-23):**
+
+| Agent / repo | License | Stars | Last push | Why it is here |
+|---|---|---|---|---|
+| https://github.com/codespar/mcp-dev-latam | MIT | 279 | 2026-11-13 | Carrier labels, shipping quotes and tracking as MCP tools for 6 LATAM countries — the step that measures as **zero worldwide** |
+| https://github.com/beckn/beckn-onix | MIT | 101 | 2026-11-19 | Reference node for the Beckn network behind ONDC's Open Delivery Protocol |
+| https://github.com/GoogleCloudPlatform/dpi-accelerator-beckn-onix | Apache-2.0 | 11 | 2026-11-13 | Google Cloud deployment path for the above |
+| https://github.com/Shopify/active_fulfillment | MIT | 155 | 2024-09-24 | Carrier-neutral fulfilment-service library; **dormant 2 years**, reference only |
+| https://github.com/kraenhansen/nemlig-mcp | MIT | 42 | 2026-10-15 | Small worked example of an agent booking a grocery delivery slot (Denmark) |
+| https://github.com/cargofy/ATLAS | **none — badge lies** | 20 | 2026-03-06 | Only logistics-specific MCP server found; Apache badge, no licence file on any branch |
+
+**What moved on the protocol layer since cycle 8 (re-measured, not assumed):**
+
+| Repo | Cycle 8 | 2026-11-23 | Delta |
+|---|---|---|---|
+| Universal-Commerce-Protocol/ucp | 3,515 | 3,517 | +2 |
+| agentic-commerce-protocol | 1,607 | 1,609 | +2 |
+| google-agentic-commerce/AP2 | 3,281 | 3,283 | +2 |
+| anthropics/commerce-agents | 3,497 | 3,502 | +5 |
+| NVIDIA-AI-Blueprints/Retail-Agentic-Commerce | 89 | 89 | 0 |
+| Shopify/ucp-cli | 84 | 84 | 0 |
+
+Two days, near-zero movement. Recorded because cycle 8 caught *fabricated* growth curves in this KB;
+a flat, boring, re-measured delta is the evidence that this pass did not invent one.
+
+**⚠️ The headline agent finding is a defect, not a repo:** the two agentic-commerce protocols type a
+delivery timestamp pair that **means different things**. ACP types `earliest_delivery_time` /
+`latest_delivery_time` (when the shopper *receives* it). UCP types `earliest_fulfillment_time` /
+`latest_fulfillment_time` (when the merchant *hands it off*). Any adapter that maps one onto the other
+silently drops the entire transit time from the promise. Details and file paths in `intel/trends.md`.
+
+**Collision caught this pass:** `fulfillment agent` is a Dialogflow term. Four of the five repos it
+returns are chatbot webhook libraries. Third industry-word collision in this KB after "hoppers" and
+"returns".
+
 ## 2026-11-23 (pass 5) — the price plane
 
 **Plane opened this pass:** the price itself. Chosen by a 46-term vocabulary probe

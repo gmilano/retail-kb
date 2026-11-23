@@ -388,3 +388,84 @@ module is `pymc_marketing/customer_choice/bayesian_blp.py`. Previous cycles of t
 KB shipped a Minecraft hopper mod as inventory intelligence by matching on a
 *repository name*; this is the same error one level down, matching on a *file name*
 inside a repository that is genuinely excellent. **Read the module docstring.**
+
+---
+
+## Added 2026-11-23 (pass 6) — the fulfilment plane: agents that move the parcel
+
+The five planes already in this file stop at the moment money changes hands. This pass covers
+what happens next: promise a date, choose a node, pick it, hand it to a carrier, route the van,
+prove it arrived. Everything below was measured on 2026-11-23 through `gh api search/repositories`,
+with existence confirmed by `git ls-remote` and every licence read from the raw file, not the API field.
+
+### The finding that governs this whole section
+
+**The physics is solved and the commerce is empty.** Routing a vehicle — the hardest *mathematics*
+on this plane — has at least ten maintained, mostly permissive implementations. Telling a shopper
+when the parcel will arrive, and printing the carrier label that makes it move, have almost none.
+
+| Step | Query run 2026-11-23 | Result |
+|---|---|---|
+| Promise a date (ATP) | `available to promise inventory` | 7 repos worldwide, **none above 1 star** |
+| Print a carrier label | `shipping carrier label api stars:>=100` | **0** |
+| Print a carrier label (shortened) | `shipping label carrier stars:>=30` | **0** |
+| Track a parcel as the merchant | `tracking number carrier stars:>=50` | **0** |
+| Prove delivery | `proof of delivery stars:>=30` | 2, both keyword collisions |
+| Route the vehicle | `vehicle routing stars:>=200` | 16, the top six all alive |
+
+### Tier 1 — permissive, alive, safe to build on
+
+| Agent / repo | Repo | License | Stars | Last push | What it does |
+|---|---|---|---|---|---|
+| MCP Dev LATAM | https://github.com/codespar/mcp-dev-latam | MIT | 279 | 2026-11-13 | MCP servers wrapping real LATAM commerce APIs across 6 countries, including the carrier layer that measures as zero everywhere else |
+| Beckn ONIX | https://github.com/beckn/beckn-onix | MIT | 101 | 2026-11-19 | Reference implementation of the Beckn network node — the stack ONDC's Open Delivery Protocol runs on |
+| DPI Accelerator (Beckn ONIX) | https://github.com/GoogleCloudPlatform/dpi-accelerator-beckn-onix | Apache-2.0 | 11 | 2026-11-13 | Google Cloud's deployment accelerator for a Beckn network node |
+| Shopify ActiveFulfillment | https://github.com/Shopify/active_fulfillment | MIT | 155 | 2024-09-24 | The only carrier-neutral, permissive fulfilment-service library found. **Dormant 2 years** — read it as a reference, not a dependency |
+| nemlig MCP | https://github.com/kraenhansen/nemlig-mcp | MIT | 42 | 2026-10-15 | Unofficial MCP for a Danish grocery delivery service; small, but a real worked example of agent-to-delivery-slot interaction |
+
+### Tier 2 — real and on-plane, but something blocks client work
+
+| Agent / repo | Repo | License | Stars | Last push | The constraint |
+|---|---|---|---|---|---|
+| ATLAS (logistics MCP) | https://github.com/cargofy/ATLAS | **No licence file** | 20 | 2026-03-06 | The only logistics-specific MCP server found. Its README shows an Apache-2.0 badge linking to `LICENSE` — **that file returns 404 on every branch and every common filename.** Unusable until the owner adds one |
+| shopper-mcp (Ozon) | https://github.com/eduard256/shopper-mcp | No licence | 94 | 2026-11-14 | Marketplace-side MCP for Ozon; no licence file |
+| eCMR MCP (Skybridge) | https://github.com/cargoffer/ecmr-mcp-skybridge | No licence | 0 | 2026-05-25 | The *only* repo on GitHub matching "eCMR"; 0 stars, no licence. Recorded because its emptiness is the finding |
+
+### ⚠️ A new form of the licence trap: the badge that points at nothing
+
+Cycle 8 established *a short LICENSE file is a pointer, not a licence*. This pass found the next form:
+**a README badge is not a licence either.** `cargofy/ATLAS` renders an Apache-2.0 shield linking to
+`LICENSE`; the API reports no licence; `LICENSE`, `LICENSE.md`, `LICENSE.txt`, `COPYING` and `NOTICE`
+all 404 on the default branch. A reader who trusted the badge would have shipped an unlicensed
+dependency into a client estate.
+
+The same probe ran in the other direction and corrected a reflex: **`valhalla/valhalla` reports
+`NOASSERTION`** — the flag that usually means trouble — **and is plain MIT.** Its `LICENSE.md` is a
+43-byte pointer reading `For license information see [here](COPYING)`, and `COPYING` is a 1,135-byte
+MIT text. The API flag was a false alarm. Read the file in *both* directions; do not downgrade a repo
+on an API field any more than you would upgrade one on a badge.
+
+### ⚠️ "Fulfillment" is ambiguous *in this industry* — the third such collision this KB has hit
+
+`fulfillment agent stars:>=30` returns 5 repos and **4 of them are Dialogflow webhook libraries**,
+where "fulfillment" means the code that satisfies a chatbot *intent* — nothing to do with shipping a
+parcel. This is the same failure mode as pass 4's "returns" (refunds vs. `return` statements) and
+cycle 8's Minecraft hopper. The industry word and the engineering word collide, and the search channel
+cannot tell them apart.
+
+**Vocabulary that actually retrieves this plane:** `vehicle routing`, `last mile`, `order router`,
+`available to promise`, `shipping label`, `parcel tracking`, `eCMR`. **Vocabulary that does not:**
+`fulfillment agent`, `supply chain agent`, `delivery mcp` — the last two now return AI-security
+scanners and Claude skill packs far more often than retail tooling.
+
+### Agent-layer measurements that came back empty (2026-11-23)
+
+Written down because an informed gap is information and silence is not:
+
+- `logistics mcp stars:>=20` → **4 repos worldwide**. One is on-plane and unlicensed (ATLAS), one is a
+  3D warehouse digital-twin demo, one is the LATAM pack, one is an African API registry.
+- `supply chain agent stars:>=100` → 11, of which the top results are a security scanner
+  (`NVIDIA/SkillSpector`, 27,310★) and marketing skill packs. **No autonomous supply-chain agent.**
+- `delivery route planning stars:>=100` → 1, and it is a dump of a W3C report. Zero real.
+- There is **no agent anywhere that promises a delivery date.** The ATP step has no agent layer
+  because it has no library layer either (see `repos/foundations.md`).

@@ -1063,3 +1063,165 @@ trail — and it is why the audit trail, not the optimiser, is the lead delivera
    channel** (stars + licence + `pushed_at` in one call); `gh api repos/<slug>`
    is still 403 in-session, and `curl -sI github.com` still blind through the
    proxy. **Existence is `git ls-remote`, full stop.**
+
+---
+
+## Pattern 26 — The delivery-promise service (the thing nobody has)
+
+**Problem.** The most visible number in e-commerce — "arrives Thursday" — is computed by no
+open-source component. Measured 2026-11-23: `available to promise inventory` → 7 repositories
+worldwide, none above 1 star.
+
+**Why it is buildable anyway.** The promise is a *composition* of four things that each do have a
+permissive floor:
+
+| Input | Component | License |
+|---|---|---|
+| Where the stock is | https://github.com/inventree/InvenTree (7,890★) or https://github.com/apache/ofbiz-framework (1,151★) | MIT / Apache-2.0 |
+| How long to the door | https://github.com/Project-OSRM/osrm-backend (8,237★) or https://github.com/valhalla/valhalla (6,481★, MIT via `COPYING`) | BSD-2 / MIT |
+| Which node should serve it | https://github.com/google/or-tools (14,430★) or https://github.com/VROOM-Project/vroom (1,924★) | Apache-2.0 / BSD-2 |
+| Is the address real | https://github.com/openvenues/libpostal (4,925★) + https://github.com/komoot/photon (3,205★) | MIT / Apache-2.0 |
+
+**Wiring.**
+1. `libpostal` normalises the destination; `photon` resolves it to a point. Reject or flag
+   unresolvable addresses **before** promising — an unparseable address is the single largest source
+   of a missed promise in LATAM.
+2. InvenTree/OFBiz answers *which nodes hold the SKU* and in what quantity.
+3. Valhalla (time-dependent costing) gives node→destination transit time per candidate node.
+4. OR-Tools picks the node that minimises cost subject to the date actually being achievable.
+5. Emit the promise as a **typed event**, not a rendered string: `{promised_earliest, promised_latest,
+   node_id, carrier, confidence, computed_at, inputs_hash}`.
+6. Store every promise. The difference between promised and actual is the only training signal that
+   matters, and nobody who renders the promise as a string ever gets it.
+
+**Protocol surface.** Publish the promise to ACP as `earliest_delivery_time` / `latest_delivery_time`
+and to UCP as `earliest_fulfillment_time` / `latest_fulfillment_time` — **after** converting, because
+the two mean different events (Pattern 27).
+
+**Entirely permissive end to end.** No AGPL, no ELv2, no copyleft anywhere in the stack.
+
+---
+
+## Pattern 27 — The hand-off/arrival adapter (small, dull, and it prevents a live defect)
+
+**Problem.** ACP's `earliest_delivery_time` is when the shopper *receives* the parcel. UCP's
+`earliest_fulfillment_time` is when the merchant *hands it off*. A name-similarity mapper equates
+them and deletes the transit time from the promise.
+
+**Recipe.**
+1. Keep **one** internal truth. Recommended: store the hand-off time and the transit estimate
+   separately, never a single fused "delivery time".
+   `{handoff_earliest, handoff_latest, transit_p50, transit_p90, carrier, service_level}`.
+2. Project to ACP: `earliest_delivery_time = handoff_earliest + transit_p50`,
+   `latest_delivery_time = handoff_latest + transit_p90`.
+3. Project to UCP: `earliest_fulfillment_time = handoff_earliest`,
+   `latest_fulfillment_time = handoff_latest`. Put the *arrival* sentence in UCP's free-text
+   `description` — which is where UCP's own example puts it (`'Arrives Dec 12-15 via FedEx'`).
+4. Assert in CI that the two projections are never produced from the same field without the transit
+   term. This is a three-line test that catches a defect a client otherwise finds in week three.
+5. Transit distributions come from Pattern 26's stored promise-vs-actual history. Until that history
+   exists, use the carrier's published service level and mark `confidence: low`.
+
+**Reference implementation to read first:**
+https://github.com/NVIDIA-AI-Blueprints/Retail-Agentic-Commerce (Apache-2.0, 89★) — still the only
+implementation of both ACP and UCP.
+
+---
+
+## Pattern 28 — Auditable dispatch (one build, four jurisdictions)
+
+**Problem.** EU Platform Work Directive transposition lands **2 December 2026**; NYC enforces
+just-cause deactivation from **January 2027**; Brazil's Senacon is monitoring payment transparency
+and PLP 152 demands algorithmic transparency. Three legal theories, one engineering artefact.
+
+**Recipe.**
+1. **Solve dispatch with a permissive solver**: https://github.com/TimefoldAI/timefold-solver
+   (Apache-2.0, 1,879★) or https://github.com/graphhopper/jsprit (Apache-2.0, 1,842★). Timefold is the
+   better choice here because it does routing **and** rostering in one constraint model, and shift
+   assignment is in scope for the Directive.
+2. **Make the constraints declarative and named.** Timefold's score explanation names which
+   constraint cost what. That mapping — constraint name → human sentence — *is* the compliance
+   artefact. Do not bury it in a solver callback.
+3. **Emit a decision record per assignment**, append-only:
+   `{assignment_id, courier_id, decided_at, inputs_hash, constraints_fired[], score_delta,
+   alternatives_considered, human_override_by?, reason_code}`.
+4. **Deactivation is the same record with a different verb** — and it is the one NYC will enforce
+   first. `{courier_id, action: deactivate, reason_code, evidence_refs[], just_cause_category,
+   reviewer_id, decided_at}`. A reason code with no evidence reference should fail validation.
+5. **Human review is a state, not a button**: every automated decision carries `review_status` with
+   an SLA. The Directive requires review to be available, which means it must be *reachable from the
+   record*, not reconstructable from logs.
+6. **Project per jurisdiction**: NYC needs just-cause categories and pay-rate derivation; an EU
+   Member State needs the transparency disclosure and review path; Brazil needs the per-delivery pay
+   breakdown (PLP 152's draft pays 100%/50%/25% across a multi-order trip, so the *trip* must be
+   decomposable into deliveries in the record or the calculation cannot be shown at all).
+
+**Honest note for the proposal.** NBER's study of Seattle's minimum-pay standard found base pay per
+task roughly doubled while tips and available tasks fell, with no net monthly earnings gain. Build
+the ledger so the client can *measure* their own version of this, rather than promising an outcome
+the literature does not support.
+
+---
+
+## Pattern 29 — The LATAM agentic delivery leg (buildable today, and only here)
+
+**Problem.** An agent can buy, but in most of the world it cannot ship: no permissive carrier-label
+library exists (`shipping label carrier stars:>=30` → 0 worldwide).
+
+**Why LATAM is different.** https://github.com/codespar/mcp-dev-latam (MIT, 279★, 2026-11-13) exposes
+the carrier layer as MCP tools for six countries — verified by reading the tool definitions in-tree.
+
+**Recipe (Brazil, end to end, all permissive):**
+1. **Quote** — `calculate_shipping` (`packages/ecommerce/melhor-envio` or `superfrete`) against the
+   normalised destination. Validate the CEP first with Correios' `find_cep`.
+2. **Promise** — feed the quote into Pattern 26 rather than rendering the carrier's estimate
+   directly; store the promise as a typed event.
+3. **Charge** — Pix via the same repo's payment packages. (Carry forward cycle 8's warning:
+   `bacen/pix-api` has **no licence file** — generate clients at build time, never vendor it.)
+4. **Fiscal document** — NF-e through the repo's fiscal packages. In Brazil the goods cannot lawfully
+   move without it; this is the step a North American reference architecture will not even have.
+5. **Label** — `generate_label` (Melhor Envio) or `buy_label_range` (Correios).
+6. **Track** — `get_tracking_history`; write actuals back against the stored promise.
+7. **Reverse** — Correios `create_reverse` covers the returns-plane step that pass 4 measured as
+   one repo wide.
+
+**Mexico / Argentina / Colombia:** same shape, swapping `packages/mexico/skydropx`,
+`packages/argentina/andreani`, `packages/colombia/coordinadora`.
+
+**Caveat worth stating in any proposal:** these are MCP wrappers over commercial carrier APIs. The
+*wrapper* is MIT; the carrier accounts, contracts and rates are not free. What you are buying with
+this repo is the integration surface, which is exactly the part that costs a quarter elsewhere.
+
+---
+
+## Anti-patterns added 2026-11-23 (pass 6)
+
+- **Selling route optimisation as the differentiator.** OR-Tools, VROOM, jsprit, PyVRP and Timefold
+  are permissive, maintained and free. The client can download the maths. Sell the promise, the
+  compliance record, or the carrier integration — the parts with no floor.
+- **Starting from the platform that demos best.** Fleetbase (4,799★) and Openship (1,680★) are
+  AGPL-3.0; OpenOMS is Elastic License 2.0 and cannot be delivered as a managed service. Assembling
+  from OFBiz/InvenTree + a permissive solver + a permissive geocoder gives a client-owned result.
+- **Mapping UCP and ACP delivery timestamps by name.** They are different events. See Pattern 27.
+- **Trusting a licence badge.** `cargofy/ATLAS` shows an Apache-2.0 shield and has no licence file on
+  any branch. Conversely `valhalla/valhalla` reports `NOASSERTION` and is MIT. Read the file.
+- **Searching for `fulfillment agent`.** It returns Dialogflow webhook libraries. Use the physical
+  noun: `vehicle routing`, `shipping label`, `parcel tracking`, `eCMR`.
+- **Vendoring the Beckn or ONDC specification text.** CC BY-NC-SA and CC BY-ND respectively. Build on
+  `beckn/beckn-onix` (MIT) instead; do not republish or profile the document.
+- **Quoting a 2026 eFTI deadline.** 9 July 2027 is the authority-acceptance date and use is voluntary
+  for businesses. The 2026 figure comes from trade commentary, not the regulation.
+
+## Method notes added 2026-11-23 (pass 6)
+
+- **A missing directory is evidence about your guess, not about the repo.** `ls packages/logistics/`
+  returned nothing in `mcp-dev-latam` and nearly produced a "README overstates the repo" finding. The
+  packages were under `packages/ecommerce/` and country folders. Grep the tree before concluding.
+- **Read specs at a pinned commit and record it.** UCP `c20aa35`, ACP `7fdd78d` (2026-11-23). Schema
+  claims decay; a SHA makes the claim falsifiable instead of merely dated.
+- **Re-measure rather than assume growth.** The six protocol repos moved +2, +2, +2, +5, 0, 0 stars
+  since cycle 8 — two days, essentially flat. Recording a boring delta is how this KB stays honest
+  after cycle 8 found fabricated growth curves in it.
+- **Shorten the query, then read the results, not the total.** `shipping label carrier stars:>=30`
+  → 0 looked like a clean gap; shortening to `shipping label stars:>=50` → 5 revealed the better
+  finding: the layer exists only as per-carrier, per-platform, copyleft plugins.

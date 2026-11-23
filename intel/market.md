@@ -292,6 +292,45 @@ pricing) separated by construction from the unlawful one (price by person). The
 New Jersey private right of action is the commercial reason a retailer will pay
 for the audit trail rather than the model.
 
+#### Added 2026-11-23 (pass 6) — the fulfilment plane
+
+**The regulatory surface here is municipal, not federal, and it has a buildable 2027 date.**
+
+New York City's Department of Consumer and Worker Protection sets a minimum pay rate for app-based
+delivery workers: **$22.13/hour as of April 2026**, inflation-adjusted annually, with tips excluded
+from the minimum. Grocery delivery apps (Instacart among them) were brought in from **January 2026**
+at $21.44/hour. The piece that matters for a build is the next one: **DCWP begins enforcing
+deactivation protections in January 2027** — a platform may not deactivate a worker without just
+cause or a bona fide economic reason.
+
+That is an algorithmic-accountability requirement wearing labour-law clothes. A delivery platform
+operating in NYC in 2027 must be able to produce, per deactivation, the reason, the evidence and the
+decision path. Nothing in the open-source estate does this.
+
+**The counter-evidence, and it is good evidence.** An NBER working paper on Seattle's equivalent
+minimum-pay standard found base pay per task roughly doubled while tips fell and available tasks
+fell, with **no net increase in monthly earnings**. NYC's own October 2026 report says earnings rose
+by more than $2 billion *and* that apps responded by limiting worker access to platforms and cutting
+unpaid waiting time. Both things are true: the rules move money and the platforms re-optimise around
+them. A client proposal that quotes only the city's number is quoting half the literature.
+
+**Adoption, from the better-sourced surveys:** a Coresight survey of 100 North American retail
+executives at $500M+ companies (fielded September 2026) reports AI in core operations with governance
+lagging deployment; Ramp spending data in the same report puts US retailers' paid AI subscriptions at
+**49% in August 2026, up from 11% two years earlier**. EMARKETER projects AI platforms will account
+for **1.5% of US retail e-commerce sales in 2026** — small, and the first time this KB has a figure
+for it at all.
+
+**Opportunity:** *auditable dispatch and deactivation*. Build the decision log that the January 2027
+NYC rule will require — every assignment, pay calculation and deactivation emitted as a typed,
+replayable event. It is the same ledger shape as pass 5's price-event ledger, applied to labour
+rather than price, and the same rule applies: the obligation is on the *explanation*, so the
+explanation has to be a first-class record, not a log line.
+
+**Honest gap:** no federal US rule, and no state-level survey, was verified in this pass. The NYC and
+Seattle findings are solid and primary-adjacent; anything claiming a nationwide US delivery-labour
+regime is not supported by what was measured here.
+
 ### EMEA
 
 - ⏰ **Hardest deadline in any region, and it is 11 days away.** EU AI Act **Article 50** transparency
@@ -587,6 +626,48 @@ KB from cycle 8 — **95% of EU retailers using or testing AI vs only 5% at
 scalable ROI** — is the backdrop: the constraint is delivery capability, not
 interest.
 
+#### Added 2026-11-23 (pass 6) — the fulfilment plane
+
+**EMEA has the hardest date on this plane and it is nine days away.**
+
+The **EU Platform Work Directive (2024/2831) transposition deadline is 2 December 2026.** The
+Commission declined to move it. As of mid-November 2026 many Member States had not finalised
+legislation: Sweden reportedly paused transposition while seeking renegotiation, Hungary had not
+started, and France, the Netherlands and Denmark were reportedly targeting 1 January 2027. **Plan for
+a patchwork, not a single regime** — the directive's own review of intermediaries and subcontracting
+is not due until December 2029.
+
+The Directive's algorithmic-management provisions land directly on last-mile delivery: transparency
+about automated systems that assign work and affect pay, and human review of automated decisions.
+This is the *same* obligation NYC is enforcing from January 2027 and the *same* thing Brazilian
+couriers are demanding (see LATAM below) — three regions, three legal instruments, one engineering
+requirement.
+
+**The second EMEA date, and vendors routinely conflate the two instruments:**
+
+| Instrument | What it is | Who it binds | Date |
+|---|---|---|---|
+| **eFTI** (Reg. (EU) 2020/1056) | Regulatory freight information shared with *authorities* (B2A) | **Authorities must accept** data from certified eFTI platforms | **9 July 2027** |
+| **eCMR** | The electronic consignment note, evidence of the *contract of carriage* (B2B) | Businesses, by agreement | Voluntary; industry commentary puts de facto adoption around 2029 |
+
+Use of eFTI is **voluntary for businesses** — 9 July 2027 is an *authority acceptance* date, not a
+corporate deadline. Trade press frequently cites 2026 as "the turning point"; the Commission's own
+page does not. Treat any proposal built on a 2026 eFTI mandate as mis-sourced.
+
+**Adoption:** McKinsey estimates €240–320bn of value available across European retail over five
+years; a global TCS study puts autonomous decision-making at only 24% of retailers. Both are
+consultancy figures — directional, not measured.
+
+**Opportunity:** *the compliant dispatch engine*. A permissive routing core (OR-Tools or VROOM with
+OSRM/Photon, all Apache/BSD/MIT) joined to an explanation layer that records why each courier got
+each job, retains the human-review path, and can produce a per-decision record under whichever
+national transposition applies. The routing half is free and solved; the compliance half is the
+billable, defensible part — and it is where the open-source floor stops.
+
+**Honest gap:** no EU-level delivery-labour *case law* and no finalised national transposition text
+were read in this pass. The 2 December 2026 deadline and the 9 July 2027 eFTI date are well
+sourced; the shape of any specific country's implementation is not yet knowable.
+
 ### APAC
 
 - **Largest stated intent of any region:** Deloitte reports **29% of APAC consumer businesses already
@@ -815,6 +896,51 @@ that remediation programmes are being scoped now, near enough that they are
 funded. Australia is the clearest "assess, then remediate the quote path"
 engagement on this plane, and s 48 plus live ACCC enforcement means the pre-2027
 exposure is already real.
+
+#### Added 2026-11-23 (pass 6) — the fulfilment plane
+
+**APAC is the only region where last-mile delivery itself is an open protocol.**
+
+India's **ONDC Open Delivery Protocol** lets a seller, brand or marketplace reach many last-mile
+providers through a single integration, rather than integrating each carrier separately. Verified
+events in 2026: **India Post booked and delivered its first ONDC order on 13 January 2026**, acting
+as the logistics service provider across first-mile pickup to metro last-mile; **Uber launched Uber
+Direct on ONDC in Bengaluru**, serving partners including Zepto; and EV fleet operator **Bounce
+joined the Open Delivery Protocol**. ONDC reports passing 500 million cumulative transactions, with
+200,000+ retail merchants active by July 2026 and 80,000+ merchants using ONDC Logistics
+specifically. The network-scale figures are ONDC's own and should be labelled as such.
+
+**The licence finding that decides how to engage.** The protocol specs are **not** open-source
+licensed, unlike every Western agentic-commerce standard this KB tracks:
+
+| Spec | License | Stars | Last push |
+|---|---|---|---|
+| https://github.com/beckn/protocol-specifications | **CC BY-NC-SA 4.0** — NonCommercial, ShareAlike | 456 | 2025-10-10 |
+| https://github.com/ONDC-Official/ONDC-Protocol-Specs | **CC BY-ND 4.0** — NoDerivatives | 146 | 2025-01-31 |
+| UCP / ACP / AP2 / x402 (for contrast) | Apache-2.0 | — | — |
+
+The **implementations are permissive**: `beckn/beckn-onix` is MIT (101★, 2026-11-19) and Google
+Cloud's `dpi-accelerator-beckn-onix` is Apache-2.0 (11★, 2026-11-13). So the build path is clean.
+The operative rule for a studio: **build on ONIX; do not vendor, fork or re-publish the specification
+text inside a client deliverable**, and do not publish a "profiled" ONDC spec — ND forbids
+derivatives of the document. Writing software to a published spec is a different act from copying the
+spec, and only the second is restricted here.
+
+**Adoption:** Deloitte puts agentic AI adoption in APAC retail at 29% today rising to a projected 76%
+within two years, and expects the region to drive about two-thirds of new global retail sales over
+five years. Singapore remains the most useful regulatory jurisdiction for agent work — its IMDA
+agentic-AI governance framework (January 2026, recorded in cycle 8) covers delegation chains and
+multi-agent coordination, which no other region has published.
+
+**Opportunity:** *be the ONIX integrator*. The single-integration-to-many-carriers model is exactly
+the problem every other region solves with per-carrier plugins (see `repos/foundations.md` Step 6,
+where the global result is zero carrier-neutral libraries). An MIT reference node plus a client's
+carrier contracts is a deliverable; the protocol expertise is the moat.
+
+**Honest gap:** no independent verification of ONDC logistics *order volumes* was found — only
+network-level claims and partner announcements. China and Japan were not measured on this plane in
+this pass; Japan's driver-hours constraint and China's instant-retail logistics are named here as
+unexamined, not as covered.
 
 ### LATAM
 
@@ -1102,6 +1228,61 @@ attributable parts in the first place, which is exactly what a monolithic
    engineering spend already concentrates (this KB's WhatsApp-commerce findings
    from cycle 8 sit on the same surface).
 
+#### Added 2026-11-23 (pass 6) — the fulfilment plane
+
+**For the fourth industry pass running, LATAM out-evidenced its own narrative — and this time it is
+the strongest result on the plane.**
+
+The carrier hand-off step measures as **zero worldwide**: `shipping carrier label api stars:>=100`
+→ 0, `shipping label carrier stars:>=30` → 0, `tracking number carrier stars:>=50` → 0. That step is
+**filled for six LATAM countries in one MIT-licensed, actively maintained repository**,
+https://github.com/codespar/mcp-dev-latam (279★, pushed 2026-11-13), already shaped as MCP tools for
+agents. Verified by cloning the repo and reading the tool definitions:
+
+| Package | Country | Tools |
+|---|---|---|
+| `packages/ecommerce/melhor-envio` | Brazil | `calculate_shipping`, `create_shipment`, `generate_label`, `get_tracking_history`, `list_agencies`, `cancel_shipment` |
+| `packages/ecommerce/correios` | Brazil | `calculate_shipping`, `buy_label_range`, `create_prepost`, `create_reverse`, `find_cep` |
+| `packages/ecommerce/superfrete` | Brazil | multi-carrier freight |
+| `packages/mexico/skydropx` | Mexico | multi-carrier shipping |
+| `packages/argentina/andreani` | Argentina | carrier integration |
+| `packages/colombia/coordinadora` | Colombia | carrier integration |
+
+`create_reverse` also fills part of the returns plane's empty "authorize the return" step from pass 4.
+
+**The regulatory surface, and it changes delivery unit economics directly.** Brazil:
+
+- A rule in force since **3 April 2026** grants motorcycle couriers a **30% hazard-pay supplement**
+  (periculosidade), amending the traffic code and Law 12.009/2009. Press coverage notes it does *not*
+  reach platform couriers working through iFood, Uber or 99 — so the cost lands unevenly across
+  employment models rather than uniformly across the market.
+- **PLP 152**, the platform-work bill, remained unresolved at last reading. Its draft pays the full
+  minimum rate only for the *first* delivery in a multi-order trip (50% for the second, 25% for the
+  third); courier organisations are demanding full pay per delivery **and algorithmic transparency** —
+  the "caixa preta" (black box) of the apps.
+- **Senacon**, the consumer authority, began monitoring payment transparency at delivery and
+  ride-hailing apps in **April 2026**, giving companies 30 days to adapt, with fines or suspension for
+  non-compliance.
+
+Note the convergence: Brazil's couriers are demanding the same algorithmic transparency that the EU
+Platform Work Directive mandates from 2 December 2026 and that NYC enforces as just-cause deactivation
+from January 2027. **One engineering requirement, three regions, three legal vehicles.**
+
+**Opportunity:** *the agent-reachable LATAM delivery leg*. The region's carrier layer, fiscal document
+layer (NF-e) and payment rail (Pix) are all reachable through permissive, agent-shaped code today.
+A storefront that can quote freight, print the label, emit the fiscal document and track the parcel —
+all through MCP tools under MIT — is buildable now in Brazil and Mexico and is not buildable from
+open source in the United States or Germany. Sell it as what it is: a regional capability advantage,
+not a localisation task.
+
+**Honest caution, carried forward from cycle 8:** LATAM vendor statistics in this sector contradict
+each other (Brazilian WhatsApp user counts of 165M vs 197M; Mexican penetration 73% vs 94.3%) and
+earlier cycles of this KB quoted some as settled fact. The findings above are deliberately of a
+different kind — repository contents and dated legal instruments, both re-checkable — rather than
+market-size claims. The one adoption figure quoted this pass for the region (Adyen: 42% of Mexican
+consumers using AI assistants when shopping, up from 15% a year earlier) comes from a single vendor
+survey and is labelled accordingly.
+
 ## Globant positioning
 
 1. **Lead with protocol reachability, not models.** The scarce skill is making a retailer's catalogue and
@@ -1260,3 +1441,35 @@ platform. There isn't one.
    agentic-commerce regulation and is false of price, where NA is the strictest
    region with the only in-force bans. **Regulatory weight is per-plane, not
    per-region.** Re-measure it every time the plane changes.
+
+### Added 2026-11-23 (pass 6) — positioning that follows from the fulfilment plane
+
+**1. Sell the promise, not the route.** The routing problem is solved by Apache/BSD/MIT code that a
+client can download: OR-Tools (14,430★), VROOM (1,924★), jsprit, PyVRP, Timefold, plus OSRM, Valhalla,
+GraphHopper and Photon under permissive licences. Proposing "AI route optimisation" as the
+differentiator is proposing to re-sell free mathematics. The **delivery promise** — which node, which
+date, with what confidence — has 7 repositories worldwide and none above 1 star. That is the build.
+
+**2. "Assemble, do not adopt" is the licence strategy on this plane.** The finished-looking platforms
+are AGPL-3.0 (Fleetbase 4,799★, Openship 1,680★) or Elastic License (OpenOMS). The components are
+permissive. A client-owned, closed fulfilment system is entirely reachable from OFBiz or InvenTree +
+OR-Tools/VROOM + Photon/Pelias; it is not reachable by starting from the platform that demos best.
+
+**3. The cross-region thesis, and it is new to this KB: algorithmic accountability toward the
+courier is now a delivery requirement in every region at once.** EU Platform Work Directive
+transposition 2 December 2026; NYC just-cause deactivation enforcement January 2027; Brazil's PLP 152
+and the Senacon transparency monitoring; and APAC approaching the same territory through open
+protocol interoperability rather than labour law. One artefact satisfies all of them: a typed,
+replayable decision record for every assignment, pay calculation and deactivation. Globant can build
+it once and place it four times.
+
+**4. LATAM is, on this plane, the best-equipped region in the world — say so.** The carrier label and
+tracking step that is empty everywhere else is MIT-licensed and agent-shaped for Brazil, Mexico,
+Argentina and Colombia. For once the regional story is not "catching up"; it is a capability a North
+American or European client cannot buy from open source at all.
+
+**5. Protocol neutrality extends to the fulfilment fields, and it now has a concrete defect to
+justify it.** UCP and ACP both type a delivery timestamp pair, and the pairs mean different events
+(hand-off vs. arrival — see `intel/trends.md`). Any merchant selling through both an OpenAI surface
+and a Google surface needs an adapter that knows the difference. That is a small, specific,
+demonstrable piece of expertise, and it is exactly the kind of thing a client discovers after launch.

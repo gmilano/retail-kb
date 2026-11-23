@@ -441,3 +441,51 @@ this KB flagged for innoshop and beikeshop in cycle 8.
 They are **SaaS metering and subscription billing** — usage tracking, invoicing,
 plan management. They do not price merchandise, and they are **AGPL**, so
 selecting one by name would be both a fit error and a licence error.
+
+---
+
+## Added 2026-11-23 (pass 6) — fulfilment and last-mile platforms
+
+Real systems that run a fulfilment operation and can take an AI layer on top. Licences read from the
+raw file on the default branch, 2026-11-23.
+
+### Platform table — read the licence column first
+
+| Platform | Repo | License | Stars | Last push | What it is | Can you white-label it? |
+|---|---|---|---|---|---|---|
+| Fleetbase | https://github.com/fleetbase/fleetbase | AGPL-3.0 | 4,799 | 2026-11-20 | Modular logistics & supply-chain OS: dispatch, drivers, fleet-ops, storefront extensions | Only with the AGPL obligation accepted, or a commercial licence from the vendor |
+| Openship | https://github.com/openshiporg/openship | AGPL-3.0 | 1,680 | 2026-11-17 | Order router: channels (Shopify/Woo) → 3PLs and fulfilment partners | Same constraint |
+| Apache OFBiz | https://github.com/apache/ofbiz-framework | Apache-2.0 | 1,151 | 2026-11-22 | ERP with order management, inventory and shipment in-tree | **Yes** — the only permissive full platform at this step |
+| OpenBoxes | https://github.com/openboxes/openboxes | EPL-1.0 | 936 | 2026-11-22 | WMS: stock movements, lots, picking | Yes, with EPL file-level source obligations |
+| InvenTree | https://github.com/inventree/InvenTree | MIT | 7,890 | 2026-11-23 | Inventory system of record with a strong plugin API | **Yes, unconditionally** |
+| Traccar | https://github.com/traccar/traccar | Apache-2.0 | 8,176 | 2026-11-22 | GPS fleet tracking, 200+ device protocols | **Yes** |
+| Beckn ONIX | https://github.com/beckn/beckn-onix | MIT | 101 | 2026-11-19 | Network node for a Beckn/ONDC open commerce network | **Yes** |
+| HotWax Fulfillment | https://github.com/hotwax/fulfillment | Apache-2.0 | 9 | 2026-11-17 | Store-fulfilment app (in-store pick/pack/ship) | Yes, but it is small — read it as a worked example |
+| OpenOMS | https://github.com/openoms-org/openoms | **Elastic License 2.0** | 33 | 2026-09-02 | Order management for e-commerce | **No — ELv2 is not open source.** It forbids offering the software to third parties as a managed service |
+
+### ⚠️ The licence inversion on this plane, and it is the opposite of the price plane
+
+On the price plane (pass 5) the platforms shipped nothing and the components were permissive. Here
+the **components are permissive and the platforms are copyleft**: every solver, routing engine and
+geocoder worth using is Apache/BSD/MIT, while the two largest platforms (Fleetbase, Openship) are
+AGPL-3.0 and the most-advertised OMS is Elastic License.
+
+The practical consequence for an engagement: **assemble, do not adopt.** A fulfilment platform built
+from OFBiz or InvenTree plus OR-Tools/VROOM plus Photon/Pelias is entirely permissive end to end and
+can be delivered as a client-owned, closed product. Starting from Fleetbase or Openship because they
+look finished imports AGPL into the core of the client's operations.
+
+### Gap: there is no open-source delivery-promise engine, and no platform ships one
+
+None of the platforms above computes a delivery date. OFBiz and InvenTree hold stock; Fleetbase and
+Openship route orders once the promise is already made; OpenBoxes moves stock inside a warehouse.
+The number the shopper actually sees — "arrives Thursday" — is computed nowhere in the open-source
+estate (see `repos/foundations.md` → Step 1, 7 repos worldwide, none above 1 star).
+
+### Gap: the fiscal/legal document layer for freight is empty in Europe and full in LATAM
+
+An EU shipment increasingly needs an electronic consignment note (eCMR) and, from 9 July 2027,
+authorities must accept freight data from certified eFTI platforms. The open-source response to that
+is **one repository with zero stars and no licence**. Meanwhile a Brazilian shipment's fiscal document
+(NF-e) and its carrier labels are covered, under MIT, in https://github.com/codespar/mcp-dev-latam.
+A European retailer has more regulation and less code than a Brazilian one on exactly this step.

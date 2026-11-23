@@ -10,6 +10,56 @@ updated: 2026-11-23
 > protocol and platform repos**. For agents and agent-facing tooling see `agents/trending.md` — until today
 > the two files were byte-identical and this distinction did not exist.
 
+## 2026-11-23 (pass 6) — the fulfilment plane
+
+**Plane opened this pass:** order → doorstep. For the agent-layer view see `agents/trending.md`;
+this file carries the infrastructure, solver and platform repos.
+
+**The permissive core of this plane, all alive, all measured 2026-11-23:**
+
+| Repo | License | Stars | Last push | Step |
+|---|---|---|---|---|
+| https://github.com/google/or-tools | Apache-2.0 | 14,430 | 2026-11-20 | Route |
+| https://github.com/Project-OSRM/osrm-backend | BSD-2-Clause | 8,237 | 2026-11-22 | Map |
+| https://github.com/inventree/InvenTree | MIT | 7,890 | 2026-11-23 | Pick |
+| https://github.com/graphhopper/graphhopper | Apache-2.0 | 6,828 | 2026-11-20 | Map |
+| https://github.com/valhalla/valhalla | MIT (API says NOASSERTION) | 6,481 | 2026-11-21 | Map |
+| https://github.com/openvenues/libpostal | MIT | 4,925 | 2026-05-13 | Address |
+| https://github.com/komoot/photon | Apache-2.0 | 3,205 | 2026-11-20 | Address |
+| https://github.com/VROOM-Project/vroom | BSD-2-Clause | 1,924 | 2026-11-17 | Route |
+| https://github.com/TimefoldAI/timefold-solver | Apache-2.0 | 1,879 | 2026-11-23 | Route |
+| https://github.com/graphhopper/jsprit | Apache-2.0 | 1,842 | 2026-11-19 | Route |
+| https://github.com/PyVRP/PyVRP | MIT | 734 | 2026-11-19 | Route |
+| https://github.com/reinterpretcat/vrp | Apache-2.0 | 512 | 2026-10-28 | Route |
+
+**The non-permissive half of the same plane:**
+
+| Repo | License | Stars | Last push | Constraint |
+|---|---|---|---|---|
+| https://github.com/fleetbase/fleetbase | AGPL-3.0 | 4,799 | 2026-11-20 | Network-copyleft on a hosted logistics platform |
+| https://github.com/osm-search/Nominatim | GPL-3.0 | 4,575 | 2026-11-21 | Permissive alternatives exist (Pelias, Photon) |
+| https://github.com/openshiporg/openship | AGPL-3.0 | 1,680 | 2026-11-17 | Order router |
+| https://github.com/GIScience/openrouteservice | GPL-3.0 | 1,996 | 2026-11-23 | Permissive alternatives exist at the same step |
+| https://github.com/openboxes/openboxes | EPL-1.0 | 936 | 2026-11-22 | Weak file-level copyleft |
+| https://github.com/openoms-org/openoms | **Elastic License 2.0** | 33 | 2026-09-02 | Source-available; blocks managed-service delivery. Public listings call it MIT — they are wrong |
+
+**Protocol-layer licence finding, new this pass and regionally decisive:** the APAC open-commerce
+protocols are **Creative Commons, not open-source licences.**
+
+| Spec repo | License | Stars | Last push |
+|---|---|---|---|
+| https://github.com/beckn/protocol-specifications | **CC BY-NC-SA 4.0** (NonCommercial) | 456 | 2025-10-10 |
+| https://github.com/ONDC-Official/ONDC-Protocol-Specs | **CC BY-ND 4.0** (NoDerivatives) | 146 | 2025-01-31 |
+
+Against UCP, ACP, AP2 and x402, which are all Apache-2.0. The reference *implementations* are
+permissive (`beckn/beckn-onix` MIT, Google's accelerator Apache-2.0) — so the build path is clean and
+the **document** path is not. Implementing a published spec is not the same act as copying its text;
+the practical rule is *build on ONIX, do not vendor or re-publish the spec text in client deliverables*.
+
+**Dead slug dropped before it entered the KB:** `hotwax/poorti` — cited by a search result and an
+ecosyste.ms listing as an Apache-2.0 store-fulfilment suite. It does not exist. Live slug:
+https://github.com/hotwax/fulfillment (Apache-2.0, 9★, 2026-11-17).
+
 ## 2026-11-23 (pass 5) — the price plane
 
 **Plane opened this pass:** the price. For the agent-layer view of the same pass

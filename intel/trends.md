@@ -812,3 +812,149 @@ Provenance flagged in place rather than cleaned up:
   surveillance pricing. Adjacent cautionary case: an airline publicly expanding
   generative-AI pricing from 3% to 20% of domestic flights drew sustained
   criticism. **The margin story is contested; the exposure story is not.**
+
+---
+
+## Added 2026-11-23 (pass 6) — the fulfilment plane
+
+### 37. The open-source floor covers the mathematics and stops at the commerce
+
+This is the sharpest form the structural law has taken in six passes. On the fulfilment plane the
+*hardest computational problem* — routing a fleet of vehicles under time windows and capacity
+constraints, an NP-hard problem with decades of literature — has at least six maintained solvers,
+nearly all permissive (OR-Tools 14,430★ Apache-2.0; VROOM 1,924★ BSD-2; Timefold 1,879★ Apache-2.0;
+jsprit 1,842★ Apache-2.0; PyVRP 734★ MIT; reinterpretcat/vrp 512★ Apache-2.0).
+
+The *easiest-sounding* problem — "when will it arrive?" — has **7 repositories worldwide and none
+above 1 star**. Printing a carrier label has **zero** repositories above 30 stars. Proving delivery
+has zero.
+
+The reason is not difficulty. It is that routing is a *problem* while promising is a *commitment*:
+it binds an inventory position, a carrier contract, a cut-off time and a liability. Open source
+produces solvers, not commitments. **Where the business carries the risk, the open-source floor ends
+— and that is precisely where the margin is.**
+
+### 38. ⚠️ UCP and ACP both type a delivery window, and the two windows are different events
+
+Read directly from the specifications on 2026-11-23 (UCP at commit `c20aa35`, ACP at `7fdd78d`):
+
+| Protocol | File | Fields | What the timestamp means |
+|---|---|---|---|
+| ACP | `spec/unreleased/openapi/openapi.agentic_checkout.yaml` → `FulfillmentOptionShipping` | `earliest_delivery_time`, `latest_delivery_time` | "RFC 3339 timestamp for earliest/latest expected **delivery**" — when the shopper receives it |
+| UCP | `source/schemas/shopping/types/fulfillment_option.json` | `earliest_fulfillment_time`, `latest_fulfillment_time` | "Earliest/latest **fulfillment** date" — when the merchant fulfils it |
+
+Both are `format: date-time`. Both sit on the shipping option a shopper chooses at checkout. A field
+mapper written by name-similarity will map one to the other, and **the entire transit time silently
+disappears from the promise** — an "arrives Tuesday" that is really "ships Tuesday".
+
+UCP's catalog-level base type (`fulfillment_option_base.json`) carries no typed timing at all; its
+arrival information lives in a free-text `description` whose own example is
+`'Arrives Dec 12-15 via FedEx'`. So within UCP the *typed* field is a hand-off and the *rendered*
+string is an arrival — the mismatch exists inside one protocol before any cross-protocol mapping.
+
+ACP is richer here than its star count suggests: `FulfillmentOptionLocalDelivery` types a
+`delivery_window` start/end plus a `service_area` radius, and `FulfillmentOptionPickup` types
+`ready_by` and `pickup_by`. UCP types post-purchase tracking well — `fulfillment_event.json` requires
+`occurred_at`, `type`, `line_items` and requires `tracking_number`/`tracking_url` once status is past
+`processing`.
+
+**Net:** an agent can follow a parcel after dispatch, and can read a promise before purchase — but
+the promise does not mean the same thing on the two surfaces a merchant is most likely to sell
+through. This is a correction to an assumption this pass started with (that the promise was untyped
+prose); it is typed, and the problem is semantics, not absence.
+
+*Falsifiable prediction, recorded for the next retail pass:* one of the two specs will add an
+explicit arrival-vs-handoff distinction (a renamed field, a second timestamp pair, or clarifying
+prose) within two cycles. If it has not, the mapping defect is load-bearing and worth a public note.
+
+### 39. "Fulfillment" is a Dialogflow word — the third industry-term collision in this KB
+
+`fulfillment agent stars:>=30` returns 5 repositories; **4 are Dialogflow webhook libraries**, where
+"fulfillment" means the handler that satisfies a chatbot intent. After cycle 8's Minecraft hoppers
+(inventory) and pass 4's `return` statements (refunds), the pattern is established: **retail's
+operational vocabulary collides with software engineering's own vocabulary, and the search channel
+cannot disambiguate.** Query with the physical noun (`vehicle routing`, `shipping label`,
+`parcel tracking`, `eCMR`), never the business abstraction.
+
+A second contamination confirmed: `supply chain agent stars:>=100` now returns an AI-security scanner
+(`NVIDIA/SkillSpector`, 27,310★) and marketing skill packs above anything in logistics.
+
+### 40. ⚠️ A README badge is not a licence — and `NOASSERTION` is not a verdict
+
+Two failures in opposite directions, both caught by reading raw files:
+
+- **`cargofy/ATLAS`** (20★) renders an Apache-2.0 badge linking to `LICENSE`. `LICENSE`, `LICENSE.md`,
+  `LICENSE.txt`, `COPYING` and `NOTICE` **all 404 on the default branch**, and the API reports no
+  licence. It is the only logistics-specific MCP server found, and it is unusable.
+- **`valhalla/valhalla`** (6,481★) reports `NOASSERTION`. Its `LICENSE.md` is a 43-byte pointer —
+  `For license information see [here](COPYING)` — and `COPYING` is 1,135 bytes of plain **MIT**.
+
+Cycle 8's law was "a short LICENSE file is a pointer, not a licence." The complete rule is now:
+**the licence is the file, and only the file.** A badge can promise one that does not exist; an API
+flag can hide one that does. Both errors cost the same if written into a client proposal.
+
+A third, from a public listing rather than a repo: **`openoms-org/openoms` is Elastic License 2.0**,
+not MIT as libraries.io reports — source-available, and it forbids offering the software to third
+parties as a managed service.
+
+### 41. The APAC commerce protocols are Creative Commons, not open source
+
+Every Western agentic-commerce standard this KB tracks is Apache-2.0 (UCP, ACP, AP2, x402). The two
+APAC open-commerce specs are not open-source licensed at all:
+**`beckn/protocol-specifications` is CC BY-NC-SA 4.0 (NonCommercial)** and
+**`ONDC-Official/ONDC-Protocol-Specs` is CC BY-ND 4.0 (NoDerivatives)** — both confirmed by reading
+the licence text ("The License Elements of this Public License are Attribution, NonCommercial, and
+ShareAlike").
+
+The reference implementations are permissive (`beckn/beckn-onix` MIT; Google's
+`dpi-accelerator-beckn-onix` Apache-2.0), so the build path is clean. The rule: **build on ONIX; do
+not vendor, fork or re-publish the spec text in a client deliverable, and do not publish a profiled
+derivative of the ONDC spec.** Writing software to a spec is not copying the spec — but a slide deck
+that reproduces it, or a repo that forks it, is.
+
+Generalisable beyond retail: **a specification's licence is usually a documentation licence, and
+documentation licences carry restrictions code licences do not.** Check the spec repo separately from
+the implementation repo in every industry.
+
+### 42. Algorithmic accountability toward the worker became a delivery requirement in all four regions
+
+| Region | Instrument | Date | Obligation |
+|---|---|---|---|
+| EMEA | EU Platform Work Directive 2024/2831 | **transposition 2 December 2026** | Transparency on automated systems affecting work and pay; human review of automated decisions |
+| North America | NYC DCWP delivery-worker rules | **enforcement January 2027** | No deactivation without just cause or bona fide economic reason |
+| LATAM | Brazil PLP 152 (pending) + Senacon monitoring from April 2026 | in motion | Payment transparency; couriers demand an end to the apps' "caixa preta" |
+| APAC | ONDC Open Delivery Protocol | in force commercially | Interoperability rather than labour law — the accountability is to the *network*, not the worker |
+
+Three different legal theories — labour law, consumer protection, platform interoperability — produce
+one engineering artefact: a typed, replayable record of why an automated system made a decision about
+a delivery. This KB has recorded a region-specific compliance build five times; this is the first
+obligation that is simultaneously live on three continents.
+
+### 43. Europe has more freight regulation and less code than Brazil
+
+The EU requires authorities to accept certified eFTI platform data from **9 July 2027**, and eCMR
+adoption is advancing B2B. The open-source response: **one repository, zero stars, no licence file**
+(`cargoffer/ecmr-mcp-skybridge`). Meanwhile Brazil's fiscal document for goods in transit (NF-e), its
+carrier labels and its tracking are all covered under MIT in `codespar/mcp-dev-latam`.
+
+Note the instrument distinction, which trade press routinely blurs: **eFTI is B2A** (information to
+authorities) and voluntary for businesses; **eCMR is B2B** (evidence of the carriage contract).
+9 July 2027 is an authority-acceptance date, not a corporate deadline. Several trade articles cite
+2026 as the turning point; the Commission's own page does not.
+
+### Source-quality notes for this section
+
+- **Strongest sources this pass:** the specification files themselves (cloned and read at pinned
+  commits), raw licence files, and `git ls-remote` for existence. Every repository claim above is
+  re-checkable in under a minute.
+- **Good secondary:** NBER working paper on Seattle's minimum pay standard (found reduced tips and
+  task availability, no net earnings gain) — rare counter-evidence in a literature dominated by
+  advocacy; NYC DCWP's own figures and rates; European Commission eFTI page.
+- **Directional only:** McKinsey's €240–320bn European value estimate, TCS's 24% autonomous
+  decision-making figure, Deloitte's 29%→76% APAC agentic adoption, Coresight's governance findings,
+  Adyen's 42% Mexican AI-assistant figure. All consultancy or vendor surveys; cite as claims.
+- **Unverified and labelled as such:** ONDC's own network-scale numbers (500M transactions, 200,000
+  merchants); the status of Brazil's PLP 152 at time of writing; any claim of a nationwide US
+  delivery-labour regime.
+- **Not examined this pass:** China and Japan on this plane; US state-level delivery rules outside
+  NYC and Seattle; air and ocean freight. Named here as gaps, not covered.
