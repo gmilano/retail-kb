@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-22
+updated: 2026-11-23
 ---
 
 # 🎯 AI Agents & Commerce Intelligence — Retail & Consumer
@@ -258,3 +258,70 @@ today returns `dovnel/Win-7` (2015), `denman2328/Help` (2013) and
 **Three of three hits are garbage, and all three look like plausible repos in
 a results list.** The defence is not a better query; it is opening every row
 before writing it. Nothing from those queries entered this KB.
+
+---
+
+## Added 2026-11-23 — the returns & recovery plane (agents for the reverse flow)
+
+### The finding that governs this whole section
+
+**The agent-shaped layer in retail's reverse flow is two repos wide, and
+neither is a returns agent.** This is measured, not estimated, and the
+measurement was nearly derailed by the ambiguity of the word itself:
+
+- `returns agent` → **2464 repos, zero relevant.** The highest-starred hit
+  (162★) is a Brainfuck web app that *"returns your user-agent to you"*. This
+  is the single best specimen of false abundance in this knowledge base.
+- `refund agent llm` → **191 repos**, and the whole top six is 141★ (a generic
+  LangGraph demo), 6★, 9★, 7★, 0★, 0★.
+- `customer support agent ecommerce` → **236 repos**, top result 12★ and
+  unlicensed.
+
+What exists, verified:
+
+| Agent / repo | License | Stars | Last push | What it actually does |
+|---|---|---|---|---|
+| [budna-marketplace/recommerce](https://github.com/budna-marketplace/recommerce) | MIT | 16★/1f | 2026-11-09 | **Agent skills for comparing new and pre-owned items.** MIT, alive, and the only agent-shaped artifact found anywhere in the recommerce/resale layer. Small, but it is the real thing: it makes the new-vs-used trade-off an agent can reason about. |
+| [Pragatheswar-72/support-agent](https://github.com/Pragatheswar-72/support-agent) | MIT | 6★/4f | 2026-07-01 | Multi-agent customer support: a LangGraph orchestrator routing to specialist agents. MIT. Useful as a *shape* for a post-purchase agent; 6★ means read it, don't depend on it. |
+
+And one that is on-topic enough to name but cannot be used:
+
+| Agent / repo | License | Stars | Last push | Why it is Tier 2 |
+|---|---|---|---|---|
+| [LikhithV02/Customer-Support-Agent](https://github.com/LikhithV02/Customer-Support-Agent) | **NONE** | 9★/2f | 2026-10-13 | Described as an agent that *"approves, denies or escalates refunds"* — precisely the decision this plane needs. **No licence ⇒ all rights reserved.** The closest thing to a refund-decision agent in open source is legally unusable. |
+
+### The asymmetry worth naming
+
+The reverse flow is the first plane in this KB where the **tool** layer is
+strong and the **agent** layer is absent. Reverse routing has eight
+permissive, actively committed solvers (see `repos/foundations.md` → Step 3,
+incl. `google/or-tools` 14430★ and `PyVRP` MIT 734★), and anomaly detection has
+`open-edge-platform/anomalib` at 6416★ Apache-2.0. What nobody has built is the
+*agent that decides*: whether to authorise the return, what condition grade to
+assign, and which disposition route is both cheapest and lawful.
+
+That is the composable opportunity, and it is written up concretely as
+Pattern 18 and Pattern 19 in `compose/patterns.md`.
+
+### Agent-layer measurements that came back empty (2026-11-23)
+
+- `returns agent` → 2464 repos, **0 relevant** (keyword collision).
+- `refund agent llm` → 191 repos, nothing above 9★ on topic.
+- `disposition engine` → **22 repos worldwide, 0 relevant.** No disposition agent.
+- `takeback trade-in` → **0 repos.**
+- `liquidation deadstock` → 1 repo, 0★.
+- Warranty: `abdul-rafay-dev0/AssureX-Warranty-Claim-Engine` (MIT, **3★**, 2026-10-01) is the best permissive warranty-claim agent in existence. A 3★ repo is not a floor.
+
+### ⚠️ Corrections and refinements to earlier cycles of this file
+
+- **`anomalib` moved.** Earlier cycles of this KB discussed shelf vision as an
+  AGPL-only corpus (2026-11-22, pass 2). That finding stands for *shelf*
+  vision, but the escape hatch has now been located and it is permissive:
+  **`open-edge-platform/anomalib`**, Apache-2.0, 6416★, pushed 2026-11-20. Note
+  the owner: the old `openvinotoolkit/anomalib` slug still resolves over git
+  but **422s** on the search API, which is the signature of a rename.
+- **OptaPlanner's famous slug is a stub.** `apache/incubator-kie-optaplanner`
+  (3512★) says in its own description that the project *"has moved"*. Where
+  earlier cycles of this file reference OptaPlanner, the live targets are
+  `apache/incubator-kie` (6344★) and `TimefoldAI/timefold-solver` (1879★,
+  pushed 2026-11-23).

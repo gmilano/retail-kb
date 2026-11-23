@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-22
+updated: 2026-11-23
 ---
 
 # 📡 Trends — Retail & Consumer
@@ -467,3 +467,194 @@ stars:>=20` returns 18 hits of which **3 are real** (the rest are Android
   statutory obligations. North America, APAC and LATAM returned **no citable
   retail-media-specific regulation**, and that is recorded as a gap in each
   regional section rather than smoothed over.
+
+---
+
+## Added 2026-11-23 — the returns & recovery plane
+
+### 29. Retail's largest margin leak had no vocabulary in this knowledge base
+
+Fifth plane, fifth time this has happened, and this was the biggest hole yet.
+Before this pass `RMA`, `returns fraud`, `routing`, `BOPIS`, `takeback`,
+`UFLPA`, `CSDDD`, `ESG` and `scope 3` were all at **zero mentions** across all
+eight files, while `reverse logistics` had 2, `recommerce` 1, `resale` 1 and
+`warranty` 1. Retail returns run at roughly **16% of sales (~$850B in 2025,
+per Shopify)**.
+
+The method that found it is now proven five times and costs about one tool
+call: when the target KB already has same-day passes, **do not rewrite and do
+not re-verify — grep ~25–60 candidate terms against the existing files before
+touching the web.** The gap announces itself.
+
+### 30. ⚠️ "Returns" is genuinely ambiguous *in this industry*, and it corrupted both channels in one pass
+
+This is the most operationally important trend entry of the pass, because it
+is a trap that produces confident, plausible, wholly wrong deliverables.
+
+**It broke code search.** `returns management` → **3134 repos, zero
+retail-relevant in the top 8** (portfolio analytics, library book lending).
+`returns agent` → **2464 repos, zero relevant**, its 162★ top hit a Brainfuck
+web app that *"returns your user-agent to you"*. And inside the KB's own
+prose, a naive grep for "returns" scored **47 hits that were all false
+positives** — phrases like *"the query returns 2 repos"* — while `RMA` scored
+75 hits that were all the substring in *fo**rma**t*.
+
+**It broke the industry sources too.** A KPMG APAC figure reads *"more than
+half of retailers report returns exceeding 10% from AI initiatives"*. That is
+**return on investment**. In a returns-reduction deck it is a factual error.
+
+Cycle 8's trend #28 recorded that keyword collision is a structural property
+of this sector. This extends it: **in the reverse-flow plane the collision is
+semantic, not merely lexical, and it contaminates prose and prose-derived
+statistics as readily as it contaminates repo search.** Search and quote
+`RMA`, `reverse logistics`, `disposition`, `restocking`, `right of
+withdrawal` — never the bare word.
+
+### 31. The structural law, sixth confirmation — and the sharpest form it has taken: the mandated step is the empty one
+
+Every plane in this KB has shown the same gradient: *format and geometry
+problems are well equipped, judgment problems are not.* The reverse flow shows
+it across six steps, and then adds a twist no previous plane had.
+
+| Step | Nature of the problem | Open-source state |
+|---|---|---|
+| 1. PREVENT (fit prediction) | Judgment about one body | **Empty** — 73 repos, best 9★ unlicensed |
+| 2. AUTHORISE (RMA) | Policy formatting | **One repo** — `mage-os/module-rma`, MIT, alive |
+| 3. MOVE (reverse routing) | **Pure geometry** | **Abundant** — 8 permissive solvers, `or-tools` 14430★, all pushed this week |
+| 4. GRADE (condition) | Perception, generic | Generic: **excellent** (`anomalib` 6416★ Apache-2.0). Retail-specific: **zero** |
+| 5. DECIDE (disposition) | **Judgment + legal liability** | **Zero** — 22 repos, 0 relevant |
+| 6. RECOVER / DETECT | Judgment + money | **~Zero** — `takeback trade-in` returns **0 repos** |
+
+Step 3 is a solved problem with a 14430★ Apache-2.0 dependency pushed three
+days before this pass. Step 5 — the adjacent step, in the same warehouse, on
+the same unit — has **22 repositories worldwide and none of them are about
+retail**.
+
+**The twist: the empty step is the one the law now targets.** Since **19 July
+2026**, ESPR Article 25 requires EU large companies to decide and evidence the
+disposition of unsold apparel and footwear. The media pass found a three-step
+gradient from *declare* (equipped) to *liquidate* (zero). This pass finds the
+same shape with the legal obligation landing **precisely on the zero**. The
+generalisable claim, now testable in the remaining industries:
+
+> Open source equips the step that can be specified, and abandons the step that
+> must be *judged and defended*. Regulation attaches to exactly the latter.
+> Therefore: **the arrival of a mandate is a reliable predictor of an
+> open-source vacuum, not of an open-source response.**
+
+Corroborating counts from this pass alone: `extended producer responsibility`
+→ **24 repos worldwide, max 1★**, for a regime in force across the EU; and
+`right to repair` → 272 repos whose top results are *automotive*, 16 months
+after a consumer-goods repair directive began applying.
+
+### 32. The obligation is *typed*, and that is what makes it a build rather than a report
+
+ESPR Article 25 does not merely forbid destruction. Sources are explicit that
+**recycling an unsold garment counts as destruction while preparing it for
+reuse does not**, and that derogations under **Delegated Regulation (EU)
+2026/296** must be justified. So the disposition decision has a legal type
+system: `reuse`/`repair` lawful, `recycle`/`destroy` restricted and
+evidenced.
+
+A cost optimiser cannot express that; a rules engine can. This is why the
+right substrate is **Apache KIE / Drools** (Apache-2.0, 6344★, alive) rather
+than a scoring model — and why the EMEA engagement is a compliance build while
+the identical North American one is an optimisation build.
+
+### 33. The one quantified "AI reduced returns" result in the world is European, and it came from the *equipped* step
+
+Across every search in this pass, exactly one retailer-reported figure
+connected AI to a measured fall in returns: **Zalando, attributing ~a fifth of
+recent revenue growth to AI-driven personalisation and reporting a 7%
+reduction in its return rate.** Note where that win was earned — at
+**recommendation**, a step this KB already documented as well equipped — not
+at the empty fit-prediction layer. Prevention pays, but it pays through the
+tools that already exist.
+
+Against it, the gap that funds the work: Retail Economics reports **95% of
+European retailers using or testing AI in marketing and e-commerce and only
+5% achieving scalable ROI**.
+
+### 34. Returns fraud is the clearest "money without code" result in this KB
+
+Demand: ~**9% of returns are fraudulent**, **85% of merchants already deploy
+AI/ML against it**, and only **45% believe those tools work on their own**
+(NRF / Happy Returns). Supply: `returns fraud` → **155 repos whose top six are
+2, 6, 0, 0, 0 and 4 stars**, with the 6★ entry being credit-card fraud. The
+graph-fraud toolboxes that listicles still recommend — `DGFraud` (766★),
+`UGFraud` (134★) — have been **dead since April 2022**.
+
+Only one live permissive piece exists and it is a **benchmark generator**,
+not a detector: `SantanderAI/gen-fraud-graph` (Apache-2.0, 296★, 2026-10-01).
+That is the correct shape, because returns-fraud data cannot legally or
+commercially be pooled across retailers — so you generate, then benchmark.
+
+An adjacent and newer surface: eMarketer, citing Chargeback911, reports
+payment providers' tools are inadequate against AI-enabled chargeback fraud
+**where autonomous agents are involved** — joining this plane directly to the
+agentic-commerce plane of 2026-11-21.
+
+### 35. ⚠️ Three new licence-verification failures, all of which would have produced wrong rows
+
+Cycle 8 established that a raw-channel 404 is never by itself proof that a
+licence is missing. This pass found three further failure modes:
+
+1. **`LICENSE.TXT` — an uppercase *extension*.** Cycle 8's fix added lowercase
+   `license.txt`. That still missed **`Project-OSRM/osrm-backend` (8237★)**,
+   whose licence is in `LICENSE.TXT`. The probe must vary the case of the
+   extension as well as the stem.
+2. **The pointer licence file — a new category.** `valhalla/valhalla` (6481★)
+   has a **44-byte** `LICENSE.md` whose entire content is
+   `For license information see [here](COPYING)`. GitHub's API therefore
+   reports **`NOASSERTION` / "Other"**, while `COPYING` is **plain MIT**. This
+   is a false negative in the *permissive* direction — a licence gate or SBOM
+   scan would reject a 6481★ MIT routing engine as unknown-licence. Cycle 8
+   found the inverse with Chromaprint. **Rule: `NOASSERTION` means "read the
+   file", never "no licence", and never "bad licence".**
+3. **Rename vs deletion is distinguishable.** `git ls-remote` succeeding while
+   `search/repositories q=repo:<slug>` returns **HTTP 422** is the signature of
+   a **renamed** repository. `openvinotoolkit/anomalib` is now
+   `open-edge-platform/anomalib` (6416★, Apache-2.0). Previous cycles treated
+   `refs=0` as non-existence; this adds the complementary test.
+
+And one liveness trap: **`apache/incubator-kie-optaplanner` (3512★) says in
+its own description that the project "has moved."** The live repo is
+`apache/incubator-kie` (6344★). Stars accumulate against history, not against
+maintenance.
+
+### 36. The licence shape inverts again — platforms copyleft, components permissive
+
+In the store plane the platforms were permissive and the fiscal libraries
+copyleft. Here it is reversed: the platforms carrying returns functionality are
+**copyleft** (Odoo LGPL-3.0 with its verified `Repairs` app, ERPNext GPL-3.0
+with its `Warranty Claim` doctype) while every component needed to build the
+missing disposition layer is **Apache-2.0, BSD-2 or MIT** (`incubator-kie`,
+`anomalib`, `or-tools`, `vroom`, `osrm`, `PyVRP`).
+
+The practical reading: **configure the copyleft platform, own the permissive
+decision layer.** The one standalone RMA component that can be re-licensed
+into a client's closed product is `mage-os/module-rma`, MIT, 23★.
+
+### Source-quality notes for this section
+
+Every GitHub claim above is verified on 2026-11-23 — existence by
+`git ls-remote`, metrics and SPDX by `search/repositories`, licence by
+fetching the file and checking its byte count.
+
+**Every non-GitHub figure in this section is search-result-derived and could
+not be fetch-verified**, because both verification channels are blocked by
+this session's network policy: `curl` returns `403 connect_rejected` from the
+egress proxy and WebFetch returns `ENOTFOUND` for `eur-lex.europa.eu`,
+`espratlas.com`, `modernretail.co`, `nrf.com`, `deloitte.com`, `emarketer.com`
+and `planalto.gov.br`. This affects the Shopify return-rate figures, the
+NRF/Happy Returns 9%/85%/45% figures, the Coresight, KPMG, Retail Economics
+and Deloitte adoption numbers, the Zalando result, and **all statutory dates
+including ESPR Article 25 and Directive (EU) 2024/1799**. They are attributed
+in prose to their named sources and must be checked against the Official
+Journal and the companies' own filings before entering a client deliverable.
+**To make them citable, those hosts need to be added to the session's allowed
+network domains.**
+
+One dated figure is flagged in place rather than dropped: the **59%** "keep
+it" adoption number is a goTRG survey of 21 retailers from the **2023**
+holiday season — the most specific available, but three years old.

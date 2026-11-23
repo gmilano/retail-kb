@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-22
+updated: 2026-11-23
 ---
 
 # 🏭 Vertical Platforms — Retail & Consumer
@@ -275,3 +275,70 @@ Globant's integration work is the product rather than a thin layer over
 someone else's platform. This joins markdown/assortment optimisation (cycle 8)
 and shelf vision (pass 2) on the short list of retail capabilities with **no
 open-source floor at all**.
+
+---
+
+## Added 2026-11-23 — returns, repair and disposition platforms
+
+### Gap first: there is no open-source returns management platform
+
+Stated before the table, because this is the commercially important fact. The
+returns-platform market is entirely commercial — ReverseLogix, Loop, Narvar,
+AfterShip, goTRG, SAP Intelligent Returns Management, Pivotree/YANTRA. A
+dedicated search for open-source equivalents found **no open-source returns
+management platform of any size**, and the code-level searches agree:
+`reverse logistics` → 364 repos whose only non-trivial entry is an unlicensed
+national-lab research tool; `disposition engine` → 22 repos, zero relevant.
+
+This is the same shape as the retail-media gap recorded on 2026-11-22 (pass 3)
+and the price/markdown gap recorded earlier: **a large, well-funded software
+category with no open-source floor at all.**
+
+### What does exist: returns as a module inside a platform you already run
+
+Returns in open source are not a product, they are a module. These are
+verified by fetching the module definition from the repository, not inferred
+from marketing pages:
+
+| Platform | License | The returns/repair capability, verified | Verification |
+|---|---|---|---|
+| **Odoo** (Community) | LGPL-3.0 | Ships a first-class **`Repairs`** app (`addons/repair`), summary *"Repair damaged products"*, explicitly covering the **warranty concept**, stock impact of a repair, and repair quotations. Present in 17.0, 18.0 and master. | `addons/repair/__manifest__.py` → HTTP 200 on all three branches |
+| **ERPNext** | GPL-3.0 | Ships a **`Warranty Claim`** doctype (`erpnext/support/doctype/warranty_claim`), plus credit-note/return flows against Delivery Note. | `warranty_claim.json` → HTTP 200 on `develop` |
+| **Mage-OS / Magento** | MIT (module) | [mage-os/module-rma](https://github.com/mage-os/module-rma) — a standalone **MIT** RMA module, 23★/14f, pushed 2026-11-17. The only permissively licensed standalone RMA component found anywhere. | `git ls-remote` + `LICENSE` 1071 B |
+
+The licence consequence is the one this KB already documented on 2026-11-22
+(pass 2) and it applies again, unchanged: **Odoo's LGPL and ERPNext's GPL make
+the returns module safe to deploy and configure, and unsafe to fork into a
+proprietary hosted product.** The Mage-OS RMA module is the only piece of this
+layer that can be freely re-licensed into a client's closed codebase.
+
+### The disposition layer has no platform — assemble it
+
+Since 19 July 2026 an EU large company must decide and evidence the
+disposition of unsold apparel and footwear (ESPR Article 25 — see
+`intel/market.md` → EMEA). No platform implements this. The honest assembly,
+all permissive:
+
+| Component | Repo | License | Role |
+|---|---|---|---|
+| Decision/rules engine | [apache/incubator-kie](https://github.com/apache/incubator-kie) | Apache-2.0 | Drools rules expressing *reuse / repair / recycle / destroy* per jurisdiction. 6344★, pushed 2026-11-20. |
+| Condition grading | [open-edge-platform/anomalib](https://github.com/open-edge-platform/anomalib) | Apache-2.0 | Defect/anomaly scoring on the inbound unit. 6416★, pushed 2026-11-20. |
+| Reverse route | [VROOM-Project/vroom](https://github.com/VROOM-Project/vroom) + [Project-OSRM/osrm-backend](https://github.com/Project-OSRM/osrm-backend) | BSD-2-Clause | Route the graded unit to the chosen destination. |
+| Product identity & evidence | Digital Product Passport stack already in this file | mixed — see the DPP section above | Carries the disposition record. |
+
+**Note the licence inversion against the rest of retail:** the *platform* layer
+here is copyleft (Odoo LGPL, ERPNext GPL) while the *disposition* components
+are all Apache-2.0/BSD/MIT. That is the opposite of the store plane, where the
+platforms were permissive and the fiscal libraries copyleft.
+
+### ⚠️ Repair platforms: the EU created a duty and open source did not respond
+
+The Right to Repair Directive (EU) 2024/1799 has applied since **31 July
+2026**, and `right to repair` on GitHub returns **272 repos whose top results
+are all automotive** — `jakka351/Opium-Den-OEM` (65★, unlicensed, Chinese
+vehicle OEM tooling) and VW component-protection documentation. There is **no
+consumer-goods repair-management platform** in open source. Odoo's `Repairs`
+app, above, is the closest thing that exists, and it was not built for this
+directive.
+
+This is a genuine, dated, unserved platform gap in EMEA.

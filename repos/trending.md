@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-22
+updated: 2026-11-23
 ---
 
 # 📈 Repos Trending — Retail & Consumer
@@ -9,6 +9,60 @@ updated: 2026-11-22
 > **Append-only.** Newest dated section on top; history preserved below. This file tracks **infrastructure,
 > protocol and platform repos**. For agents and agent-facing tooling see `agents/trending.md` — until today
 > the two files were byte-identical and this distinction did not exist.
+
+## 2026-11-23 — the returns & recovery plane
+
+**Eight permissive reverse-routing solvers entered this KB today.** None of
+them was present before this pass (`or-tools`, `osrm`, `valhalla`, `vroom`,
+`jsprit`, `PyVRP` were all absent). Reverse logistics is a pickup-and-delivery
+VRP, and that corpus is the best-equipped layer in the whole reverse flow —
+permissive, mature, and committing this week:
+
+| Repo | License | Stars | Last push |
+|---|---|---|---|
+| [google/or-tools](https://github.com/google/or-tools) | Apache-2.0 | 14430★/2558f | 2026-11-20 |
+| [Project-OSRM/osrm-backend](https://github.com/Project-OSRM/osrm-backend) | BSD-2-Clause | 8237★/3981f | 2026-11-22 |
+| [open-edge-platform/anomalib](https://github.com/open-edge-platform/anomalib) | Apache-2.0 | 6416★/1045f | 2026-11-20 |
+| [apache/incubator-kie](https://github.com/apache/incubator-kie) | Apache-2.0 | 6344★/2609f | 2026-11-20 |
+| [valhalla/valhalla](https://github.com/valhalla/valhalla) | **MIT** (in `COPYING`; API says NOASSERTION) | 6481★/1037f | 2026-11-21 |
+| [VROOM-Project/vroom](https://github.com/VROOM-Project/vroom) | BSD-2-Clause | 1924★/452f | 2026-11-17 |
+| [TimefoldAI/timefold-solver](https://github.com/TimefoldAI/timefold-solver) | Apache-2.0 | 1879★/244f | 2026-11-23 |
+| [graphhopper/jsprit](https://github.com/graphhopper/jsprit) | Apache-2.0 | 1842★/640f | 2026-11-19 |
+| [PyVRP/PyVRP](https://github.com/PyVRP/PyVRP) | MIT | 734★/165f | 2026-11-19 |
+| [reinterpretcat/vrp](https://github.com/reinterpretcat/vrp) | Apache-2.0 | 512★/100f | 2026-10-28 |
+| [SantanderAI/gen-fraud-graph](https://github.com/SantanderAI/gen-fraud-graph) | Apache-2.0 | 296★/81f | 2026-10-01 |
+| [mage-os/module-rma](https://github.com/mage-os/module-rma) | MIT | 23★/14f | 2026-11-17 |
+
+**The one retail-specific repo in the plane has no licence.**
+[ANL-CEEESA/RELOG](https://github.com/ANL-CEEESA/RELOG) (11★/2f, 2026-07-17),
+Argonne National Laboratory's "Reverse Logistics Optimization", is the only
+domain-specific reverse-logistics optimiser that exists — and carries **no
+licence file on `master`, `main` or `dev`** (8 filenames probed; `README.md`
+returns 200 on the same channel, so the probe is sound). Default copyright
+applies. Do not vendor it.
+
+**Two licence-probe traps found this week, both reusable:**
+
+1. **`LICENSE.TXT` — uppercase extension.** Cycle 8's probe added lowercase
+   `license.txt`; that still missed `Project-OSRM/osrm-backend` (8237★), whose
+   licence is in `LICENSE.TXT`. Probe case variants of the *extension* too.
+2. **The pointer licence file.** `valhalla/valhalla` has a **44-byte**
+   `LICENSE.md` reading only `For license information see [here](COPYING)`.
+   GitHub reports `NOASSERTION`; the real `COPYING` is **plain MIT**. A licence
+   gate would reject a 6481★ MIT dependency as unknown-licence. When SPDX says
+   NOASSERTION, open the file.
+
+**Rename signature:** `openvinotoolkit/anomalib` still resolves via
+`git ls-remote` but **422s** on `search/repositories`. That disagreement, in
+that direction, means *renamed* — the live slug is
+`open-edge-platform/anomalib`. **Migration stub:**
+`apache/incubator-kie-optaplanner` (3512★) describes itself as *"has moved"*;
+stars track history, not liveness.
+
+**Measured empty (2026-11-23):** `disposition engine` → 22 repos, 0 relevant ·
+`takeback trade-in` → **0 repos** · `extended producer responsibility` → 24
+repos, max 1★ · `size recommendation fashion` → 73 repos, best 9★ unlicensed ·
+`grading condition used` → 96 repos, top five 0★.
 
 ## 2026-11-22 (pass 3)
 

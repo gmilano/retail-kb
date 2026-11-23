@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-22
+updated: 2026-11-23
 ---
 
 # 📈 Agents Trending — Retail & Consumer
@@ -9,6 +9,40 @@ updated: 2026-11-22
 > **Append-only.** Newest dated section on top; history preserved below. This file tracks **agents and
 > agent-facing tooling**. For infrastructure and platform repos see `repos/trending.md` — until today the
 > two files were byte-identical, so the agents/repos distinction never actually existed in this KB.
+
+## 2026-11-23 — the returns & recovery plane
+
+**Plane opened this pass:** retail's reverse flow (prevent → authorise → move →
+grade → decide → recover/detect). Chosen by vocabulary probe, not by web
+search: `RMA`, `returns fraud`, `routing`, `BOPIS` and `takeback` were all at
+**zero mentions** across all eight KB files this morning.
+
+**What is new and alive in the agent layer — all two of it:**
+
+| Agent / repo | License | Stars | Last push | Why it is here |
+|---|---|---|---|---|
+| [budna-marketplace/recommerce](https://github.com/budna-marketplace/recommerce) | MIT | 16★/1f | 2026-11-09 | Agent skills for comparing new vs pre-owned items. The only agent-shaped recommerce artifact in open source. |
+| [Pragatheswar-72/support-agent](https://github.com/Pragatheswar-72/support-agent) | MIT | 6★/4f | 2026-07-01 | LangGraph orchestrator routing to specialist support agents. A shape to copy, not a dependency. |
+
+**The week's sharpest measurement — the keyword collision that nearly produced
+fake rows.** `returns agent` returns **2464 repos and zero relevant ones**; its
+top hit at 162★ is a Brainfuck web app that *"returns your user-agent to you"*.
+`returns management` returns **3134 repos**, all portfolio analytics and library
+lending. In this industry the word "returns" is genuinely ambiguous — it also
+corrupted a KPMG APAC statistic, where *"returns exceeding 10% from AI
+initiatives"* means **return on investment**, not merchandise. Search
+`RMA` / `reverse logistics` / `disposition` instead.
+
+**Dormancy check on what the listicles recommend:** `safe-graph/DGFraud`
+(Apache-2.0, 766★) last pushed **2022-04-20**; `safe-graph/UGFraud`
+(Apache-2.0, 134★) **2022-04-18**; `bcmi/DCI-VTON-Virtual-Try-On` (MIT, 508★)
+**2023-12-06**. All three are still presented as current options for returns
+fraud and try-on. They are not.
+
+**Measured empty (2026-11-23):** `disposition engine` → 22 repos, 0 relevant ·
+`takeback trade-in` → **0 repos** · `liquidation deadstock` → 1 repo, 0★ ·
+`refund agent llm` → nothing on topic above 9★. The agent that *decides* a
+return's fate does not exist in open source.
 
 ## 2026-11-22 (pass 3)
 

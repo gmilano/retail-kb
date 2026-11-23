@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-22
+updated: 2026-11-23
 ---
 
 # 🏗️ Foundational Repos — Retail & Consumer
@@ -462,3 +462,241 @@ which the words "Retail" (Windows edition), "Media" (Media Center) and
 this sector returns confident, plausible-looking, wholly wrong rows, and the
 only defence is opening each one. Nothing from either query was written into
 this KB as data.
+
+---
+
+## Added 2026-11-23 — the returns & recovery plane (the reverse flow), in six steps
+
+**Why this plane, and how it was chosen.** `retail-kb` already had four passes
+(2026-11-21 base, then product-data, store and retail-media on 2026-11-22). Per
+the method earned in cycle 8, this pass did not rewrite or re-verify them: it
+ran a ~60-term vocabulary probe against all eight files *before* searching the
+web, and the reverse flow came back almost empty. Measured, in the KB as it
+stood this morning: `reverse logistics` 2 mentions, `recommerce` 1, `resale` 1,
+`warranty` 1, and **`RMA` 0, `returns fraud` 0, `routing` 0, `BOPIS` 0,
+`UFLPA` 0, `CSDDD` 0, `ESG` 0, `scope 3` 0**. The 47 hits for "returns" and 75
+for "RMA" were **all false positives** — "returns" from prose like *"the query
+returns 2 repos"*, "RMA" as a substring of *fo**rma**t*. Retail's largest
+single margin leak had no vocabulary in this knowledge base.
+
+Scale, for context: Shopify reports **~16% of all sales were returned in 2025,
+~$850B** (cited from search results; see the source-quality note at the end of
+this section).
+
+### ⚠️ Read this first: the word "returns" is ambiguous *in this industry*, and it broke both channels
+
+This is not a search-tooling annoyance, it is a property of the domain, and it
+corrupted both the code search and the industry sources in the same pass:
+
+- **Code search.** `returns management` → **3134 repos, zero retail-relevant in
+  the top 8** (portfolio analytics, library book lending). `returns agent` →
+  **2464 repos, zero relevant**; the 162★ hit is a Brainfuck web app that
+  *"returns your user-agent to you"*. This is false abundance of the worst
+  kind: a careless pass writes plausible rows from it.
+- **Industry sources.** A KPMG APAC figure reads *"more than half of retailers
+  report returns exceeding 10% from AI initiatives"*. That is **return on
+  investment**, not merchandise returns. Quoting it in a returns deck would be
+  a straightforward factual error.
+
+**Rule:** in this plane, never search or quote the bare word "returns". Use
+`RMA`, `reverse logistics`, `disposition`, `restocking`, `right of withdrawal`.
+
+### Step 1 — PREVENT the return (fit and size prediction). Empty.
+
+`size recommendation fashion` → **73 repos total**; top result 9★ and
+unlicensed, every other result 0★. There is **no maintained, permissively
+licensed size/fit prediction library**. `apparel` was absent from this KB
+entirely before this pass.
+
+The contrast inside this one step is the cleanest illustration of the
+structural law this KB keeps recording. *Rendering* a garment onto a body is a
+geometry problem and is well equipped (`virtual try on` → 5608 repos, real
+star counts); *predicting whether it will fit this person* is a judgment
+problem and is empty. The best-known permissive try-on repo is also **dead**:
+
+| Repo | License | Stars | Last push | Note |
+|---|---|---|---|---|
+| [bcmi/DCI-VTON-Virtual-Try-On](https://github.com/bcmi/DCI-VTON-Virtual-Try-On) | MIT | 508★/77f | 2023-12-06 | ACM MM 2023. Permissive and genuinely useful as a *renderer*. **Dormant ~2 years** — treat as a paper artifact, not a dependency. |
+| [vcarlosrb/3d-body-measurements](https://github.com/vcarlosrb/3d-body-measurements) | MIT | 136★/35f | 2024-02-24 | Body measurement extraction. MIT and the highest-starred permissive option. **Stale since Feb 2024.** |
+
+### Step 2 — AUTHORIZE the return (RMA and the right of withdrawal). One repo wide.
+
+`rma returns` → 55 repos total. Exactly **one** is permissive, non-trivial and
+alive:
+
+| Repo | License | Stars | Last push | Note |
+|---|---|---|---|---|
+| [mage-os/module-rma](https://github.com/mage-os/module-rma) | MIT | 23★/14f | 2026-11-17 | Return Merchandise Authorization for Mage-OS / Magento. **MIT, pushed six days before this pass.** The only credible standalone open-source RMA component found. Small — read it as a reference implementation, not a product. |
+
+Everything else at this step is embedded in a commerce platform (Odoo, Spree,
+Saleor, Medusa, Vendure — all already covered in `verticals/solutions.md`), or
+is a sub-5★ WooCommerce plugin. One of those is worth naming only because of
+what it reveals about demand:
+`DevDiggers-Technologies/returns-for-woocommerce` (2★, unlicensed, pushed
+2026-11-10) advertises *"the EU withdrawal button"* — a 2★ unlicensed plugin is
+the visible open-source response to a pan-EU statutory right.
+
+### Step 3 — MOVE it (reverse routing). Richly equipped, permissive, committing this week.
+
+This is the one step of the reverse flow that is *better* equipped than most of
+retail. Reverse routing is a vehicle-routing problem with pickups, and the VRP
+corpus is mature, permissive and extremely alive. **None of these were in this
+KB before today** (`or-tools`, `PyVRP`, `jsprit`, `vroom` were all absent):
+
+| Repo | License | Stars | Last push | Note |
+|---|---|---|---|---|
+| [google/or-tools](https://github.com/google/or-tools) | Apache-2.0 | 14430★/2558f | 2026-11-20 | Google OR-Tools. The CP-SAT/routing workhorse. Apache-2.0, the single safest optimisation dependency in this KB. |
+| [Project-OSRM/osrm-backend](https://github.com/Project-OSRM/osrm-backend) | BSD-2-Clause | 8237★/3981f | 2026-11-22 | Routing engine on OSM data. Supplies the distance/duration matrices the solvers need. Pushed the day before this pass. |
+| [valhalla/valhalla](https://github.com/valhalla/valhalla) | **MIT** (see licence note) | 6481★/1037f | 2026-11-21 | Routing engine with time-dependent costing. GitHub reports `NOASSERTION`; **it is MIT.** See the licence note below before trusting any SBOM on this one. |
+| [VROOM-Project/vroom](https://github.com/VROOM-Project/vroom) | BSD-2-Clause | 1924★/452f | 2026-11-17 | Vehicle Routing Open-source Optimization Machine. Pairs directly with OSRM/Valhalla. The most practical "give me routes now" choice. |
+| [graphhopper/jsprit](https://github.com/graphhopper/jsprit) | Apache-2.0 | 1842★/640f | 2026-11-19 | Java toolkit for rich VRPs — pickups *and* deliveries in one tour, which is exactly the reverse-logistics shape. |
+| [TimefoldAI/timefold-solver](https://github.com/TimefoldAI/timefold-solver) | Apache-2.0 | 1879★/244f | 2026-11-23 | Already in this KB for rostering. Named again here because it solves VRP too. **Pushed the morning of this pass.** |
+| [PyVRP/PyVRP](https://github.com/PyVRP/PyVRP) | MIT | 734★/165f | 2026-11-19 | State-of-the-art VRP solver, Python-first. MIT. Best fit for a data-science team. |
+| [reinterpretcat/vrp](https://github.com/reinterpretcat/vrp) | Apache-2.0 | 512★/100f | 2026-10-28 | Rust VRP solver, pickup/delivery and multi-objective. Apache-2.0. |
+
+**And the one retail-specific repo in the whole step is legally unusable:**
+
+| Repo | License | Stars | Last push | Note |
+|---|---|---|---|---|
+| [ANL-CEEESA/RELOG](https://github.com/ANL-CEEESA/RELOG) | **NONE** | 11★/2f | 2026-07-17 | "Reverse Logistics Optimization", from Argonne National Laboratory. The *only* domain-specific reverse-logistics optimiser that exists. **No licence file on `master`, `main` or `dev`** (8 filenames probed; `README.md` returns 200 on the same channel, so the branch and channel are right). No grant ⇒ default copyright, all rights reserved. **Do not vendor it.** Use the generic solvers above and model the reverse flow yourself. |
+
+`reverse logistics` returns **364 repos** in total and, below RELOG, every
+result is a sub-5★ unlicensed student project.
+
+### Step 4 — GRADE it (condition assessment). Generic layer is excellent; retail-specific layer is zero.
+
+| Repo | License | Stars | Last push | Note |
+|---|---|---|---|---|
+| [open-edge-platform/anomalib](https://github.com/open-edge-platform/anomalib) | Apache-2.0 | 6416★/1045f | 2026-11-20 | Anomaly/defect detection library. **Apache-2.0 and alive** — and therefore the single most important repo in this plane, because it is the only permissive escape from the AGPL shelf-vision corpus this KB documented on 2026-11-22. Was renamed (see note). |
+
+Retail-specific grading does not exist. `grading condition used` → 96 repos,
+**top five are all 0★** and are school-assignment graders or home inspection.
+The two on-topic results are both 0★ hobby projects
+(`hyeminLee-project/used_book_grading`, `MarceloNoguera/condition-grader`).
+Nobody has published an open condition-grading model for returned retail goods.
+
+### Step 5 — DECIDE its disposition (restock / reuse / repair / recycle / destroy). Zero. And this is now the legally binding step.
+
+`disposition engine` → **22 repos worldwide, zero relevant** (game faction
+systems, sales-lead routing, an AI coding-agent memory tool). This is the
+starkest count recorded anywhere in this KB — starker than retail workforce
+management (single repo), starker than the retail-media clean room.
+
+It matters far more than its size suggests, because **since 19 July 2026 the EU
+requires large companies to make exactly this decision and prove it** (ESPR
+Article 25 — see `intel/market.md` → EMEA). The rule turns disposition from a
+cost optimisation into an evidenced legal judgment, and there is no open-source
+implementation of it anywhere.
+
+The usable substrate is a general rules/decision engine, not anything retail:
+
+| Repo | License | Stars | Last push | Note |
+|---|---|---|---|---|
+| [apache/incubator-kie](https://github.com/apache/incubator-kie) | Apache-2.0 | 6344★/2609f | 2026-11-20 | Apache KIE — the live home of Drools (rules) and OptaPlanner. Apache-2.0, alive. The right substrate for a per-jurisdiction disposition policy. **Use this slug, not the famous one** — see the migration note. |
+
+Dedicated DMN engines exist but are mostly dormant: `adamecr/Common.DMN.Engine`
+(MIT, 97★, last push **2022-12-14**), `powerflows/powerflows-dmn` (Apache-2.0,
+58★, **2024-10-17**). Permissive, but do not stake a compliance deadline on an
+unmaintained rules engine.
+
+### Step 6 — DETECT abuse (returns fraud) and RECOVER value (resale). Both effectively zero.
+
+**Returns fraud is the clearest "money without code" result in this KB.** The
+demand side is measured and large: an NRF / Happy Returns figure puts **~9% of
+returns as fraudulent**, with **85% of merchants already using AI/ML against
+returns fraud but only 45% believing those tools work on their own** (cited
+from search results). The supply side:
+
+- `returns fraud` → **155 repos**; the top six are **2, 6, 0, 0, 0, 4 stars**,
+  and the 6★ entry is credit-card fraud, not returns. Nothing usable.
+- The generic graph-fraud toolboxes that listicles recommend are **dead**:
+  [safe-graph/DGFraud](https://github.com/safe-graph/DGFraud) (Apache-2.0,
+  766★, last push **2022-04-20**) and `safe-graph/UGFraud` (Apache-2.0, 134★,
+  **2022-04-18**). `awslabs/realtime-fraud-detection-with-gnn-on-dgl`
+  (Apache-2.0, 225★) last moved **2024-03-31**.
+- One genuinely live and permissive piece, and it is a *benchmark*, not a detector:
+
+| Repo | License | Stars | Last push | Note |
+|---|---|---|---|---|
+| [SantanderAI/gen-fraud-graph](https://github.com/SantanderAI/gen-fraud-graph) | Apache-2.0 | 296★/81f | 2026-10-01 | Synthetic fraud-graph generator for benchmarking graph fraud models. Apache-2.0, alive. Valuable precisely because returns-fraud training data cannot be shared between retailers — generate, then benchmark. |
+
+**Value recovery is emptier still.** `liquidation deadstock` → **1 repo
+worldwide** (0★). `takeback trade-in` → **0 repos. Literally zero.**
+`extended producer responsibility` → **24 repos worldwide, maximum 1★** — for a
+legal regime now in force across the EU.
+
+### Measured gaps in this plane — searched for on 2026-11-23, genuinely not there
+
+Recorded so that silence is not mistaken for coverage:
+
+- **Disposition decisioning:** `disposition engine` → 22 repos, 0 relevant. **No open-source implementation of the ESPR Article 25 decision exists.**
+- **Trade-in / take-back:** `takeback trade-in` → **0 repos**.
+- **Liquidation / deadstock:** `liquidation deadstock` → 1 repo, 0★.
+- **EPR compliance:** `extended producer responsibility` → 24 repos, max 1★.
+- **Returns fraud:** `returns fraud` → 155 repos, best real candidate ≤6★ and off-topic.
+- **Size/fit prediction:** `size recommendation fashion` → 73 repos, best 9★ unlicensed.
+- **Retail-specific condition grading:** `grading condition used` → 96 repos, top five 0★.
+- **Retail-specific reverse-logistics optimiser:** exactly one exists (RELOG) and it has **no licence**.
+- **Warranty claims:** `warranty claims` → 689 repos; best permissive is `abdul-rafay-dev0/AssureX-Warranty-Claim-Engine` (MIT, **3★**). Not a floor.
+- **Right-to-repair tooling:** `right to repair` → 272 repos, and the top results are *automotive* (`jakka351/Opium-Den-OEM` 65★ unlicensed, VW component-protection docs). No consumer-goods repair-tooling corpus, despite the EU directive applying since 31 July 2026.
+
+### ⚠️ Method notes earned this pass (reusable across all twelve industries)
+
+**(1) The licence probe was still incomplete — add `LICENSE.TXT` with an
+uppercase extension.** Cycle 8 added lowercase `license.txt` and `COPYING.md`.
+That still missed
+[Project-OSRM/osrm-backend](https://github.com/Project-OSRM/osrm-backend)
+(8237★), whose licence lives in **`LICENSE.TXT`** — uppercase *extension*. The
+probe must now cover case variants of the extension, not just the stem. The
+current working set: `LICENSE`, `LICENSE.md`, `LICENSE.txt`, `LICENSE.TXT`,
+`license.txt`, `LICENCE`, `COPYING`, `COPYING.md`.
+
+**(2) New licence-file category: the POINTER file.** `valhalla/valhalla`
+(6481★) has a `LICENSE.md` of **44 bytes** whose entire content is
+`For license information see [here](COPYING)`. GitHub's API therefore reports
+**`NOASSERTION` / "Other"**, and the actual `COPYING` file is **plain MIT**.
+This is a *false negative in the permissive direction*: an SBOM scan or licence
+gate would flag a 6481★ MIT routing engine as unknown-licence and a careless
+reviewer would drop it. Cycle 8 found the inverse (Chromaprint: MIT file,
+LGPL compilation). **Rule: when SPDX says NOASSERTION, read the licence file
+before concluding anything — in either direction.**
+
+**(3) `git ls-remote` succeeding while `search/repositories` 422s means the
+repo was RENAMED, not deleted.** `openvinotoolkit/anomalib` resolves fine via
+`ls-remote` (14 refs) but `q=repo:openvinotoolkit/anomalib` returns HTTP 422.
+The repo is now **`open-edge-platform/anomalib`** (6416★, Apache-2.0). The two
+oracles disagreeing in *that specific direction* is a reliable rename
+signature, and it is worth checking before writing a dead-link row.
+
+**(4) The famous slug can be a migration stub.** `apache/incubator-kie-optaplanner`
+(3512★) carries a description that begins *"OptaPlanner has moved to …"*. The
+live project is `apache/incubator-kie` (6344★, pushed 2026-11-20) and the
+independent successor is `TimefoldAI/timefold-solver`. Star count tracks
+history, not liveness.
+
+**(5) `gh api repos/<slug>` is unavailable in this session** (HTTP 403, outside
+the session's repository scope). `gh api -X GET search/repositories -f
+q='repo:<slug>'` is the only metadata channel, and it returns stars, forks,
+`pushed_at`, `default_branch` and SPDX in one call. `git ls-remote` remains the
+existence oracle.
+
+### Source-quality notes for this section
+
+**Every GitHub row above is verified**: existence by `git ls-remote`, metrics
+and SPDX by the search API on 2026-11-23, and licence text by fetching the
+actual file from `raw.githubusercontent.com` and checking its byte count.
+
+**Non-GitHub URLs could not be fetch-verified in this session, and are not
+cited as links below.** Both verification channels are blocked by this
+session's network policy: `curl` returns `403 connect_rejected` from the egress
+proxy and WebFetch returns `ENOTFOUND` for `eur-lex.europa.eu`,
+`espratlas.com`, `modernretail.co`, `nrf.com`, `deloitte.com`, `emarketer.com`
+and `planalto.gov.br`. Per the standing rule that a 404 is not a finding — and
+that an unverified URL is not one either — the market and regulatory figures in
+this pass are attributed **in prose to their named source** and flagged as
+*search-result-derived, not fetch-verified*. The affected claims are the
+Shopify ~16%/$850B return rate, the NRF/Happy Returns 9% and 85%/45% figures,
+the KPMG and Coresight adoption numbers, and all statutory dates. **To promote
+any of them to citable, these hosts must be added to the session's allowed
+network domains.** The legal dates should in any case be checked against the
+Official Journal text before they go into a client deliverable.

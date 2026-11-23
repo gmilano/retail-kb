@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-22
+updated: 2026-11-23
 ---
 
 # 🧩 Composition Patterns — Retail & Consumer
@@ -630,3 +630,184 @@ scope to a client is worse than quoting no date, because it is checkable.
   available channel (`gh api repos/<slug>` → 403 for non-attached repos), and
   this KB has shipped fabricated star curves twice. Record refs and last-commit
   dates, which **are** measurable.
+
+---
+
+## Pattern 18 — The ESPR Article 25 disposition engine (EMEA flagship; nothing like it exists)
+
+**The problem.** Since **19 July 2026**, an EU large company may not destroy
+unsold apparel, clothing accessories or footwear, must disclose unsold
+quantities, and must justify any derogation. Crucially the rule is **typed**:
+preparing a unit for **reuse** is lawful, **recycling** it counts as
+destruction. So "cheapest disposition" is no longer a legal answer — the
+output must be a defensible classification with evidence attached.
+
+**Why this is a build and not a licence purchase.** `disposition engine`
+returns **22 repositories worldwide and none are about retail**;
+`extended producer responsibility` returns **24 repositories, maximum 1 star**.
+There is no product and no open-source floor. Every component below is
+verified permissive and alive as of 2026-11-23.
+
+**The wiring.**
+
+1. **Grade the unit.**
+   [open-edge-platform/anomalib](https://github.com/open-edge-platform/anomalib)
+   (Apache-2.0, 6416★, pushed 2026-11-20) scores defect/anomaly on inbound
+   images. Output: a condition score plus the defect mask that will serve as
+   evidence. *Use this slug — `openvinotoolkit/anomalib` is the old name.*
+2. **Type the decision, don't score it.**
+   [apache/incubator-kie](https://github.com/apache/incubator-kie)
+   (Apache-2.0, 6344★, pushed 2026-11-20) — Drools rules encoding, per
+   jurisdiction: `reuse` and `repair` as permitted outcomes; `recycle` and
+   `destroy` gated behind a Delegated Regulation (EU) 2026/296 derogation with
+   a mandatory justification field. The condition score from step 1 is an input
+   to the rule, never the decision itself.
+3. **Rank cost only inside the legal type.** Once the lawful set is
+   determined, order it by recoverable value minus freight — not before.
+4. **Route the unit to the chosen destination.**
+   [VROOM-Project/vroom](https://github.com/VROOM-Project/vroom) (BSD-2-Clause,
+   1924★) over [Project-OSRM/osrm-backend](https://github.com/Project-OSRM/osrm-backend)
+   (BSD-2-Clause, 8237★) for the distance matrix. Reverse flows are
+   pickup-and-delivery VRPs; [graphhopper/jsprit](https://github.com/graphhopper/jsprit)
+   (Apache-2.0) models pickups and deliveries in one tour natively.
+5. **Persist the evidence.** Write the decision, the rule version, the
+   derogation justification and the grading artefact into the Digital Product
+   Passport record already documented in `verticals/solutions.md`. The
+   disclosure obligation is satisfied by querying this store, not by a
+   spreadsheet exercise at year end.
+
+**The part clients will not expect, and the part worth charging for:** the rule
+set must be **per Member State**, because France's AGEC is stricter than ESPR
+and transposition of the companion repair directive is fragmented. Sell the
+jurisdiction matrix, not a single compliance mode.
+
+**Do not use** `ANL-CEEESA/RELOG` — Argonne's reverse-logistics optimiser is
+the only domain-specific tool in existence and it has **no licence file on any
+branch**. Default copyright applies.
+
+---
+
+## Pattern 19 — Grade-to-route: the agent that decides a return's fate
+
+**The gap this fills.** The reverse flow's tool layer is strong and its **agent
+layer is two repos wide**, neither of which decides anything: `returns agent`
+returns 2464 repos and **zero relevant** ones. The closest thing to a
+refund-decision agent in open source,
+`LikhithV02/Customer-Support-Agent` (*"approves, denies or escalates
+refunds"*), has **no licence** and 9★. So the deciding agent must be built.
+
+**The wiring — a tool-calling agent over four verified tools.**
+
+| Tool the agent calls | Repo | License | What it returns |
+|---|---|---|---|
+| `grade_unit(images)` | [open-edge-platform/anomalib](https://github.com/open-edge-platform/anomalib) | Apache-2.0 | condition score + defect mask |
+| `lawful_dispositions(sku, jurisdiction)` | [apache/incubator-kie](https://github.com/apache/incubator-kie) | Apache-2.0 | the permitted set, typed |
+| `route_cost(origin, candidates)` | [VROOM-Project/vroom](https://github.com/VROOM-Project/vroom) + [Project-OSRM/osrm-backend](https://github.com/Project-OSRM/osrm-backend) | BSD-2-Clause | freight cost per destination |
+| `resale_value(sku, grade)` | [budna-marketplace/recommerce](https://github.com/budna-marketplace/recommerce) | MIT | new-vs-pre-owned comparison |
+
+**The design rule that matters.** The LLM **orchestrates and explains; it does
+not decide legality.** `lawful_dispositions` is a hard gate: the agent may
+choose freely within the set the rules engine returns and may never choose
+outside it. This is the same separation Pattern 13 applied to rostering —
+solver decides, prompt explains — and it is what makes the output auditable.
+
+**Where the agent earns its keep:** writing the human-readable justification
+for the derogation, reconciling a customer's description of the fault against
+the grading model's mask, and escalating the disagreements. That is genuine
+judgment work sitting on top of deterministic components.
+
+**Start from** `Pragatheswar-72/support-agent` (MIT, 6★) as a *shape* for the
+orchestrator — a LangGraph router to specialist agents — not as a dependency.
+
+---
+
+## Pattern 20 — Returns-abuse scoring a retailer can actually own (North America)
+
+**Why now.** ~**9% of returns are fraudulent**; **85% of merchants already run
+AI/ML against returns fraud** and only **45% think it works unaided**
+(NRF / Happy Returns). The budget exists and the incumbent is distrusted by
+more than half its own users — the rare case where the sales motion is
+displacement, not education.
+
+**Why you cannot just adopt the obvious libraries.** The graph-fraud toolboxes
+every listicle recommends are **dead**:
+[safe-graph/DGFraud](https://github.com/safe-graph/DGFraud) (Apache-2.0, 766★)
+last pushed **2022-04-20**; `safe-graph/UGFraud` (Apache-2.0, 134★)
+**2022-04-18**; `awslabs/realtime-fraud-detection-with-gnn-on-dgl`
+(Apache-2.0, 225★) **2024-03-31**. Read them for architecture; do not deploy
+them.
+
+**The wiring.**
+
+1. **Model the behaviour as a graph, not a row.** Returns abuse is relational —
+   one address, many accounts; one payment instrument, many "damaged on
+   arrival" claims. A per-transaction classifier structurally cannot see it.
+2. **Generate before you train.**
+   [SantanderAI/gen-fraud-graph](https://github.com/SantanderAI/gen-fraud-graph)
+   (Apache-2.0, 296★, pushed 2026-10-01) produces synthetic fraud graphs for
+   benchmarking. This is not a convenience: returns-fraud data **cannot be
+   pooled across retailers** for competitive and privacy reasons, so a shared
+   synthetic benchmark is the only way to compare models honestly.
+3. **Implement the detector on a maintained GNN stack** (PyTorch Geometric or
+   DGL) rather than resurrecting a 2022 toolbox.
+4. **Feed the decision, not a dashboard.** The score's consumer is the
+   authorisation step (`mage-os/module-rma`, MIT, is the reference
+   implementation) and the "keep it" calculation.
+5. **Keep the "keep it" call economic.** In North America there is no
+   disposition mandate, so the decision is freight + grading cost vs
+   recoverable value. The same engine ported to EMEA must instead run inside
+   Pattern 18's legal gate.
+
+**Watch the adjacent surface:** payment tooling is reported inadequate against
+AI-enabled chargeback fraud where **autonomous agents** act for the shopper.
+A retailer deploying agentic checkout is opening this exposure now.
+
+---
+
+## Pattern 21 — LATAM: beat the 7-day clock, then consolidate the pickups
+
+**The constraint.** Brazil's CDC **Article 49** gives a **7-day right of
+withdrawal from receipt** for distance sales — half the EU's 14 — and an
+opened package is **not** an express exception to it. There is no room for
+multi-day manual review: authorise inside the window or lose the argument.
+
+**Part A — automate authorisation.**
+
+1. [mage-os/module-rma](https://github.com/mage-os/module-rma) (MIT, 23★,
+   pushed 2026-11-17) as the RMA spine. It is the **only permissively licensed
+   standalone RMA component in open source**, so it is also the only one that
+   can be re-licensed into a client's closed product.
+2. A **statutory clock** per jurisdiction, driven from the delivery event —
+   7 days Brazil (CDC Art. 49), 14 days EU, and each other market's own rule.
+   Encode it in [apache/incubator-kie](https://github.com/apache/incubator-kie)
+   (Apache-2.0) alongside the disposition rules, so one engine holds both the
+   inbound deadline and the outbound legality.
+3. **Auto-approve inside the window** for in-scope distance sales; route only
+   out-of-scope cases (in-store purchases, which Art. 49 does not cover as a
+   rule) to a human.
+
+**Part B — make the freight affordable.** The region's own chosen remedy is
+collection points and **locker networks**, and consolidating reverse pickups
+across lockers is exactly a capacitated pickup VRP:
+
+- [PyVRP/PyVRP](https://github.com/PyVRP/PyVRP) (MIT, 734★, pushed 2026-11-19)
+  for a Python-first team, or
+  [VROOM-Project/vroom](https://github.com/VROOM-Project/vroom) (BSD-2-Clause)
+  for a service you call.
+- [valhalla/valhalla](https://github.com/valhalla/valhalla) — **MIT**, 6481★ —
+  where time-dependent costing matters. ⚠️ GitHub reports its licence as
+  `NOASSERTION` because `LICENSE.md` is a 44-byte pointer; the real `COPYING`
+  is plain MIT. **Expect to have to explain this to a client's licence gate.**
+
+**Part C — price the re-import.** A returned cross-border unit is a customs
+event: Mexico's simplified regime charges by country of origin, Argentina uses
+a courier small-shipments regime, Brazil layers federal and state taxes. In
+LATAM the customs line, not consumer law, is what makes a return expensive —
+model it inside the disposition decision.
+
+**⚠️ Verify before you deliver.** The Article 49 detail above rests on
+Brazilian legal commentary and trade press, **not** on the Planalto statute
+text, which could not be fetched in this session. This pass found **no
+primary-source 2026 returns regulation** for Brazil, Mexico, Colombia or
+Chile. Treat the region as *"no mandate found"*, not *"no mandate exists"*, and
+read Art. 49 against the official text before it reaches a client.

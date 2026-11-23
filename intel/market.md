@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-22
+updated: 2026-11-23
 ---
 
 # 🗺️ Market Map — Retail & Consumer
@@ -188,6 +188,67 @@ here.** Treat US retail media compliance as driven by state privacy law and
 self-regulatory advertising codes until this KB can cite a primary source —
 and note the contrast with EMEA, where the dates are statutory and dated.
 
+#### Added 2026-11-23 — returns & recovery in North America: the only region where disposition is *not* legally constrained
+
+**Adoption is already deep in exactly the function this plane needs.** A
+Coresight survey of 100 North American retail executives (September 2026)
+found AI in production across an average of **4.8 of seven core functions**,
+with customer service at **83%** and **fraud and loss prevention at 77%** —
+making loss prevention the second most-deployed AI function in North American
+retail. KPMG frames shrink as now spanning organised retail crime, **returns
+abuse**, payments fraud and logistics in one envelope.
+
+**The buying trigger is a measured confidence gap, not a capability gap.** An
+NRF / Happy Returns report puts roughly **9% of returns as fraudulent**, and
+finds **85% of merchants already use AI or ML against returns fraud while only
+45% believe those tools are effective on their own**. That 85/45 split is the
+most sellable number in this plane: the budget is already spent, the incumbent
+tools are already distrusted, and — per `repos/foundations.md` → Step 6 — the
+open-source alternatives the market would reach for are **dead since 2022**
+(`DGFraud`, `UGFraud`).
+
+**Agentic commerce is opening a new fraud surface here first.** eMarketer,
+citing Chargeback911, reports that payment providers' current tools are
+inadequate for AI-enabled chargeback fraud, **particularly where autonomous
+agents are involved**. This joins directly to the agentic-commerce plane this
+KB opened on 2026-11-21: the same ACP/AP2 rails that let an agent buy also let
+an agent dispute.
+
+**Scale and policy context:** Shopify reports **~16% of all sales returned in
+2025, ~$850B**. On "keep it" / returnless refunds, the most specific adoption
+figure available is a goTRG survey of 21 major retailers at **59%** — but that
+is from the **2023** holiday season, so treat it as the latest available
+number, **not** a 2026 one. Forrester's 2026 outlook predicts the end of
+generous e-commerce returns on the grounds that free keep-it programmes became
+open to abuse.
+
+**The structural asymmetry — and it mirrors the store plane exactly.** On
+2026-11-22 (pass 2) this KB recorded that North America is the only region
+with **no fiscalisation driver** for the till. The same holds for the reverse
+flow: there is **no federal AI statute and no destruction/disposition mandate**,
+so returns policy here is governed by contract and state consumer law rather
+than by a dated obligation. The consequence for engagement design is concrete:
+
+> In North America the disposition decision is a **pure economic optimisation**
+> — is this unit worth the freight back? In EMEA the identical decision is a
+> **legally evidenced judgment**. Same code, different objective function, and
+> the EMEA version needs an audit trail the North American version does not.
+
+**Opportunities — North America**
+
+- **Returns-abuse scoring that a retailer can actually own.** The incumbent
+  tools are distrusted by 55% of their own users and the open-source graph-fraud
+  toolboxes are four years stale. Build on
+  [SantanderAI/gen-fraud-graph](https://github.com/SantanderAI/gen-fraud-graph)
+  (Apache-2.0, 296★, 2026-10-01) to generate and benchmark, because returns-fraud
+  data cannot be pooled across retailers. See Pattern 20.
+- **"Keep it" decisioning as an optimiser.** The decision is freight + grading
+  cost vs recoverable value. This is the one market where it can be built
+  without a compliance layer, which makes it the cheapest place to prove the
+  model before porting it to EMEA.
+- **Agent-dispute defence.** Price the new chargeback surface that agentic
+  checkout creates, before the payment providers close it.
+
 ### EMEA
 
 - ⏰ **Hardest deadline in any region, and it is 11 days away.** EU AI Act **Article 50** transparency
@@ -334,6 +395,104 @@ returned.** The direction is plausible and commercially important; it is
 and the Commission's VLOP designation list) is read. Recorded as the first
 thing a retail media pass in EMEA should close.
 
+#### Added 2026-11-23 — returns & recovery in EMEA: the mandate is live, it is typed, and the code is zero
+
+This is the strongest single finding of this pass. **EMEA is the only region
+where the disposition decision is a legal obligation rather than a cost
+trade-off, that obligation is already in force, and there is no open-source
+implementation of it anywhere on GitHub.**
+
+**ESPR Article 25 — the destruction ban, in force since 19 July 2026.** Under
+Article 25 of **Regulation (EU) 2024/1781** (ESPR), large companies are barred
+from destroying unsold apparel, clothing accessories and footwear. Reported
+details, consistent across several compliance and law-firm sources:
+
+- **Applies from 19 July 2026** for large companies; **medium-sized companies
+  from 2030**; **micro and small enterprises exempt** from both the destruction
+  ban and the disclosure obligations.
+- Implementing measures adopted **February 2026**; derogations set out in
+  **Delegated Regulation (EU) 2026/296** — reported to cover dangerous
+  products, products legally non-compliant and unfit for purpose, and goods
+  proven to infringe IP rights.
+- There is a **disclosure obligation** on unsold products alongside the ban.
+- The EU's own rationale cites **4–9% of unsold textiles destroyed each year**
+  in Europe before ever being worn.
+- **Stricter national rules may still apply**, notably **France's AGEC law**.
+
+**The engineering consequence, and it is the detail that makes this a build.**
+Sources are explicit that **recycling an unsold garment counts as destruction,
+while preparing it for reuse does not**. That single line converts disposition
+from a cost ranking into a **legally typed decision tree**: `reuse` and
+`repair` are lawful outcomes, `recycle` and `destroy` are the restricted ones
+requiring a derogation and a record. A disposition engine for EMEA is therefore
+not an optimiser with a compliance report bolted on — the legal type *is* the
+primary output, and the cost ranking runs inside it.
+
+And per `repos/foundations.md` → Step 5: `disposition engine` returns **22
+repositories worldwide, zero of them relevant**, and
+`extended producer responsibility` returns **24 repositories, maximum 1 star**.
+A live, dated, pan-EU obligation on large companies has attracted essentially
+no open-source implementation. That is the clearest obligation-without-code
+result in this knowledge base.
+
+**Right to Repair — Directive (EU) 2024/1799, applying since 31 July 2026.**
+Adopted 13 June 2024; Member States had to transpose and apply from **31 July
+2026** (EUR-Lex consolidated text carries that date). Further reported detail:
+
+- Transposition is **fragmented**: repair.eu reported around 30 July 2026 that
+  only *a handful* of Member States had formally notified completion. Ireland
+  did transpose on time, via the European Union (Common Rules Promoting the
+  Repair of Goods) (No. 2) Regulations 2026.
+- The **European online repair platform** is due by **31 July 2027**; Member
+  States must notify at least one repair-promotion measure (e.g. repair
+  vouchers) by **31 July 2029**.
+- **Commission Delegated Directive (EU) 2026/74** (12 January 2026) added
+  domestic local space heaters to Annex II from 31 July 2026.
+- A caution worth repeating to clients: the directive does **not** create a
+  right to repair every broken product — scope is set by Annex II.
+
+**Two further dates landing in the same window:** the **PPWR** (packaging and
+packaging waste) began applying **12 August 2026**, and the **EU AI Act's**
+transparency provisions for AI-generated/manipulated content from **2 August
+2026** — the latter already recorded in this KB from the retail-media pass. A
+revision of the Consumer Protection Cooperation Regulation is expected **Q4
+2026**.
+
+**Adoption, and the gap that funds this work.** Retail Economics data
+(reported June 2026) has **95% of European retailers using or testing AI in
+marketing and e-commerce while only 5% report achieving scalable return on
+investment** — a 19:1 ratio between experimentation and realised value. KPMG's
+regional survey has the share of organisations expecting to scale AI use cases
+rising 29% (2024) → 42% (2025) → **74% (2026)**. Deloitte reports **56% of
+European consumers** have used AI to shop at least once.
+
+**The one measured outcome in this plane, and it is European.** Zalando
+attributes about **a fifth of its recent revenue growth** to AI-driven
+personalisation **and reports cutting its return rate by 7%**. This is the only
+quantified AI-reduces-returns result found in the entire pass, in any region —
+and note what it implies: the return was prevented at the *recommendation*
+step, which is the one step of the reverse flow that is already well equipped.
+
+**Opportunities — EMEA**
+
+- **The ESPR Article 25 disposition evidence engine. This is the flagship of
+  the pass.** The obligation is live, it is typed (reuse ≠ recycling), it
+  carries a disclosure duty, derogations must be justified per unit, and the
+  open-source floor is literally zero. Assemble it from Apache KIE + anomalib +
+  a DPP record — see Pattern 18.
+- **A per-Member-State policy engine, not a single compliance mode.** Because
+  transposition of the repair directive is fragmented and France's AGEC is
+  stricter than ESPR, the sellable asset is the **jurisdiction matrix** — the
+  same conclusion this KB reached for APAC in the media pass and for
+  fiscalisation in the store pass.
+- **Repair-management for consumer goods.** A dated EU duty since 31 July 2026
+  with **no open-source platform in existence** (`right to repair` on GitHub
+  returns automotive tooling). Odoo's `Repairs` app is the only credible
+  starting point; see `verticals/solutions.md`.
+- **Returns prevention as the proven play.** Zalando's 7% is the number to
+  lead with, and it is reachable with the recommendation/personalisation stack
+  this KB already documents — not with the empty fit-prediction layer.
+
 ### APAC
 
 - **Largest stated intent of any region:** Deloitte reports **29% of APAC consumer businesses already
@@ -465,6 +624,62 @@ multi-agent coordination** (recorded in cycle 8 as the most useful regulatory
 document found in any region), plus China's registration-and-labelling regime
 and South Korea's AI Basic Act (effective Jan 2026). None of these is
 retail-media-specific; **saying so is the finding.**
+
+#### Added 2026-11-23 — returns & recovery in APAC: the volume region, where prevention is the only lever that scales
+
+**The region is where the growth is.** Deloitte (March 2026) projects APAC
+will drive roughly **two thirds of the world's new retail sales over the next
+five years**, and finds **~29% of retailers adopting agentic AI today, rising
+to an expected 76% within two years**. Adyen (July 2026) reports the consumer
+side lagging that enthusiasm: only **30% of consumers currently feel
+comfortable letting an AI agent complete a purchase** on their behalf.
+
+**Why returns behave differently here.** Deloitte notes APAC pioneered the
+models now being exported globally, and that **social and livestream commerce
+have become mass-market**. Livestream and social selling are impulse-weighted
+and apparel-weighted, which is the highest-return-rate combination in retail.
+That puts APAC's pressure on **Step 1 — prevention** rather than on
+disposition, and Step 1 is precisely the empty step: `size recommendation
+fashion` returns **73 repositories, the best of them 9★ and unlicensed**.
+
+**⚠️ A source trap specific to this region — do not repeat it in a deck.**
+A KPMG APAC figure reads *"more than half of retailers report returns
+exceeding 10% from AI initiatives, with around one in five achieving returns
+above 30%"*. Those are **returns on investment**, not merchandise returns.
+Quoted in a returns-reduction deck it would be a flat factual error. KPMG
+separately reported (April 2026) on APAC retailers deploying AI for **loss
+prevention**, which *is* on-topic for this plane. The ambiguity of "returns"
+is a property of this industry's vocabulary, and it corrupted the code search
+in the same pass — see `intel/trends.md`.
+
+**Regulation: an informed gap, stated rather than left silent.** Coverage of
+NRF APAC 2026 and Deloitte's regional work both name **government regulation,
+physical infrastructure and digital access** as the named obstacles, but
+neither supplies a returns-specific or disposition-specific rule for any APAC
+jurisdiction. **This pass found no APAC analogue to ESPR Article 25 and no
+dated reverse-logistics mandate anywhere in the region.** That is a measured
+absence, not an unexplored area: it means the APAC sale is an economics and
+customer-experience sale, not a compliance sale. China's 7-day no-reason
+return rule is widely described in secondary commentary but **was not verified
+to a primary source in this session** (see the channel note below) and is
+therefore not asserted here as a finding.
+
+**Opportunities — APAC**
+
+- **Returns prevention for livestream and social commerce.** The region's
+  dominant channel generates the returns, and the fit-prediction layer that
+  would stop them does not exist in open source. Highest-volume opportunity in
+  this plane, and the only one that is a genuine build-from-scratch.
+- **Reverse routing at density.** APAC's urban density is where the VRP stack
+  pays off hardest; `or-tools`, `vroom` and `osrm` are all Apache-2.0/BSD-2 and
+  all pushed within the last week.
+- **Loss prevention, following KPMG's April 2026 signal.** Deployment is
+  already under way regionally, and the open-source fraud toolboxes are dead —
+  same structural opening as North America, without the chargeback overlay.
+- **Agent-readiness gap as advisory.** 29% of retailers adopting agentic AI
+  against 30% of consumers willing to let an agent buy: the mismatch is the
+  consulting conversation, and the post-purchase flow (tracking, returns) is
+  where Forrester expects agents to be accepted first.
 
 ### LATAM
 
@@ -629,6 +844,76 @@ obviously apply to audience matching, but **this pass cannot cite a
 retail-media-specific obligation in either country, and says so rather than
 implying coverage.**
 
+#### Added 2026-11-23 — returns & recovery in LATAM: a shorter statutory clock than the EU, and a logistics cost problem
+
+**Market.** Latin America is reported as the fastest-growing retail
+e-commerce region, at roughly **$191B in 2025**, with **Brazil and Mexico
+together accounting for over 55% of volume**.
+
+**The statutory clock is shorter here than in Europe, and that is the design
+constraint.** Brazil's Consumer Defence Code **Article 49 (CDC)** gives a
+**7-day right of withdrawal**, counted from receipt of the product for
+distance sales — against the EU's 14 days. Reported detail worth carrying into
+a build:
+
+- The right applies to contracts concluded **outside the commercial
+  establishment**, and majority doctrine and case law extend it to
+  **e-commerce**, on the reasoning that the consumer had no physical access to
+  the product before buying.
+- It does **not**, as a rule, apply to in-store purchases — those depend on
+  each retailer's own exchange policy.
+- **An opened package is not an express exception** in Article 49. Refusing a
+  withdrawal solely because packaging was opened is not supported by the text.
+
+**The engineering consequence:** a 7-day clock running from delivery, with no
+opened-package defence, means the **authorisation step must be automated and
+fast** — there is no room for a multi-day manual review. That is the opposite
+emphasis from EMEA, where the pressure is on evidencing the *disposition*
+weeks later. Mexico's PROFECO regime and each country's distance-selling rules
+need the same treatment per jurisdiction.
+
+**Cross-border customs shape the reverse flow more than returns law does.**
+Mexico handles cross-border e-commerce under a simplified import regime with
+rates by country of origin; Argentina uses a small-shipments courier regime;
+Brazil layers federal and state taxes with detailed customs documentation. A
+returned cross-border unit is a **re-import**, and that, not consumer law, is
+what makes LATAM reverse logistics expensive.
+
+**What the market is actually doing about cost:** sources point to automated
+collection points, **locker networks**, and third-party/alliance partners as
+the mechanisms for cutting last-mile and returns cost, and describe returns
+policy as becoming a **trust and loyalty factor** rather than a pure cost
+line. Reverse logistics' environmental footprint is named as a driver, without
+a specific rule attached.
+
+**⚠️ Informed gap — stated explicitly, because silence would look like
+coverage.** This pass **found no primary-source 2026 returns or
+reverse-logistics regulation** for Brazil, Mexico, Colombia or Chile, and **no
+new consumer-protection or reverse-logistics mandate** in the region. The
+Article 49 detail above rests on Brazilian legal commentary, trade press and
+law-firm material — **not** on the Planalto statute text, which could not be
+fetched in this session (see the channel note). Before any of this enters a
+client deliverable, Article 49 must be read against the official Planalto text
+and Mexico's requirements against PROFECO. Treat the region as **"no mandate
+found", not "no mandate exists."**
+
+**Opportunities — LATAM**
+
+- **Fast statutory authorisation.** A 7-day clock with no opened-package
+  defence is a straightforward, high-volume automation: authorise inside the
+  window or lose the argument. Pairs with the Mage-OS MIT RMA module, the only
+  permissively licensed RMA component in existence. See Pattern 21.
+- **Locker-network consolidation routing.** The region's chosen cost remedy is
+  collection points, and consolidating reverse pickups across lockers is
+  exactly a pickup-and-delivery VRP — `vroom` + `osrm` (both BSD-2) or `PyVRP`
+  (MIT). This is the single most direct fit between a verified repo and a
+  stated regional need found in this pass.
+- **Re-import cost modelling.** The expensive part of a LATAM return is
+  customs, not consumer law. A duty/landed-cost model attached to the
+  disposition decision is differentiated advisory work.
+- **Returns policy as loyalty instrument.** Positioned as retention rather
+  than compliance — the regional framing the sources actually support.
+
 ## Globant positioning
 
 1. **Lead with protocol reachability, not models.** The scarce skill is making a retailer's catalogue and
@@ -699,3 +984,45 @@ tutorial.**
    provider marking duty catching up on **2026-12-02**, and watermark-detection
    interoperability on **2027-02-02** — so creative labelling is a compliance
    build with a date on it.
+
+### Added 2026-11-23 — positioning that follows from the returns & recovery plane
+
+**The one-line pitch.** Retail loses roughly a sixth of its sales to returns
+(Shopify: ~16% of 2025 sales, ~$850B), the EU now legally constrains what a
+retailer may do with the goods that come back, and the decision step that
+obligation targets has **zero open-source implementations**. Globant can build
+the thing that does not exist, on a stack that is entirely Apache-2.0, BSD-2
+and MIT.
+
+**Why this plane suits a studio rather than a product vendor.** Every other
+step of the reverse flow is either already solved by permissive, actively
+maintained software (reverse routing: eight solvers, `or-tools` at 14430★) or
+is a commercial SaaS category with no open floor (returns platforms). The
+missing piece is the **integration judgment** — grading feeding a typed
+disposition rule feeding a route — which is bespoke per client, per
+jurisdiction and per product category. That is studio work, not licence work.
+
+**The regional objective function changes, the code does not.** This is the
+most reusable framing to come out of the pass:
+
+| Region | What drives the disposition decision | What to sell first |
+|---|---|---|
+| **North America** | Pure economics — no federal mandate. Freight vs recoverable value. | Returns-abuse scoring (85% deployed / 45% trusted) and "keep it" optimisation |
+| **EMEA** | **Legal obligation, live since 19 July 2026**, and typed: reuse ≠ recycling | The ESPR Article 25 disposition evidence engine; per-Member-State policy matrix |
+| **APAC** | Volume from livestream/social commerce; no mandate found | Returns *prevention*; dense-city reverse routing |
+| **LATAM** | Statutory speed — Brazil CDC Art. 49, 7 days from receipt | Fast automated authorisation; locker consolidation routing |
+
+**Sequencing recommendation.** Prove the model in **North America**, where the
+decision is unconstrained economics and therefore cheap to validate, then port
+it to **EMEA**, where the identical engine carries a legal obligation and
+commands a compliance budget. The EMEA version needs an audit trail the North
+American one does not — build the evidence layer from the start even where it
+is not required, because it is the entire value in the larger market.
+
+**The honest caveat to put in front of a client.** Unlike the store plane,
+where this KB can point to maintained fiscal libraries per country, **this
+plane has no domain-specific open-source floor**: the only retail-specific
+reverse-logistics optimiser in existence (Argonne's RELOG) carries **no
+licence at all**. Promise an assembly of general-purpose permissive
+components, verified and named, and do **not** promise an open-source returns
+platform. There isn't one.
