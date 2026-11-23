@@ -10,6 +10,80 @@ updated: 2026-11-23
 > protocol and platform repos**. For agents and agent-facing tooling see `agents/trending.md` — until today
 > the two files were byte-identical and this distinction did not exist.
 
+## 2026-11-23 (pass 5) — the price plane
+
+**Plane opened this pass:** the price. For the agent-layer view of the same pass
+see `agents/trending.md`; this file carries the infrastructure, library and
+platform findings.
+
+**The headline is a licence pattern, not a star count.** Every repository that is
+*specifically* a retail price optimiser **lacks a licence grant** — three of three,
+each verified by reading nine filename variants at the default branch:
+
+| Repo | Stars | Last push | Licence at root |
+|---|---|---|---|
+| [cvxgrp/elasticity-estimation](https://github.com/cvxgrp/elasticity-estimation) | 0★ | 2026-04-15 | **none** — Stanford/Boyd code for *Estimating Price Elasticity Matrices* (Apr 2026). Best available method, unusable. |
+| [Azure/cortana-intelligence-price-optimization](https://github.com/Azure/cortana-intelligence-price-optimization) | 90★ | 2017-09-05 | **none** |
+| [topprismdata/fashion-lifecycle-pricing](https://github.com/topprismdata/fashion-lifecycle-pricing) | 2★ | 2026-08-28 | **none** |
+
+Same signature as pass 4's RELOG: **research code solves the mandated-and-empty
+step, and research code is not licensed.**
+
+**New to this KB — the layer it said did not exist, all permissive and alive:**
+
+| Repo | License | Stars | Last push | Step |
+|---|---|---|---|---|
+| [scrapy/scrapy](https://github.com/scrapy/scrapy) | BSD-3-Clause | 65,542★ | 2026-11-19 | OBSERVE |
+| [dgtlmoon/changedetection.io](https://github.com/dgtlmoon/changedetection.io) | Apache-2.0 (11382 B) | 35,967★ | 2026-11-22 | OBSERVE — price watchers, deployable as-is |
+| [apify/crawlee](https://github.com/apify/crawlee) | Apache-2.0 | 26,521★ | 2026-11-23 | OBSERVE |
+| [py-why/dowhy](https://github.com/py-why/dowhy) | MIT | 8,410★ | 2026-11-17 | MODEL |
+| [cvxpy/cvxpy](https://github.com/cvxpy/cvxpy) | Apache-2.0 | 6,400★ | 2026-11-23 | OPTIMISE substrate |
+| [uber/causalml](https://github.com/uber/causalml) | **Apache-2.0** (561 B, read; API said `NOASSERTION`) | 6,047★ | 2026-10-12 | MODEL |
+| [py-why/EconML](https://github.com/py-why/EconML) | **MIT** (2978 B, read; API said `NOASSERTION`) | 4,861★ | 2026-11-20 | MODEL |
+| [dedupeio/dedupe](https://github.com/dedupeio/dedupe) | MIT | 4,531★ | 2025-07-29 | MATCH — **dormant ~16 months** |
+| [moj-analytical-services/splink](https://github.com/moj-analytical-services/splink) | MIT | 2,594★ | 2026-11-11 | MATCH — the live pick |
+| [Pyomo/pyomo](https://github.com/Pyomo/pyomo) | **BSD-3-Clause** (`LICENSE.md` 1735 B, read; API said `NOASSERTION`) | 2,563★ | 2026-11-21 | OPTIMISE substrate |
+| [google/meridian](https://github.com/google/meridian) | Apache-2.0 | 1,612★ | 2026-11-21 | MODEL (promotion spend) |
+| [pymc-labs/pymc-marketing](https://github.com/pymc-labs/pymc-marketing) | Apache-2.0 (11357 B) | 1,314★ | 2026-11-22 | **MODEL — the find of the pass.** `customer_choice/bayesian_blp.py`: Bayesian BLP on aggregate share panels, documented for *"Nielsen / IRI / retailer-scanner"* data, full posterior cross-price elasticities |
+| [zinggAI/zingg](https://github.com/zinggAI/zingg) | **AGPL-3.0** (34523 B) | 1,275★ | 2026-11-03 | MATCH — blocker inside a shipped product |
+| [jeffgortmaker/pyblp](https://github.com/jeffgortmaker/pyblp) | MIT (`LICENSE.txt`) | 297★ | 2026-11-13 | MODEL — classical BLP cross-check |
+| [supermarkt/checkjebon](https://github.com/supermarkt/checkjebon) | MIT | 259★ | 2026-11-20 | OBSERVE — Dutch supermarket price corpus (**EMEA**) |
+| [ByteSizedMarius/rewerse-engineering](https://github.com/ByteSizedMarius/rewerse-engineering) | MIT | 98★ | 2026-09-29 | OBSERVE — REWE Germany client (**EMEA**) |
+
+Already in this KB and reused on this plane: `google/or-tools` (Apache-2.0,
+14,430★, 2026-11-20) and `facebookexperimental/Robyn` (MIT, 1,539★, 2026-11-10).
+`google/lightweight_mmm` (Apache-2.0, 1,055★) is **dormant since 2025-06-17**;
+`google/meridian` is its successor.
+
+**Dormant / dead, with dates:** `flix-tech/RevPy` MIT 50★ **2023-07-06** (airline
+revenue management, not retail); `Azure/cortana-intelligence-price-analytics` MIT
+38★ **2023-06-27**; `cinoliu/Promotion-engine` MIT 98★ **2018-10-16**;
+`fnando/coupons` MIT 141★ **2017-05-25**; `Smile-SA/elasticsuite-for-retailer`
+OSL-3.0 18★ **2024-08-29**.
+
+**Measured zero — the physical execution surface.** Trade press reports tier-one
+retailers scaling **electronic shelf labels**. `electronic shelf label stars:>=5`
+returns **16 repos, all hobbyist ESP32/e-paper**: `rbaron/elink` (116★, **no
+licence**, dead 2022-08-04), `tuanpmt/esp_epaper` (MIT, 21★, 2026-11-21 — a
+display driver), `Northstrix/Electronic-Shelf-Label-Management-System` (MIT, 9★,
+dead 2024-06-07). **No open-source ESL management system exists at retail scale.**
+
+**Deliberate exclusion — the biggest false-positive family on this plane.**
+`revenue management stars:>=50` surfaces [getlago/lago](https://github.com/getlago/lago)
+(**AGPL-3.0**, 10,910★, 2026-11-19) and [meteroid-oss/meteroid](https://github.com/meteroid-oss/meteroid)
+(**AGPL-3.0**, 1,369★, 2026-11-23). Both are first-rate **SaaS metering and
+subscription billing**; neither prices merchandise. Picking one by name would be a
+fit error *and* a licence error.
+
+**Channel note.** `repo:facebook/Ax` returns **HTTP 422** from
+`search/repositories` while `ls-remote` gives **4642 refs**, default branch
+`main`, and an MIT `LICENSE` served by `raw.githubusercontent`. Pass 4's rule
+("ls-remote OK + 422 = renamed") needs its second half: **422 means search cannot
+see the repo** — rename is one cause, an index gap on a live repo is another.
+Stars for that row are left blank rather than guessed.
+
+---
+
 ## 2026-11-23 — the returns & recovery plane
 
 **Eight permissive reverse-routing solvers entered this KB today.** None of

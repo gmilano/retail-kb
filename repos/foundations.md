@@ -700,3 +700,178 @@ the KPMG and Coresight adoption numbers, and all statutory dates. **To promote
 any of them to citable, these hosts must be added to the session's allowed
 network domains.** The legal dates should in any case be checked against the
 Official Journal text before they go into a client deliverable.
+
+---
+
+## Added 2026-11-23 (pass 5) — the price plane, and a correction to this file
+
+### ⚠️ Correction notice: two claims this KB has carried are wrong as written
+
+This file has stated since cycle 8, and `compose/patterns.md`, `intel/trends.md`,
+`intel/market.md` and `verticals/solutions.md` all repeat it, that:
+
+1. *"Retail price optimisation: no credible open-source project exists"* — on the
+   evidence of **one** query, `price optimization stars:>=100`; and
+2. *"`product matching entity resolution stars:>=200` returns 0 results"* — used
+   to justify building product matching as proprietary IP.
+
+Both were re-measured on 2026-11-23 against seven query families and direct
+`repo:` lookups. **Claim 2 is false.** `entity resolution record linkage
+stars:>=500` still returns **0**, yet all three leading libraries exist, are
+permissive and are alive — `splink` 2594★ MIT, `dedupe` 4531★ MIT,
+`zingg` 1275★ AGPL-3.0. That is a **measured search false negative**, the fifth
+in this KB, and this time it did not merely hide a repo: it manufactured a
+strategic recommendation.
+
+**Claim 1 is wrong in its general form and right in a narrow one.** The
+*elasticity/demand* layer is well equipped and permissive (below). What has no
+licensed, maintained retail implementation is the **decision** step — the
+markdown/promotion optimiser. Restate it that way, because the two have
+different buy/build answers.
+
+> **The sharper finding, and the headline of this pass:** every repository that
+> is *specifically* a retail price optimiser **lacks a licence grant**. Three of
+> three. Meanwhile every generic layer such an optimiser would be assembled from
+> is permissive and actively maintained. The retail pricing gap is not *"no code
+> exists"* — it is *"the code that exists cannot be granted."* That is a
+> different problem with a different remedy.
+
+### The six-step price gradient, measured 2026-11-23
+
+```
+OBSERVE → MATCH → MODEL → OPTIMISE → SET/EXECUTE → DEFEND
+  ✅       ✅       ✅        ❌            ✅          ⚠️ one repo wide
+generic  generic  generic   no licensed  permissive   0★, 1 day old
+abundant permissive alive   retail impl  + agent-native  and EMEA-only
+```
+
+#### 1. OBSERVE — collect market prices. Abundant, generic, permissive.
+
+| Repo | License | Stars | Last push | Role |
+|---|---|---|---|---|
+| [scrapy/scrapy](https://github.com/scrapy/scrapy) | BSD-3-Clause | 65,542★ | 2026-11-19 | The crawling framework. Nothing retail-specific about it, which is why no retail query finds it. |
+| [dgtlmoon/changedetection.io](https://github.com/dgtlmoon/changedetection.io) | **Apache-2.0** (11382 B) | 35,967★ | 2026-11-22 | Change detection with price watchers and notification hooks. Deployable as-is for competitor monitoring. |
+| [apify/crawlee](https://github.com/apify/crawlee) | **Apache-2.0** | 26,521★ | 2026-11-23 | Browser automation for pages that defend themselves. |
+| [supermarkt/checkjebon](https://github.com/supermarkt/checkjebon) | **MIT** (1067 B) | 259★ | 2026-11-20 | Dutch supermarket price data and comparison. A *working regional price corpus*, not a framework — the only one of its kind found. **EMEA.** |
+| [ByteSizedMarius/rewerse-engineering](https://github.com/ByteSizedMarius/rewerse-engineering) | **MIT** | 98★ | 2026-09-29 | Unofficial REWE (Germany) client in Go and Python: discounts, prices. **EMEA.** |
+
+#### 2. MATCH — is it the same product? Well equipped, and this is the corrected claim.
+
+| Repo | License | Stars | Last push | Role |
+|---|---|---|---|---|
+| [dedupeio/dedupe](https://github.com/dedupeio/dedupe) | **MIT** (1118 B) | 4,531★ | 2025-07-29 | Fuzzy matching and record deduplication. **Dormant ~16 months** — note before depending on it. |
+| [moj-analytical-services/splink](https://github.com/moj-analytical-services/splink) | **MIT** (1076 B) | 2,594★ | 2026-11-11 | Probabilistic record linkage at scale, backed by the UK Ministry of Justice. **The live pick.** |
+| [zinggAI/zingg](https://github.com/zinggAI/zingg) | **AGPL-3.0** (34523 B) | 1,275★ | 2026-11-03 | Entity resolution and MDM. AGPL — fine hosted for one client, a blocker inside a shipped product. |
+
+#### 3. MODEL — elasticity and demand. The layer the KB said did not exist.
+
+| Repo | License | Stars | Last push | Role |
+|---|---|---|---|---|
+| [py-why/dowhy](https://github.com/py-why/dowhy) | **MIT** | 8,410★ | 2026-11-17 | Causal graphs and identification — the step before any elasticity number is trustworthy. |
+| [uber/causalml](https://github.com/uber/causalml) | **Apache-2.0** (`LICENSE` **561 B**, read) | 6,047★ | 2026-10-12 | Uplift modelling: who responds to a discount. API reported `NOASSERTION`. |
+| [py-why/EconML](https://github.com/py-why/EconML) | **MIT** (2978 B, read) | 4,861★ | 2026-11-20 | Heterogeneous treatment effects — price response by segment. API reported `NOASSERTION`. |
+| [pymc-labs/pymc-marketing](https://github.com/pymc-labs/pymc-marketing) | **Apache-2.0** (11357 B) | 1,314★ | 2026-11-22 | **The find of this pass.** `customer_choice/bayesian_blp.py` fits a Bayesian random-coefficients BLP model on *aggregate market-share panels*, documented for **"the common Nielsen / IRI / retailer-scanner data shape"**, returning **full posterior cross-price elasticities** with hierarchical pooling across markets. `MixedLogit` covers individual-level choice. Ships Spanish locale files. |
+| [jeffgortmaker/pyblp](https://github.com/jeffgortmaker/pyblp) | **MIT** (`LICENSE.txt` 1077 B) | 297★ | 2026-11-13 | The mature classical BLP implementation: elasticities, diversion ratios, markups, HHI. Research-oriented but maintained. |
+| [cvxgrp/elasticity-estimation](https://github.com/cvxgrp/elasticity-estimation) | **NO LICENCE FILE** (root of `main` verified) | 0★ | 2026-04-15 | Stanford/Boyd-group code for the April 2026 paper *Estimating Price Elasticity Matrices* — low-rank-plus-diagonal structure so large portfolios stay tractable. Algorithmically the best answer to retail's hardest pricing problem, and **unusable**: no grant. Read the paper, cite nothing, vendor nothing. |
+
+Adjacent and permissive, for the promotion-spend side rather than the shelf price:
+[google/meridian](https://github.com/google/meridian) (Apache-2.0, 1612★, 2026-11-21),
+[facebookexperimental/Robyn](https://github.com/facebookexperimental/Robyn) (MIT, 1539★, 2026-11-10 —
+already in this KB from pass 3, including the default-branch trap), and
+[google/lightweight_mmm](https://github.com/google/lightweight_mmm) (Apache-2.0, 1055★,
+**last push 2025-06-17, ~17 months dormant**; Meridian is its successor).
+
+#### 4. OPTIMISE — decide the markdown. The empty step.
+
+Solver substrate — all permissive, all alive, none retail:
+
+| Repo | License | Stars | Last push | Role |
+|---|---|---|---|---|
+| [google/or-tools](https://github.com/google/or-tools) | **Apache-2.0** | 14,430★ | 2026-11-20 | CP-SAT and MIP. Already carried in this KB for reverse-logistics routing (pass 4). |
+| [cvxpy/cvxpy](https://github.com/cvxpy/cvxpy) | **Apache-2.0** | 6,400★ | 2026-11-23 | Convex modelling — the natural expression of a markdown problem with margin and inventory constraints. |
+| [Pyomo/pyomo](https://github.com/Pyomo/pyomo) | **BSD-3-Clause** (`LICENSE.md` 1735 B, Sandia/NTESS — read) | 2,563★ | 2026-11-21 | Algebraic modelling. API reported `NOASSERTION`. |
+| [facebook/Ax](https://github.com/facebook/Ax) | **MIT** (`LICENSE` read at `main`) | *not measurable* | — | Adaptive experimentation — the honest way to run price tests. **`repo:facebook/Ax` returns HTTP 422 from `search/repositories`** while `ls-remote` gives 4642 refs; see the method note below. Stars deliberately left blank rather than guessed. |
+
+Retail-specific attempts — **all dead, unlicensed, or both:**
+
+| Repo | License | Stars | Last push | Verdict |
+|---|---|---|---|---|
+| [Azure/cortana-intelligence-price-optimization](https://github.com/Azure/cortana-intelligence-price-optimization) | **NO LICENCE FILE** (root of `master` verified) | 90★ | 2017-09-05 | Microsoft's retail price-optimisation solution. Nine years dead, no grant. |
+| [Azure/cortana-intelligence-price-analytics](https://github.com/Azure/cortana-intelligence-price-analytics) | MIT (1183 B) | 38★ | 2023-06-27 | Double-ML price analytics. Properly licensed, dormant ~3.5 years. |
+| [flix-tech/RevPy](https://github.com/flix-tech/RevPy) | MIT (1071 B) | 50★ | 2023-07-06 | Revenue-management heuristics (DAVN, DP-LP). **Airline**, not retail. Dormant ~3.4 years. |
+| [topprismdata/fashion-lifecycle-pricing](https://github.com/topprismdata/fashion-lifecycle-pricing) | **NO LICENCE FILE** (root of `main` verified) | 2★ | 2026-08-28 | The only on-topic hit in 263 `markdown pricing` results. No grant. |
+
+#### 5. SET / EXECUTE — apply the price. Adequate and permissive.
+
+[offerkit/offerkit](https://github.com/offerkit/offerkit) (MIT, 58★, 2026-11-20) for
+promotions, plus the promotion and price-list modules already inside the permissive
+platform layer this KB verified in cycle 8 —
+[medusajs/medusa](https://github.com/medusajs/medusa) (MIT, `LICENSE` read 1075 B;
+API still reports `NOASSERTION`), [saleor/saleor](https://github.com/saleor/saleor)
+(BSD-3-Clause, 23,593★), [odoo/odoo](https://github.com/odoo/odoo) (**LGPL-3.0**, so
+proprietary pricing modules are permitted — cycle 8's most commercially useful
+licence fact).
+
+**The hardware end is empty.** Trade press this year reports tier-one and big-box
+retailers scaling **electronic shelf labels** — the physical execution surface of
+every dynamic price. **[measured]** `electronic shelf label stars:>=5` returns
+**16 repos, all hobbyist ESP32/e-paper projects**: `rbaron/elink` (116★, **no
+licence**, dead 2022-08-04), `tuanpmt/esp_epaper` (MIT, 21★, 2026-11-21 — a display
+driver, not an ESL system), `Northstrix/Electronic-Shelf-Label-Management-System`
+(MIT, 9★, dead 2024-06-07). There is **no open-source ESL management system** at
+retail scale. Ties directly to the store plane (pass 2).
+
+#### 6. DEFEND — prove the price was lawful. One repo wide.
+
+[zanreal-labs/medusa-consumer-compliance](https://github.com/zanreal-labs/medusa-consumer-compliance)
+(MIT, 0★, 2026-11-22) is the only implementation found, and it covers **EMEA only**
+(EU + Polish duties). Algorithmic-collusion auditing exists solely as academic
+replication code: [matteocourthoud/Algorithmic-Collusion-Replication](https://github.com/matteocourthoud/Algorithmic-Collusion-Replication)
+(MIT, 22★, dead 2023-06-20), [luciasauer/algorithmic_pricing_llms](https://github.com/luciasauer/algorithmic_pricing_llms)
+(MIT, 8★, 2025-07-09), [becmn/algorithmic-collusion](https://github.com/becmn/algorithmic-collusion)
+(MIT, 0★, 2026-10-30 — Q-learning vs LLM agents in a repeated Bertrand duopoly).
+Useful as evidence that the risk is studied; **not** an audit tool.
+
+**Sixth/seventh confirmation of the structural law, and the cleanest instance yet:
+the mandated step is the empty one.** Regulation attaches to *judgment about the
+price*; open source equips *collection, measurement and execution of the price*.
+
+### Not retail pricing, despite the vocabulary — exclusion note
+
+`revenue management stars:>=50` surfaces [getlago/lago](https://github.com/getlago/lago)
+(**AGPL-3.0**, 10,910★) and [meteroid-oss/meteroid](https://github.com/meteroid-oss/meteroid)
+(**AGPL-3.0**, 1,369★). Both are excellent **SaaS metering and subscription billing**
+platforms. Neither prices merchandise. They are the single largest and most
+confusing false-positive family on this plane, and both are AGPL, so a careless
+pick is a licence problem on top of a fit problem.
+
+### Method notes added 2026-11-23 (pass 5)
+
+1. **`search/repositories` HTTP 422 does *not* imply a rename.** Pass 4 recorded
+   *"ls-remote OK + 422 = repo was RENAMED"*. `facebook/Ax` falsifies the rule as
+   stated: `ls-remote` gives **4642 refs**, the default branch is `main`, and
+   `raw.githubusercontent` serves an MIT `LICENSE` — yet `repo:facebook/Ax` and
+   `repo:facebook/ax` both return 422. **Restated: 422 means search cannot see the
+   repo. Rename is one cause; an index gap on a live repo is another.**
+   `ls-remote` plus a raw licence read settles which.
+2. **A short licence file is not automatically a pointer.** Cycle 8's rule
+   (*"a short LICENSE is a pointer, not a licence — read it"*) came from
+   Meilisearch's 468 B multi-licence redirect. `uber/causalml`'s `LICENSE` is
+   **561 B** and is a *valid* Apache-2.0 grant by reference to the canonical URL.
+   So: **short ≠ invalid; short = read it.** Both halves of the rule matter.
+3. **The byte-size licence fingerprint table held.** `zingg`'s `LICENSE` is
+   **34523 B**, matching this KB's own cycle-8 entry for AGPL-3.0 exactly.
+4. **Licence probes must cover `LICENSE.md`.** `Pyomo` declares BSD-3-Clause there
+   and nowhere else; pass 4 added `LICENSE.TXT` for the same reason.
+5. **Three of three** retail-price-specific repos had **no licence file at root**,
+   detected only by direct `raw.githubusercontent` reads across nine filename
+   variants. The GitHub API field said `NONE` or `NOASSERTION` without
+   distinguishing *"no grant"* from *"unrecognised grant"* — a distinction that
+   decides whether a client can use the code.
+
+**Informed gap — provenance of every statutory date and market figure below.**
+Non-GitHub hosts remain unreachable from this session (`eur-lex.europa.eu`,
+`gov.br`, `accc.gov.au` and law-firm hosts all return **000 / connection refused**
+through the proxy, re-tested 2026-11-23). Every legal date and market number in
+this pass is **search-result-derived and not fetch-verified**, and is marked as
+such where it appears. Read the official text before any of it reaches a client.

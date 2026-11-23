@@ -342,3 +342,102 @@ app, above, is the closest thing that exists, and it was not built for this
 directive.
 
 This is a genuine, dated, unserved platform gap in EMEA.
+
+---
+
+## Added 2026-11-23 (pass 5) — the price plane: what the platforms do and do not ship
+
+### Correction to this file
+
+The section above headed *"Gap: there is no open-source retail price/markdown
+engine"* says that *"no credible open-source project fills it"* and that
+assortment, markdown and promotion optimisation have no floor. **Half of that
+survives re-measurement and half does not.** Corrected:
+
+- **Promotions and discounting: there is now a real, permissive, agent-native
+  option.** [offerkit/offerkit](https://github.com/offerkit/offerkit) (**MIT**,
+  `LICENSE` 1073 B read, 58★, pushed 2026-11-20).
+- **Elasticity estimation: well equipped and permissive** — see
+  `repos/foundations.md` → MODEL.
+- **Markdown/clearance optimisation: the gap is real**, and the stronger
+  statement is that all three retail-specific attempts **carry no licence
+  grant**, not merely that they are absent.
+
+### Price capability by platform — what is in-tree today
+
+| Platform | Repo | License | Price capability in-tree | What is missing |
+|---|---|---|---|---|
+| **Medusa** | [medusajs/medusa](https://github.com/medusajs/medusa) | **MIT** (`LICENSE` 1075 B, read in cycle 8; API still reports `NOASSERTION`) | Price lists with schedules, region/currency pricing contexts, promotion module | No elasticity, no markdown optimiser. Compliance available as a **third-party MIT plugin** (below) — the only platform with one. |
+| **Saleor** | [saleor/saleor](https://github.com/saleor/saleor) | **BSD-3-Clause** | Channel-based pricing, discounts, vouchers, promotions via API | No compliance layer, no price-history ledger, no optimiser. |
+| **Odoo** | [odoo/odoo](https://github.com/odoo/odoo) | **LGPL-3.0** (43529 B, read in cycle 8 — **not** GPL) | Pricelists with rules and formulas, discounts, coupon/promotion programmes | No elasticity, no reference-price ledger. **LGPL means a proprietary pricing module is permitted** — the most commercially useful licence fact in this KB, and it applies directly here. |
+| **OfferKit** | [offerkit/offerkit](https://github.com/offerkit/offerkit) | **MIT** | Discount engine (fixed/percentage, caps, product and collection eligibility), **stackable atomic redemptions**, gift-card balance ledger, loyalty tiers and points ledger, referrals, customer segments, validation rules | Not a pricing engine: it decides *offers*, never the base price. No elasticity, no markdown. |
+
+**Why OfferKit is worth a row of its own.** It is the first platform-layer repo in
+this KB built **agent-first rather than agent-adapted**: the MCP server is a
+first-class surface, and **every mutating endpoint declares its risk level**
+(`safe` / `mutating` / `destructive`) so an LLM host can render the appropriate
+confirmation. Procedures opt into MCP exposure declaratively via `.meta()`.
+Distribution is one Docker image (`ghcr.io/offerkit/offerkit`) bringing up web,
+worker, Postgres and Redis; OpenTelemetry-ready. The README states **MIT
+first-party packages, no CLA, no paywalled commercial features** — which, given
+how often this KB has caught that claim being false at the platform layer
+(nopCommerce's mandatory UI link, Meilisearch's BUSL Enterprise parts, Snowplow's
+three licences in one product), is a claim to verify at integration time rather
+than accept. The `LICENSE` file itself reads clean MIT at 1073 B.
+
+**Caveat proportional to its size:** 58★ and 173 refs. This is an early project.
+Appropriate as a *component you fork and own*, not as a dependency you assume will
+be maintained for the life of a client platform.
+
+### The compliance plugin — the only one of its kind, and the shape to copy
+
+[zanreal-labs/medusa-consumer-compliance](https://github.com/zanreal-labs/medusa-consumer-compliance)
+(**MIT**, 1064 B read, 0★, pushed **2026-11-22**). Medusa v2 plugin covering the
+Omnibus 30-day lowest price, unit prices, GPSR safety information, the online
+withdrawal function of Directive (EU) 2023/2673, and the reviews and
+**personalised-pricing** disclosures. Documentation in English and Polish; the
+legal basis of every rule, with sources and dates, in `docs/legal.en.mdx`. It
+states plainly that it supports compliance and does not guarantee it.
+
+**The reusable design, independent of Medusa:**
+- Records **every price a customer could see**, per variant **and pricing
+  context** (region and currency, price lists and their schedules as applied).
+- Three capture paths — product/price events, an **hourly sweep**, and on-demand
+  **backfill** — because event streams drop.
+- **Never edits a recorded price.** Append-only by construction.
+- Retains at least the regulatory window, **400 days by default**.
+- **Warns when the history is incomplete**, and when a "reduced" price is not
+  actually below the reference. The second check is the one that catches a
+  merchandising mistake before a regulator does.
+- Encodes member-state variation explicitly: **Poland did not adopt art. 6a(5)**,
+  so each step of a gradual reduction is measured on its own; plus goods on offer
+  for under 30 days, perishables, relaunch after a break, and the label UOKiK
+  expects.
+
+**The platform gap this establishes, stated precisely.** One MIT plugin, for one
+platform, in one member state's specifics, at 0 stars, one day old, covering one
+of the four regional duties on this plane. Saleor, Odoo, Shopware, Spree and
+Bagisto have **nothing equivalent**, and the Digital Fairness Act proposal of
+2026-11-11 would widen the duty (RRP-based savings claims restricted, a
+consumer-set **maximum price** written into the agent contract by Art. 26). This
+is a **dated, named, unserved platform gap in EMEA** — the second such gap this
+KB has recorded, alongside the ESPR Art. 25 disposition engine from pass 4.
+
+### Measured: the platform layer does not price, and nothing adjacent fills it
+
+**[measured 2026-11-23]** `promotion engine stars:>=50` returns **2 repos** —
+OfferKit and a 2018 Chinese "new retail" demo (`cinoliu/Promotion-engine`, MIT,
+98★, dead 2018-10-16). `discount engine stars:>=30` returns **5**, of which the
+only real ones are a 2017 Rails coupon gem (`fnando/coupons`, MIT, 141★, dead
+2017-05-25) and `ByteSizedMarius/rewerse-engineering` (MIT, 98★ — a German grocer
+API client, not an engine). `Smile-SA/elasticsuite-for-retailer` (OSL-3.0, 18★)
+is **dead since 2024-08-29** and carries the same Open Software License family
+this KB flagged for innoshop and beikeshop in cycle 8.
+
+**Deliberate exclusion, because the names mislead:**
+[getlago/lago](https://github.com/getlago/lago) (AGPL-3.0, 10,910★) and
+[meteroid-oss/meteroid](https://github.com/meteroid-oss/meteroid) (AGPL-3.0,
+1,369★) are the two largest repos that appear under retail pricing vocabulary.
+They are **SaaS metering and subscription billing** — usage tracking, invoicing,
+plan management. They do not price merchandise, and they are **AGPL**, so
+selecting one by name would be both a fit error and a licence error.

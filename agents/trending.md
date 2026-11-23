@@ -10,6 +10,59 @@ updated: 2026-11-23
 > agent-facing tooling**. For infrastructure and platform repos see `repos/trending.md` — until today the
 > two files were byte-identical, so the agents/repos distinction never actually existed in this KB.
 
+## 2026-11-23 (pass 5) — the price plane
+
+**Plane opened this pass:** the price itself. Chosen by a 46-term vocabulary probe
+against all eight KB files **before** any web search: `elasticit`, `dynamic pric`,
+`competitor pric`, `price scrap`, `unit price`, `drip pricing`, `shrinkflation`,
+`algorithmic collusion`, `personalized pricing`, `clearance`, `revenue
+management`, `coupon`, `bundl` and `cross-sell` were all at **literal zero**. The
+19 hits for `markdown` were the file format.
+
+**New and alive in the agent layer — two repos, and the smaller one matters more:**
+
+| Agent / repo | License | Stars | Last push | Why it is here |
+|---|---|---|---|---|
+| [offerkit/offerkit](https://github.com/offerkit/offerkit) | MIT (1073 B read) | 58★/173 refs | 2026-11-20 | Agent-**first** promotion engine, not agent-adapted: the MCP server is a first-class surface and **every mutating endpoint declares a risk level** (`safe`/`mutating`/`destructive`) so the LLM host renders the right confirmation. The design pattern is worth more than the code. |
+| [zanreal-labs/medusa-consumer-compliance](https://github.com/zanreal-labs/medusa-consumer-compliance) | MIT (1064 B read) | **0★**/21 refs | 2026-11-22 | One day old. The **only** code implementation of a pricing *duty* found in any region: Omnibus 30-day reference price, unit prices, personalised-pricing disclosure. Append-only price history that never edits a recorded price. |
+
+**This pass corrected two of this KB's own claims**, both produced by a single
+GitHub query each and then quoted as fact by four later sections:
+`entity resolution record linkage stars:>=500` **still returns 0** while `splink`
+(MIT 2594★), `dedupe` (MIT 4531★) and `zingg` (AGPL 1275★) all exist — the fifth
+measured search false negative here; and retail elasticity **does** have a
+permissive floor in `pymc-marketing`'s `customer_choice/bayesian_blp.py`
+(Apache-2.0, 1314★), documented for *"Nielsen / IRI / retailer-scanner"* panels.
+
+**No pricing-agent boom — measured.** `pricing agent created:>2026-06-01
+stars:>=20` returns **36 repos and zero retail pricing agents** (App Store PPP
+updaters, trading agents, an agent-authorization gateway, startup skill packs).
+`competitor monitoring stars:>=50` → **2**, neither retail.
+`price intelligence stars:>=20` → **23**, whose two most on-topic hits are
+Microsoft's dead Cortana solutions (2017 and 2023).
+
+**The week's sharpest trap — collision *inside* a correct dependency.**
+`pymc-marketing` contains `mmm/price_response.py`, which a grep for *elasticity*
+finds and which prices a **delivered media unit** (auction bid-up, rate-card
+tiers), not a retail product. Cycle 8 shipped a Minecraft hopper mod as inventory
+intelligence by matching a *repository* name; this is the same error one level
+down, matching a *file* name inside an excellent repo. Read the docstring.
+
+**Contamination, third family in the pricing vocabulary.** `pricing engine
+stars:>=200` returns a Unity text engine (`LightSideKittens/UniText`, 720★) and
+two Claude/Codex **marketing skill packs** (`Yuzzyuk/marketing-os` 580★,
+`holy-templar/marketing-agi` 243★). Cycle 8 caught this family in `ecommerce mcp`;
+it has spread. Excluded deliberately.
+
+**Dormancy / licence check on what gets recommended:**
+`ivorpad/mercadona-cli` (338★, self-described *"agent-friendly"* grocery CLI) has
+**no licence file** on `main`; `flix-tech/RevPy` (MIT, 50★) dead **2023-07-06**
+and airline-oriented; `Azure/cortana-intelligence-price-analytics` (MIT, 38★) dead
+**2023-06-27**; `Azure/cortana-intelligence-price-optimization` (90★) dead
+**2017-09-05** and **no licence file**.
+
+---
+
 ## 2026-11-23 — the returns & recovery plane
 
 **Plane opened this pass:** retail's reverse flow (prevent → authorise → move →

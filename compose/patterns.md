@@ -811,3 +811,255 @@ text, which could not be fetched in this session. This pass found **no
 primary-source 2026 returns regulation** for Brazil, Mexico, Colombia or
 Chile. Treat the region as *"no mandate found"*, not *"no mandate exists"*, and
 read Art. 49 against the official text before it reaches a client.
+
+---
+
+## Pattern 22 — The price-event ledger with four regional projections
+
+**The problem.** Four regions attach four different legal objects to the same
+number (`intel/market.md` → Opportunities by region). Teams build the ledger for
+whichever region is in front of them, and the ledger then cannot answer the other
+three — not because of effort, but because it stored the wrong thing.
+
+**The one build that serves all four.** An **append-only price-event log** that
+records, at every price change *and* at every quote:
+
+```
+price_event {
+  variant_id, context {region, currency, price_list_id, schedule_id, channel},
+  base_price, applied_promotions[], fee_components[{code, amount, recipient}],
+  pricing_inputs {segment_id, cohort_rules_version, competitor_feed_rev,
+                  model_version, NO per-person attributes},
+  displayed_total, observed_at, source {event | hourly_sweep | backfill}
+}
+```
+
+**The four projections, and why none substitutes for another:**
+
+| Region | Projection | Needs from the log |
+|---|---|---|
+| **EMEA** | `min(base_price)` over trailing 30 days per `variant × context`, with step-wise handling where art. 6a(5) was not adopted | Complete price history **per pricing context**, not per variant alone |
+| **North America** | Proof of the **absence** of per-consumer variation | `pricing_inputs` — the *inputs*, not the outcomes. An outcome-only ledger cannot answer a counterfactual |
+| **APAC** | `displayed_total` including every transaction-based fee **at display time** | `fee_components` captured on the **quote** path, not the catalogue path |
+| **LATAM** | Money split **by recipient per transaction** | `fee_components[].recipient` — a monolithic `final_price` field destroys this irreversibly |
+
+**Wiring.** Take the capture design from
+[zanreal-labs/medusa-consumer-compliance](https://github.com/zanreal-labs/medusa-consumer-compliance)
+(MIT) — three capture paths (events + hourly sweep + on-demand backfill), never
+edit a recorded price, ≥400-day retention, warn on incomplete history and on a
+"reduction" that is not below the reference. Keep the log in Postgres beside the
+platform ([medusajs/medusa](https://github.com/medusajs/medusa) MIT,
+[saleor/saleor](https://github.com/saleor/saleor) BSD-3, or
+[odoo/odoo](https://github.com/odoo/odoo) LGPL-3.0 — all permit a proprietary
+module on top). Expose each projection as a read model, one per region.
+
+**Why it is a pattern and not a product.** Only the **EMEA** projection exists in
+open source, at 0★ and one day old, for one platform, in one member state's
+specifics. The other three are greenfield. **Do not promise a product; promise
+one ledger and the projection the client's region needs first.**
+
+**Hard rule.** Never put per-person attributes in `pricing_inputs`. Three US
+states ban personalised pricing and New Jersey attached a **private right of
+action** — a log that *contains* person-level pricing inputs is discovery
+material rather than a defence. Segment-level only (Pattern 25).
+
+---
+
+## Pattern 23 — Licensed elasticity → your own optimiser (the assembly that replaces the missing engine)
+
+**The problem.** Retail markdown/promotion optimisation has **no licensed,
+maintained open-source implementation** — and the best algorithmic answer that
+exists, [cvxgrp/elasticity-estimation](https://github.com/cvxgrp/elasticity-estimation)
+(Stanford/Boyd group, *Estimating Price Elasticity Matrices*, April 2026), has
+**no licence file**. Clients still need the capability.
+
+**The assembly — every dependency permissive, verified 2026-11-23:**
+
+```
+Scanner / POS sales panel  ─┐
+Competitor price feed      ─┤
+   (changedetection.io,     │
+    Apache-2.0, 35967★)     │
+                            ▼
+[splink MIT 2594★] ── match products across retailers
+                            │
+                            ▼
+[pymc-marketing Apache-2.0 1314★]
+   customer_choice/BayesianBLP  ── posterior cross-price elasticities
+   (documented for Nielsen / IRI / retailer-scanner panels)
+   └─ MixedLogit for individual-level choice
+   └─ [pyblp MIT 297★] as the classical cross-check
+                            │
+                            ▼
+[py-why/EconML MIT 4861★ | uber/causalml Apache-2.0 6047★]
+   ── heterogeneous price response by SEGMENT (never by person)
+                            │
+                            ▼
+╔═════════════════════════════════════════════════════════╗
+║  MARKDOWN / PROMOTION OPTIMISER  —  GLOBANT IP           ║
+║  Expressed on [cvxpy Apache-2.0] or [or-tools Apache-2.0]║
+║  Objective: margin over the lifecycle, subject to        ║
+║  inventory, min-margin, price-ladder and legal floors    ║
+╚═════════════════════════════════════════════════════════╝
+                            │
+                            ▼
+[offerkit MIT 58★] promotions  │  platform price lists  │  Pattern 22 ledger
+```
+
+**Why this is better than "build a pricing platform".** The elasticity work — the
+part a client assumes is the hard science — arrives under Apache-2.0 and MIT,
+fitted to exactly the data shape retailers already have (scanner panels). What
+remains proprietary is the **constrained decision**, which is a smaller,
+better-specified build and the only step with no licensed option.
+
+**Three warnings, each from a measurement this pass:**
+1. **Read `cvxgrp/elasticity-estimation`'s paper; vendor nothing.** No grant on
+   `main`. Reimplementing the published method is lawful; copying the repo is not.
+2. **Do not reach for `pymc_marketing/mmm/price_response.py`.** It prices a
+   *delivered media unit*, not a product. The retail module is
+   `customer_choice/bayesian_blp.py`.
+3. **`dedupe` (MIT, 4531★) is dormant since 2025-07-29.** Prefer `splink`.
+   Avoid `zingg` inside a shipped product — **AGPL-3.0** (34523 B verified).
+
+---
+
+## Pattern 24 — Competitive price intelligence that survives the matching step
+
+**Supersedes Pattern 6**, which states that the matching floor is zero. It is not.
+
+```
+[dgtlmoon/changedetection.io Apache-2.0 35967★]  ← deployable as-is, price watchers
+        or [apify/crawlee Apache-2.0 26521★] / [scrapy/scrapy BSD-3 65542★]
+        or [apify/apify-mcp-server MIT 17199★]  ← typed MCP access (already in KB)
+                            │
+                            ▼
+[moj-analytical-services/splink MIT 2594★]  ── probabilistic product matching
+   ONE comparison model per category; GTIN/GS1 where present (pass 1's
+   product-data plane), probabilistic matching only where it is not
+                            │
+                            ▼
+Pattern 22 ledger  →  competitor_feed_rev stamped on every pricing decision
+                            │
+                            ▼
+Pattern 23 elasticity  →  your optimiser
+```
+
+**The step everyone skips.** Price collection is easy and well supplied;
+**knowing two listings are the same product is the actual bottleneck**, and this
+KB previously recorded that layer as empty on the strength of one query that
+returns a false negative. GTIN presence resolves it cheaply where it exists —
+cycle 8's product-data finding that **GTIN is not required by the ACP feed spec**
+is exactly why probabilistic matching is still needed.
+
+**Regional corpora that already exist** (useful as test fixtures, and as proof the
+category is tractable): [supermarkt/checkjebon](https://github.com/supermarkt/checkjebon)
+(MIT, 259★, Dutch supermarkets) and
+[ByteSizedMarius/rewerse-engineering](https://github.com/ByteSizedMarius/rewerse-engineering)
+(MIT, 98★, REWE Germany). **Do not** depend on
+[ivorpad/mercadona-cli](https://github.com/ivorpad/mercadona-cli) (338★) — **no
+licence file**, despite being the most agent-shaped of the three.
+
+**Legal gate before this ships.** Collection is lawful in general; using a
+competitor feed to coordinate rather than to compete is not. Keep
+`competitor_feed_rev` and `model_version` on every decision (Pattern 22) so the
+record shows the system reacted to *public* prices. The only open-source work on
+algorithmic collusion is academic replication code
+([matteocourthoud/Algorithmic-Collusion-Replication](https://github.com/matteocourthoud/Algorithmic-Collusion-Replication)
+MIT 22★ dead 2023-06-20; [becmn/algorithmic-collusion](https://github.com/becmn/algorithmic-collusion)
+MIT 0★ 2026-10-30) — evidence the risk is studied, **not an audit tool**.
+
+---
+
+## Pattern 25 — North America safe mode: segment pricing with a discoverable defence
+
+**The driver, with dates.** Maryland (signed 2026-04-28), Connecticut (signed
+2026-06-04, effective 2026-10-01) and New Jersey (**private right of action** via
+the NJ Consumer Fraud Act) ban personalised pricing; New York requires
+disclosure; **New York's One Fair Price Act must be signed or not by 2026-12-31**.
+All search-derived, not fetch-verified.
+
+**The build.**
+1. **Segment, never person.** Price varies by store, channel, region, time,
+   inventory and competitor price — all in `pricing_inputs`. Person-level
+   attributes are **not collected into the pricing path at all**, so the defence
+   is architectural rather than a policy document.
+2. **Pin the lawful lever.** Trade press reports leading retailers use dynamic
+   pricing mainly to **match competitor price drops**. Implement that as an
+   explicit, named rule with its own `rule_id`, so the common case is
+   self-evidencing.
+3. **Log inputs, not just outcomes.** The NA question is a counterfactual —
+   *would this shopper have seen a different price?* Only an input log answers it.
+   This is the projection the EMEA ledger cannot serve (Pattern 22).
+4. **Disclose where required.** New York's model is disclosure; reuse the
+   personalised-pricing disclosure surface from
+   [zanreal-labs/medusa-consumer-compliance](https://github.com/zanreal-labs/medusa-consumer-compliance)
+   (MIT) even outside Medusa — it is the only implementation of that disclosure
+   found anywhere.
+5. **Keep the optimiser inside the fence.** The Pattern 23 optimiser consumes
+   segment-level elasticities from `EconML`/`causalml`. If a feature engineer can
+   add a person-level covariate without review, the architectural defence is gone.
+
+**Why the private right of action changes the sale.** Regulator-only exposure
+gets a policy. A private right of action gets **plaintiffs with discovery**, and
+a ledger built to produce a defence is worth more than a model built to produce a
+margin. This is the commercial reason a North American retailer funds the audit
+trail — and it is why the audit trail, not the optimiser, is the lead deliverable.
+
+---
+
+## Anti-patterns added 2026-11-23 (pass 5)
+
+- **Do not quote a measured zero as "nothing exists" — including this KB's own.**
+  Four cycles carried *"product matching entity resolution stars:>=200 = 0"* into
+  a build recommendation. `splink` (MIT 2594★), `dedupe` (MIT 4531★) and `zingg`
+  (AGPL 1275★) all exist; the query still returns zero. **Before writing a gap,
+  re-ask it two other ways and look up by name the three libraries you would
+  expect to exist.**
+- **Do not cite or vendor `cvxgrp/elasticity-estimation`.** Best available method,
+  **no licence grant**. Same failure as pass 4's RELOG.
+- **Do not grep a good repo for a concept and trust the path.**
+  `pymc_marketing/mmm/price_response.py` prices media impressions, not products.
+- **Do not promise an open-source markdown or clearance engine.** Three retail
+  attempts, **three with no licence file**.
+- **Do not treat "dynamic pricing" search results as retail.** In open source the
+  term overwhelmingly means **electricity tariffs**.
+- **Do not select `lago` or `meteroid` for retail pricing.** SaaS metering and
+  subscription billing, and both **AGPL-3.0** — a fit error and a licence error.
+- **Do not assume `search/repositories` HTTP 422 means a rename.** `facebook/Ax`
+  is live (4642 refs, MIT at `main`) and returns 422. Pass 4's rule needed this
+  second half.
+- **Do not reuse a region's regulatory weight across planes.** Cycle 8's "North
+  America is the weakest-sourced region" is false for price, where NA has the only
+  in-force bans.
+- **Do not build one compliance ledger and assume it travels.** Four regions, four
+  projections, and the EMEA one provably cannot answer the NA question.
+
+## Method notes added 2026-11-23 (pass 5)
+
+1. **The vocabulary probe paid for itself again, and cost one Bash call.** 46
+   candidate terms grepped against all eight files *before* any web search:
+   `elasticit`, `dynamic pric`, `competitor pric`, `price scrap`, `unit price`,
+   `drip pricing`, `shrinkflation`, `algorithmic collusion`, `personalized
+   pricing`, `clearance`, `revenue management`, `coupon`, `bundl`, `cross-sell`
+   all at **literal zero**. The 19 `markdown` hits were the **file format** —
+   check what a hit actually is before counting it as coverage.
+2. **A plane can be *referenced* across a whole KB and still be *unresearched*.**
+   "Pricing" appeared in all eight files as the thing with no open-source floor,
+   which read like coverage and was a four-cycle-old unexamined assertion. **Grep
+   for the plane's vocabulary, not for its name.**
+3. **422 ≠ rename** (restates pass 4). 422 means search cannot see the repo;
+   `ls-remote` plus a raw licence read settles whether it moved or is simply
+   missing from the index.
+4. **Short licence files cut both ways.** `uber/causalml`'s 561 B `LICENSE` is a
+   *valid* Apache-2.0 grant by reference; Meilisearch's 468 B file was a
+   multi-licence redirect. **Short ≠ invalid; short = read it.**
+5. **Nine filename variants are the minimum licence probe:** `LICENSE`,
+   `LICENSE.txt`, `LICENSE.TXT`, `LICENSE.md`, `LICENCE`, `LICENCE.txt`,
+   `COPYING`, `COPYING.txt`, `LICENSE-APACHE`. `Pyomo` declares BSD-3-Clause only
+   in `LICENSE.md`; pass 4 added `LICENSE.TXT` for `osrm-backend`.
+6. **The byte-size fingerprint table from cycle 8 verified correct again:**
+   `zingg` = 34523 B = AGPL-3.0, exactly as tabulated.
+7. **`search/repositories` with `repo:owner/name` remains the only metadata
+   channel** (stars + licence + `pushed_at` in one call); `gh api repos/<slug>`
+   is still 403 in-session, and `curl -sI github.com` still blind through the
+   proxy. **Existence is `git ls-remote`, full stop.**

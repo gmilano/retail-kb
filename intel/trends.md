@@ -658,3 +658,157 @@ network domains.**
 One dated figure is flagged in place rather than dropped: the **59%** "keep
 it" adoption number is a goTRG survey of 21 retailers from the **2023**
 holiday season — the most specific available, but three years old.
+
+---
+
+## Added 2026-11-23 (pass 5) — the price plane
+
+### 1. This KB was wrong about retail pricing for four cycles, and the error had a shape
+
+**[measured 2026-11-23]** Since cycle 8 this KB has repeated that *"retail price
+optimisation: no credible open-source project exists"* and that
+*"`product matching entity resolution stars:>=200` returns 0 results"*. Each
+rested on **one** GitHub query. Re-measured across seven query families plus
+direct `repo:` lookups:
+
+- **Product matching is well equipped.** `splink` (MIT, 2594★, 2026-11-11),
+  `dedupe` (MIT, 4531★, dormant since 2025-07-29), `zingg` (AGPL-3.0, 1275★,
+  2026-11-03). And `entity resolution record linkage stars:>=500` **still returns
+  zero** — a reproducible search false negative, the fifth measured in this KB.
+- **Elasticity is well equipped.** `pymc-labs/pymc-marketing` (Apache-2.0, 1314★,
+  pushed 2026-11-22) ships `customer_choice/bayesian_blp.py`, a Bayesian
+  random-coefficients BLP model documented for **"the common Nielsen / IRI /
+  retailer-scanner data shape"** returning full posterior cross-price
+  elasticities, plus `MixedLogit` for individual-level choice. `pyblp` (MIT,
+  297★, 2026-11-13) is the mature classical implementation.
+- **The decision step is genuinely empty**, and that is the claim worth keeping.
+
+**The transferable lesson is about *how* the error happened.** A single query
+returning zero was written down as "nothing exists", then quoted by four later
+sections of this KB as an established fact, then used to justify a build
+recommendation. A measured zero is only ever a statement about a query. The fix
+is cheap: before writing a gap, re-ask it two other ways and look up the three
+libraries you would expect to exist by name.
+
+### 2. The sharpest form yet of the structural law: not "no code" but "no grant"
+
+**[measured]** Every repository that is *specifically* a retail price optimiser
+**lacks a licence grant** — three of three:
+
+| Repo | Stars | Last push | Licence file at root |
+|---|---|---|---|
+| [cvxgrp/elasticity-estimation](https://github.com/cvxgrp/elasticity-estimation) | 0★ | 2026-04-15 | **none** (9 filename variants checked on `main`) |
+| [Azure/cortana-intelligence-price-optimization](https://github.com/Azure/cortana-intelligence-price-optimization) | 90★ | 2017-09-05 | **none** (checked on `master`) |
+| [topprismdata/fashion-lifecycle-pricing](https://github.com/topprismdata/fashion-lifecycle-pricing) | 2★ | 2026-08-28 | **none** (checked on `main`) |
+
+Meanwhile every *generic* layer such an optimiser would be assembled from —
+`or-tools`, `cvxpy`, `Pyomo`, `scrapy`, `crawlee`, `changedetection.io`, `splink`,
+`dowhy`, `EconML`, `causalml`, `pymc-marketing` — is permissive **and** alive.
+The first is the Stanford/Boyd-group code for the April 2026 paper *Estimating
+Price Elasticity Matrices*, algorithmically the best open answer to retail's
+hardest pricing problem. It cannot be used. This is the same signature as pass 4's
+RELOG finding (Argonne's reverse-logistics optimiser, no licence on any branch):
+**research code solves the mandated-and-empty step, and research code is not
+licensed.** Two industries, two planes, one pattern.
+
+### 3. Four regions, four different legal objects attached to the same number
+
+The clearest regional differentiation found on any plane in this KB. All dates
+**search-derived, not fetch-verified** — non-GitHub hosts are unreachable from
+this session (re-tested 2026-11-23).
+
+| Region | The legal object | Hardest dated item |
+|---|---|---|
+| **North America** | **Who** gets the price — personalised/surveillance pricing | NY One Fair Price Act: sign-or-not by **2026-12-31** |
+| **EMEA** | **What** the price is measured against — the reference price | **Digital Fairness Act proposal, 2026-11-11** |
+| **APAC** | **Whether** the whole price was shown — drip/component pricing | Australia UTP Act commences **2027-07-01** |
+| **LATAM** | **To whom** the money is split — decomposition | Senacon Portaria 61/2026, in force **2026-04-23** |
+
+Three US states (Maryland 2026-04-28, Connecticut 2026-06-04 eff. 2026-10-01,
+New Jersey with a **private right of action**) have banned personalised pricing;
+New York requires disclosure; ~40 bills in 24+ states. **This inverts cycle 8's
+"North America is the weakest-sourced region"** — regulatory weight turns out to
+be a property of the *plane*, not the region. Re-measure it whenever the plane
+changes, and do not carry a regional generalisation across planes.
+
+**Engineering consequence:** these are four *projections of one immutable
+price-event log*, and the projections do not substitute for each other. EMEA
+needs `min(price)` over a trailing 30 days per variant × pricing context. NA
+needs proof of the **absence** of per-consumer variation — a counterfactual the
+EMEA ledger cannot answer, because it stores outcomes and not inputs. APAC needs
+the total including every transaction-based fee **at display time**. LATAM needs
+the money split **by recipient per transaction**. Pattern 22.
+
+### 4. The only pricing duty with working open-source code is EMEA's, and it is one day old
+
+[zanreal-labs/medusa-consumer-compliance](https://github.com/zanreal-labs/medusa-consumer-compliance)
+(MIT, **0★**, pushed **2026-11-22**) implements the Omnibus 30-day lowest price,
+unit prices, GPSR, the withdrawal function and the personalised-pricing
+disclosure, for Medusa v2, with Polish member-state specifics and a documented
+legal basis per rule. Its ledger design is the reusable part: every price a
+customer could see, per variant and pricing context, from events plus an hourly
+sweep plus backfill; **never edits a recorded price**; keeps ≥400 days; warns when
+history is incomplete or a "reduced" price is not below the reference.
+
+**Falsifiable prediction, recorded for 2027-05-23.** If the price-compliance
+layer is a real market rather than one developer's weekend, then by that date
+either this repo exceeds 150★, or an equivalent plugin exists for at least one
+other permissive platform (Saleor, Odoo, Shopware, Spree, Bagisto). If neither
+holds, price compliance is a consultancy deliverable, not a product, and this KB
+should stop describing it as a platform gap.
+
+### 5. The physical execution surface of dynamic pricing has no open source at all
+
+Trade press reports tier-one and big-box retailers moving to **electronic shelf
+labels**, and ESL momentum is named as a 2026 shift. **[measured]**
+`electronic shelf label stars:>=5` returns **16 repos, every one a hobbyist
+ESP32/e-paper project**: `rbaron/elink` (116★, **no licence**, dead 2022-08-04),
+`tuanpmt/esp_epaper` (MIT, 21★, 2026-11-21 — a display driver, not an ESL system),
+`Northstrix/Electronic-Shelf-Label-Management-System` (MIT, 9★, dead 2024-06-07).
+A retailer that adopts dynamic pricing in-store buys the label network from a
+vendor, full stop. This is the price plane's point of contact with the store plane
+(pass 2), and it is empty on both sides.
+
+### 6. "Pricing" is now a contaminated search term in three distinct ways
+
+**[measured]** Cycle 8 warned that `ecommerce mcp` had been overrun by Claude
+marketing/SEO skill packs. The pricing vocabulary has three separate collisions:
+
+1. **Energy.** `dynamic pricing stars:>=100` returns **7 repos**, of which the
+   live ones are electricity-tariff optimisers (`martinarva/dynamic_energy_cost`
+   207★, `corneel27/day-ahead` 188★, `Akkudoktor-EOS/EOS` 1732★) plus crypto
+   trading. Cycle 8 saw this under `price optimization`; it is the dominant
+   meaning of "dynamic pricing" in open source.
+2. **Agent skill packs.** `pricing engine stars:>=200` returns a Unity text engine
+   (720★) and two marketing skill packs (580★, 243★).
+3. **SaaS billing.** `revenue management stars:>=50` returns `getlago/lago`
+   (AGPL-3.0, 10,910★) and `meteroid-oss/meteroid` (AGPL-3.0, 1,369★) — excellent
+   metering and subscription-billing platforms that do not price merchandise, and
+   both AGPL, so a careless pick is a licence problem as well as a fit problem.
+
+**And a fourth, new in kind: collision *inside* a correct repo.**
+`pymc-marketing`'s `mmm/price_response.py` matches a grep for *elasticity* and
+prices a **delivered media unit** (auction bid-up, rate-card tiers) in the budget
+optimiser — not a retail product. The retail module is
+`customer_choice/bayesian_blp.py`. Cycle 8 shipped a Minecraft hopper mod as
+inventory intelligence by matching a *repository* name; this is the same error
+matching a *file* name inside a genuinely excellent dependency. **Read the
+docstring, not the path.**
+
+### 7. Market numbers on this plane are weak, and the strongest claim cuts against the hype
+
+Provenance flagged in place rather than cleaned up:
+
+- **"5–15% revenue uplift from dynamic pricing"**, attributed to McKinsey,
+  traceable only to Brazilian vendor blogs. **Directional at best.**
+- **89% of retailers using or assessing AI / 97% increasing investment** — NVIDIA
+  survey, carried in this KB since cycle 2 and **dated 2025**.
+- **95% of EU retailers using or testing AI vs 5% at scalable ROI** — Retail
+  Economics via cycle 8. The 90-point delivery gap remains this KB's best
+  single argument for a delivery partner.
+- **The most useful claim found, and it is deflationary:** trade press (May 2026)
+  reports that leading retailers use dynamic pricing mainly to **match
+  competitors' price drops**, not to raise prices — and distinguishes that from
+  surveillance pricing. Adjacent cautionary case: an airline publicly expanding
+  generative-AI pricing from 3% to 20% of domestic flights drew sustained
+  criticism. **The margin story is contested; the exposure story is not.**

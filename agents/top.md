@@ -325,3 +325,66 @@ Pattern 18 and Pattern 19 in `compose/patterns.md`.
   earlier cycles of this file reference OptaPlanner, the live targets are
   `apache/incubator-kie` (6344★) and `TimefoldAI/timefold-solver` (1879★,
   pushed 2026-11-23).
+
+---
+
+## Added 2026-11-23 (pass 5) — the price plane: agents that touch the number itself
+
+**Plane opened this pass:** the price. Chosen by vocabulary probe against all
+eight files *before* any web search, and the probe was unusually clean:
+`elasticit`, `dynamic pric`, `competitor pric`, `price scrap`, `unit price`,
+`drip pricing`, `shrinkflation`, `algorithmic collusion`, `personalized pricing`,
+`clearance`, `revenue management`, `coupon`, `bundl` and `cross-sell` were all at
+**literal zero** across the KB. The 19 hits for `markdown` were the *file format*;
+`surveillance pricing` had exactly one mention.
+
+> **This pass corrects two claims this KB has been carrying as settled fact.**
+> See the correction notice in `repos/foundations.md` and trends #1 below.
+> Both were produced by a single GitHub query each, and both are wrong as
+> written. Rows here were verified on **2026-11-23**: existence via
+> `git ls-remote`, stars + last push from one `search/repositories` call, and
+> licence by reading the actual bytes wherever the API said `NOASSERTION` or
+> `NONE`.
+
+### Agent-facing and agent-shaped tooling on the price plane
+
+| Agent / repo | Repo | License | Stars | Last push | Why it is here |
+|---|---|---|---|---|---|
+| OfferKit | [offerkit/offerkit](https://github.com/offerkit/offerkit) | **MIT** (`LICENSE` 1073 B read) | 58★ | 2026-11-20 | Agent-first, self-hostable promotion engine: coupons, gift cards, loyalty, referrals, stackable redemptions. Ships an **MCP server as a first-class surface** where every mutating endpoint declares a risk level (`safe` / `mutating` / `destructive`) so the LLM host can render the right confirmation. The only agent-native promotion engine found in open source. |
+| Medusa Consumer Compliance | [zanreal-labs/medusa-consumer-compliance](https://github.com/zanreal-labs/medusa-consumer-compliance) | **MIT** (`LICENSE` 1064 B read) | 0★ | 2026-11-22 | Medusa v2 plugin implementing the **Omnibus 30-day lowest price**, unit prices, GPSR, the withdrawal function and the **personalised-pricing disclosure**. Records every price a customer could see per variant and pricing context, **never edits a recorded price**, keeps ≥400 days. The only code implementation of the price-compliance step found anywhere, at 0 stars and one day old. |
+| changedetection.io | [dgtlmoon/changedetection.io](https://github.com/dgtlmoon/changedetection.io) | **Apache-2.0** (11382 B) | 35,967★ | 2026-11-22 | Website change detection with price-drop watchers and notification hooks. The practical substrate for competitor price observation, and by far the largest live repo on this plane. Surfaced under a `pricing mcp` query, not a retail one. |
+| Crawlee | [apify/crawlee](https://github.com/apify/crawlee) | **Apache-2.0** | 26,521★ | 2026-11-23 | Browser-automation crawler for catalogue and price pages that defend themselves. Pairs with `apify/apify-mcp-server` (MIT, already in this file) to expose collection as agent tools. |
+| Mercadona CLI | [ivorpad/mercadona-cli](https://github.com/ivorpad/mercadona-cli) | **NO LICENCE FILE** (root of `main` verified) | 338★ | 2026-10-06 | Self-described *"agent-friendly"* shopping CLI over a Spanish grocer: search products, read prices. The shape of a regional price agent — and **not usable**, because there is no grant. Listed as a shape, never as a dependency. |
+
+### Measured: there is no retail pricing-agent boom, and the word "pricing" is contaminated
+
+**[measured 2026-11-23]** `pricing agent created:>2026-06-01 stars:>=20` returns
+**36 repos and not one retail pricing agent**: App Store PPP price updaters,
+trading agents, an agent-authorization gateway, startup-advice skill packs.
+`competitor monitoring stars:>=50` returns **2**, neither retail.
+`price intelligence stars:>=20` returns **23**, whose two most on-topic hits are
+Microsoft's dead Cortana solutions (below).
+
+**New contamination family, and it has spread.** `pricing engine stars:>=200`
+returns **6 repos** of which the top three are a Unity text-rendering engine
+(`LightSideKittens/UniText`, 720★) and two **Claude/Codex marketing skill packs**
+(`Yuzzyuk/marketing-os` 580★, `holy-templar/marketing-agi` 243★). Cycle 8 caught
+this family polluting `ecommerce mcp`; it is now in the pricing vocabulary too.
+Real, popular, and not retail pricing tooling. Excluded deliberately.
+
+**Read the results, not the total — third confirmation, now with a ratio.**
+`retail pricing` returns **4,472 repos and zero usable ones** in the top page
+(student coursework from 2019–2023, a dead Magento toolkit, an API wrapper).
+`markdown pricing` returns **263** of which exactly **one** is on-topic —
+`topprismdata/fashion-lifecycle-pricing`, at 2★ with **no licence file**.
+
+### Keyword collision *inside* a good repo — the new form of this trap
+
+`pymc-labs/pymc-marketing` (Apache-2.0, 1314★, see `repos/foundations.md`) contains
+`pymc_marketing/mmm/price_response.py`. Grepping the repo for *elasticity* finds it,
+and it is **not retail pricing**: it models the price of a **delivered media unit**
+(auction bid-up, rate-card tiers) inside the budget optimiser. The retail-relevant
+module is `pymc_marketing/customer_choice/bayesian_blp.py`. Previous cycles of this
+KB shipped a Minecraft hopper mod as inventory intelligence by matching on a
+*repository name*; this is the same error one level down, matching on a *file name*
+inside a repository that is genuinely excellent. **Read the module docstring.**

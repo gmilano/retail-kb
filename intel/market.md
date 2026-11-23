@@ -249,6 +249,49 @@ than by a dated obligation. The consequence for engagement design is concrete:
 - **Agent-dispute defence.** Price the new chargeback surface that agentic
   checkout creates, before the payment providers close it.
 
+#### Added 2026-11-23 (pass 5) — the price plane in North America: **who gets the price**, and this region is now the strictest
+
+> **This inverts a cycle-8 finding.** Cycle 8 recorded *"North America is the
+> weakest-sourced region"* — FTC and a proposed federal act visible only in
+> vendor secondary sources. For **price**, NA is the opposite: the only region
+> with outright **bans already in force**, enacted at state level, with a private
+> right of action in one state. Generalisations about a region's regulatory
+> weight do not survive a change of plane.
+
+**The legal object here is *who* gets the price.** North America regulates
+**personalised / surveillance pricing** — price that varies by what you know
+about the shopper. It does *not* generally restrict price that varies by market
+conditions. Every date below is **search-derived, not fetch-verified** (see the
+provenance gap in `repos/foundations.md`).
+
+| Jurisdiction | Instrument | Status / date | Shape |
+|---|---|---|---|
+| Maryland | Protection From Predatory Pricing Act | Signed **2026-04-28** | Reported as the **first state ban**; commentators note broad industry exemptions that may limit its reach. |
+| Connecticut | Surveillance-pricing ban | Signed **2026-06-04**, effective **2026-10-01** | In force now. |
+| New Jersey | Grocery/retail-focused ban | Enacted 2026 | **First with a private right of action**, via the NJ Consumer Fraud Act. Raises exposure from regulator-only to plaintiff-driven. |
+| New York | Algorithmic pricing **disclosure** | In force | Disclosure model: say when a price was personalised, rather than prohibit it. |
+| New York | One Fair Price Act | Passed legislature **June 2026**; awaiting signature, **decision deadline 2026-12-31** | **38 days after this pass.** The nearest dated uncertainty in the region. |
+| Federal (FTC) | Proposed enforcement policy on personalized pricing | **August 2026** | Narrower than the state laws; read as a framework for state regulators under existing consumer-protection law rather than a new federal duty. |
+
+**Volume:** roughly **40 bills across 24+ states** introduced in 2026, with three
+states enacting. **Contradiction flagged rather than resolved:** Colorado is
+reported both as having a surveillance-pricing bill **vetoed 2026-06-03** and as
+regulating via **HB 1210**. Sources disagree; treat Colorado as *unresolved*.
+
+**What this means for a build.** The compliance artefact NA requires is the
+*opposite shape* to EMEA's. EMEA asks you to **produce** a number (the 30-day
+reference price). NA asks you to **prove an absence** — that price did not vary
+by consumer attributes. A price-history ledger keyed by *variant × context*
+answers EMEA and **cannot** answer NA, which needs the pricing *inputs* logged
+per quote. Design for the harder one. Pattern 22 and Pattern 25 set this out.
+
+**Opportunity, placed.** NA is where **segment-level pricing with a defensible
+audit trail** is a product, not a slide: the lawful lever (match competitor price
+drops, which trade press reports is how leading retailers actually use dynamic
+pricing) separated by construction from the unlawful one (price by person). The
+New Jersey private right of action is the commercial reason a retailer will pay
+for the audit trail rather than the model.
+
 ### EMEA
 
 - ⏰ **Hardest deadline in any region, and it is 11 days away.** EU AI Act **Article 50** transparency
@@ -493,6 +536,57 @@ step, which is the one step of the reverse flow that is already well equipped.
   lead with, and it is reachable with the recommendation/personalisation stack
   this KB already documents — not with the empty fit-prediction layer.
 
+#### Added 2026-11-23 (pass 5) — the price plane in EMEA: **what the reference price was**, and the only region with code
+
+**The legal object here is the *reference* price** — the number a discount is
+measured against. EMEA is the only region where the price duty has an existing,
+well-defined computational form, and consequently the only region where
+**open-source code implementing a pricing duty exists at all**.
+
+| Instrument | Status / date | Duty |
+|---|---|---|
+| Omnibus Directive prior-price rule | In force | A announced reduction must be measured against the **lowest price of the preceding 30 days**. Member-state variation matters: **Poland did not adopt art. 6a(5)**, so each step of a gradual reduction is measured on its own. |
+| Price Indication Directive — unit pricing | In force | Net quantity, unit, drained weight, defined exemptions, deposit handling. |
+| Personalised-pricing disclosure | In force **since 2022** | Traders must indicate when a price was personalised by automated decision-making — **without** having to explain how it was calculated. |
+| **Digital Fairness Act — proposal published 2026-11-11** | **Draft, 12 days old at this pass** | Would **repeal the Unfair Commercial Practices Directive**. Restricts misleading savings claims: a crossed-out price or percentage saving may not be based on an estimated or recommended price (RRP) as though it were a real prior price. Personalised pricing **prohibited where reasonably likely to harm minors or vulnerable consumers** — explicitly *not* a general ban, and *not* a ban on demand-responsive dynamic pricing. |
+| DFA **Article 26** — AI shopping agents | Draft | Covers a retailer's own shopping assistant **and** independent agents buying across merchants. Consumers may set criteria for agent purchases, **including a maximum price**. Remedies include compensation, price reduction or contract termination. |
+
+> **Article 26 is the first regulation found in any industry in this KB that
+> writes a *price constraint set by the consumer* into the agent's contract.**
+> A max-price mandate is not a prompt instruction — it is a term the merchant
+> must honour. Every agentic-commerce build in this KB (ACP, UCP, AP2 — pass 1)
+> acquires a hard constraint-checking requirement in EMEA if the DFA passes in
+> this shape. Draft status flagged: this is a proposal, and law-firm commentary
+> is the only source reachable from this session.
+
+**The code, and it is one repo.**
+[zanreal-labs/medusa-consumer-compliance](https://github.com/zanreal-labs/medusa-consumer-compliance)
+(MIT, 0★, pushed 2026-11-22) implements the Omnibus reference price, unit prices,
+GPSR, the withdrawal function of Directive (EU) 2023/2673, and the reviews and
+personalised-pricing disclosures. Its design is the part worth copying even
+outside Medusa: it **records every price a customer could see** per variant and
+pricing context (region, currency, price lists and their schedules), from product
+events plus an hourly sweep plus on-demand backfill; it **never edits a recorded
+price**; it keeps **≥400 days**; and it **warns when the history is incomplete or
+when a "reduced" price is not actually below the reference**. It encodes the
+Polish specifics — gradual reductions, goods on offer under 30 days, perishables,
+relaunch after a break, the label UOKiK expects — and documents the legal basis
+of each rule with sources and dates in `docs/legal.en.mdx`.
+
+**Opportunity, placed.** Two, and they are different sales.
+1. **The compliance ledger as a product.** One MIT plugin for one platform in two
+   languages is not coverage of a 27-member-state duty. The same engine for
+   Saleor, Odoo, Shopware, Spree, Bagisto — plus the member-state matrix — is a
+   real, dated, unserved gap, and the DFA's RRP restriction widens it.
+2. **Agent price-constraint enforcement (DFA Art. 26).** Nothing in the protocol
+   layer this KB tracks enforces a consumer-set maximum price. That is a
+   buildable, EMEA-specific component with a named legal driver.
+
+**Market context, provenance flagged.** Retail Economics' figure carried in this
+KB from cycle 8 — **95% of EU retailers using or testing AI vs only 5% at
+scalable ROI** — is the backdrop: the constraint is delivery capability, not
+interest.
+
 ### APAC
 
 - **Largest stated intent of any region:** Deloitte reports **29% of APAC consumer businesses already
@@ -680,6 +774,47 @@ therefore not asserted here as a finding.
   against 30% of consumers willing to let an agent buy: the mismatch is the
   consulting conversation, and the post-purchase flow (tracking, returns) is
   where Forrester expects agents to be accepted first.
+
+#### Added 2026-11-23 (pass 5) — the price plane in APAC: **whether the whole price was shown**
+
+**The legal object here is *completeness*** — not who gets the price, not what it
+is measured against, but whether the number shown is the number paid. APAC
+regulates **drip pricing and component pricing**.
+
+| Jurisdiction | Instrument | Status / date | Shape |
+|---|---|---|---|
+| Australia | **Competition and Consumer Amendment (Unfair Trading Practices) Act 2026** | Passed, **Royal Assent received**; drip-pricing, unfair-trading and subscription provisions **commence 2027-07-01** | Transaction-based charges — charges *other than* the price of the goods, payable in connection with supply — must be displayed **at the same time as** the price. **Does not apply to offers made to businesses.** Sources disagree on the passage date (1 vs 2 July 2026); commencement is consistently reported as 2027-07-01. |
+| Australia | Australian Consumer Law **s 48** (component pricing) | **Already in force** | Prohibits stating a partial price without prominently specifying the single total price. The pre-2027 obligation that already binds. |
+| Australia | ACCC enforcement | **Live now** | Dendy Cinemas fined **A$19,800** for alleged drip pricing (mid-2025); **EconomyBookings** issued two infringement notices totalling **A$39,600** for misleading pricing conduct (**January 2026**). Manipulative digital-market practices — subscription traps, drip pricing, dark patterns — named an enforcement priority. |
+| China | Algorithm rules by service type (recommendation, deep synthesis, generative AI, labelling) | In force; comprehensive AI Law reported in preparation, **not enacted** | Penalties run through existing cybersecurity and content law rather than a dedicated AI fine schedule. On price specifically: the state market regulator is reported to have **summoned the five largest e-commerce platforms over a "price war" in June 2026** — **vendor-blog source only, treat as unverified**. |
+| India | Consumer-protection statutes, dark-pattern guidelines, algorithmic due diligence on significant data fiduciaries | In force, indirect | Price is reached **through** consumer-protection and data law, not a pricing rule. MeitY AI guidelines are non-binding; synthetic-content labelling is binding. |
+
+**Informed gaps, written down rather than dressed up.**
+- **No Australia-specific rule on *algorithmic* pricing** was located — the UTP
+  regime is about disclosure of the full price, not about how the price was
+  computed. That distinction matters and is easy to blur.
+- **India's e-commerce pricing rules were searched and not found.** Two targeted
+  queries returned Australian material only. Treat as *"not researched to a
+  conclusion"*, not *"nothing exists"*. Cycle 8's finding that India's binding
+  constraint is **e-commerce law (FDI limits on inventory-led retail, marketplace
+  neutrality, data localisation) rather than AI law** remains this KB's best
+  India answer, and it is from a prior pass.
+- **Japan, South Korea and Singapore returned nothing on price.** Singapore's
+  IMDA agentic-AI governance framework (Jan 2026, found in cycle 8) remains the
+  region's most useful agent document, but it does not address pricing.
+
+**What this means for a build.** The APAC artefact is a **quote-time fee
+composition**: every transaction-based charge resolved and displayable at the
+moment the price is shown. That is an engineering requirement on the *checkout
+and quote path*, not on the pricing model — a different subsystem from EMEA's
+ledger and NA's input log. And because it excludes B2B offers, a wholesale
+surface and a consumer surface can lawfully differ.
+
+**Opportunity, placed.** The commencement date is **2027-07-01**: far enough out
+that remediation programmes are being scoped now, near enough that they are
+funded. Australia is the clearest "assess, then remediate the quote path"
+engagement on this plane, and s 48 plus live ACCC enforcement means the pre-2027
+exposure is already real.
 
 ### LATAM
 
@@ -914,6 +1049,59 @@ found", not "no mandate exists."**
 - **Returns policy as loyalty instrument.** Positioned as retention rather
   than compliance — the regional framing the sources actually support.
 
+#### Added 2026-11-23 (pass 5) — the price plane in LATAM: **where the money goes**
+
+**The legal object here is *decomposition*** — and it is genuinely different from
+the other three regions. Brazil does not ask who got the price, or what it was
+measured against, or whether it was complete. It asks **how the money is split**.
+
+| Jurisdiction | Instrument | Status / date | Duty |
+|---|---|---|---|
+| Brazil | **Senacon Portaria nº 61/2026** | Issued **2026-03-24**, effective **2026-04-23** (30 days from publication to comply) — **in force ~7 months** | Transport and delivery platforms must show, **in each transaction**, how the amount paid is divided among the **platform, the driver/courier, and the establishment**. |
+| Brazil | Senacon/DPDC technical note (Nota Técnica nº 3/2026) | Published 2026 | Legal basis: platforms use proprietary algorithms to set the final price, allocate service, evaluate performance and split the price among participants. States that **opacity about price composition may constitute an abusive practice** where it impedes consumer understanding of the price. |
+| Mexico | Profeco review of dynamic tariffs | **Requested February 2026** by the President; **no enacted norm found** | Directed at Uber/Didi dynamic fares. An announced intention, not a duty. |
+
+**The stated intent is the useful part:** *"A proposta não é acabar com o preço
+dinâmico, mas torná-lo mais compreensível"* — the aim is not to end dynamic
+pricing but to make it comprehensible. LATAM's duty is therefore **additive, not
+restrictive**: it does not constrain the pricing model at all, it constrains the
+*explanation*. That is the cheapest of the four regional duties to satisfy and
+the one most easily retrofitted — provided the price was composed from
+attributable parts in the first place, which is exactly what a monolithic
+"final price" field prevents.
+
+**Informed gaps, explicit.**
+- **Portaria 61/2026 binds transport and delivery platforms, not retailers
+  generally.** Extending it to retail is an inference, not a finding. Stated
+  here as a *shape that regulators in the region have chosen*, which is useful
+  for anticipating the next instrument — not as a current retail obligation.
+- **PL 2338/2023 (Brazil's AI bill) was searched and not found** in relation to
+  pricing. Two targeted Portuguese-language queries returned Senacon's
+  transport/delivery material instead.
+- **Profeco's position on personalised pricing was searched and not found.**
+  Mexico has an announced review and no instrument.
+- **No dynamic- or personalised-pricing instrument was found for Argentina,
+  Colombia or Chile.** Not searched to exhaustion. Record as *"no instrument
+  found"*, never *"no instrument exists"*.
+- **A counter-caution from cycle 8 still applies and is worth repeating here,
+  because this plane is full of vendor numbers:** LATAM figures in this KB have
+  contradicted each other before (Brazil WhatsApp users 165M vs 197M; Mexico
+  penetration 73% vs 94.3%), and earlier cycles quoted them as settled fact.
+  The **"5–15% revenue uplift from dynamic pricing"** figure that recurs in
+  Brazilian trade press is attributed to McKinsey through vendor blogs, with no
+  reachable primary source. **Directional at best.**
+
+**Opportunity, placed.** Two.
+1. **Price decomposition as an architecture, sold as transparency.** A retailer or
+   marketplace in Brazil that can attribute every component of a displayed price
+   to a recipient satisfies Portaria 61 at the surface and gains the substrate
+   for margin analytics underneath. The same ledger serves both; almost no
+   commerce platform stores price this way by default.
+2. **Marketplace price-split tooling for the delivery/quick-commerce segment**,
+   which is where the obligation actually bites today and where the region's
+   engineering spend already concentrates (this KB's WhatsApp-commerce findings
+   from cycle 8 sit on the same surface).
+
 ## Globant positioning
 
 1. **Lead with protocol reachability, not models.** The scarce skill is making a retailer's catalogue and
@@ -1026,3 +1214,49 @@ reverse-logistics optimiser in existence (Argonne's RELOG) carries **no
 licence at all**. Promise an assembly of general-purpose permissive
 components, verified and named, and do **not** promise an open-source returns
 platform. There isn't one.
+
+### Added 2026-11-23 (pass 5) — positioning that follows from the price plane
+
+1. **Lead with the correction, not the plane.** This KB told itself for four
+   cycles that retail pricing had no open-source floor, and the claim shaped a
+   recommendation ("build product matching as proprietary IP") that was based on
+   a **search false negative**. The floor exists: `splink` (MIT), `dedupe` (MIT),
+   `pymc-marketing`'s `BayesianBLP` (Apache-2.0, documented for retailer-scanner
+   data), `pyblp` (MIT). A studio that assembles and verifies these starts an
+   engagement weeks ahead of one that quotes a build.
+
+2. **Sell the assembly, and keep exactly one thing proprietary.** The honest
+   split on this plane is now measurable: OBSERVE, MATCH, MODEL, SET and EXECUTE
+   are all permissive and alive. **OPTIMISE is the only genuinely empty step**,
+   and every repo that attempted it specifically for retail — three of three —
+   **has no licence grant**. The markdown/promotion optimiser is where Globant IP
+   belongs, and it is a *smaller* build than "a pricing platform" because the
+   elasticity estimates arrive from Apache-2.0 code.
+
+3. **The compliance ledger is the actual product, and it is four products.**
+   Each region attaches a different legal object to the same number — NA *who*,
+   EMEA *against what*, APAC *whether complete*, LATAM *to whom split*. They are
+   four projections of one immutable price-event log, and a ledger designed for
+   one will not answer the others (Pattern 22). Exactly **one** open-source
+   implementation of **one** projection exists, at 0 stars, one day old, for one
+   platform, in one member state's specifics.
+
+4. **Two dated near-term hooks, both verifiable against a calendar.** New York's
+   One Fair Price Act must be signed or not by **2026-12-31**; the EU's Digital
+   Fairness Act proposal of **2026-11-11** puts a consumer-set **maximum price**
+   into the agent contract (Art. 26) and would repeal the UCPD. Australia's
+   **2027-07-01** commencement is the scoping window. These are the conversations
+   a retailer is already having.
+
+5. **Do not sell dynamic pricing. Sell defensible pricing.** Trade press reports
+   leading retailers use dynamic pricing mainly to *match competitors' price
+   drops* rather than to raise prices, while three US states have banned
+   personalised pricing outright and one attached a private right of action. The
+   margin story is contested and the exposure story is not. Position the audit
+   trail as the deliverable and the optimiser as what it protects.
+
+6. **A regional generalisation died this pass — keep it dead.** Cycle 8's
+   "North America is the weakest-sourced region" was true of returns and
+   agentic-commerce regulation and is false of price, where NA is the strictest
+   region with the only in-force bans. **Regulatory weight is per-plane, not
+   per-region.** Re-measure it every time the plane changes.
