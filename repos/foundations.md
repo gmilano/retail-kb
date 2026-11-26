@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-23
+updated: 2026-11-26
 ---
 
 # 🏗️ Foundational Repos — Retail & Consumer
@@ -1028,3 +1028,48 @@ you expected it is evidence about your expectation, not about the repo.
 - **No proof-of-delivery library** (0 real repos ≥30★).
 - **No eCMR implementation of any size** (1 repo, 0★, unlicensed).
 - **No autonomous supply-chain agent** (`supply chain agent stars:>=100` → 11, all off-plane).
+
+## Added 2026-11-26 (pass 7) — the merchandise planning & buying layer
+
+The finding of this pass, stated once and then evidenced: **in merchandise planning the arithmetic is
+fully open and the retail chart of accounts is not.** Assortment, shelf-space and open-to-buy are all
+small mixed-integer programs, and the solver layer that implements them is mature, permissive and
+well-maintained. What has no open implementation is the *definition* layer — what an open-to-buy is at
+retail versus at cost, how a size curve rolls up into a buy, how a vendor allowance is accrued, claimed,
+deducted and settled.
+
+Build on the first table. Do not build on the second.
+
+### The layer that is healthy — solvers and modelling (build on these)
+
+| Repo | License | Stars | Last push | Role in this plane |
+|---|---|---|---|---|
+| https://github.com/google/or-tools | Apache-2.0 | 14,462 | 2026-11-25 | CP-SAT and MIP. The strongest single choice for planogram/assortment constraint models. Already referenced elsewhere in this KB; listed here for the planning role specifically. |
+| https://github.com/coin-or/pulp | MIT | 2,499 | 2026-11-23 | The MILP modelling layer the public shelf-space tutorials actually use, with the CBC solver bundled. **GitHub's API reports `NOASSERTION`; the `LICENSE` file on `master` is verbatim MIT** ("Permission is hereby granted, free of charge…", Jean-Sebastien Roy / Stuart Mitchell). |
+| https://github.com/Pyomo/pyomo | BSD-3-Clause | 2,566 | 2026-11-23 | Algebraic modelling when the model outgrows PuLP — multi-period open-to-buy with inventory carry is the usual trigger. **API reports `NOASSERTION`; the grant is in `LICENSE.md` on `main`** (Sandia / NTESS, BSD). |
+| https://github.com/ERGO-Code/HiGHS | MIT | 1,954 | 2026-11-26 | The open LP/MIP solver to pair with PuLP or Pyomo when CBC stalls. MIT, actively pushed. This is the one that removes the Gurobi dependency the public planogram examples fall back on. |
+| https://github.com/unit8co/darts | Apache-2.0 | 9,598 | 2026-11-24 | SKU×store demand forecasting, which is the input to open-to-buy. Unified API across classical and deep models. |
+| https://github.com/awslabs/gluonts | Apache-2.0 | 5,265 | 2026-10-13 | Probabilistic forecasting. Matters here because an open-to-buy needs a *distribution*, not a point forecast — the receipt plan is a decision under uncertainty. |
+| https://github.com/frePPLe/frepple | MIT core (**dual-licensed**) | 787 | 2026-11-26 | The closest thing to an open planning spine: demand, capacity and replenishment planning with a real data model. **License nuance, read from `COPYING` on `master`:** "The frePPLe software has **dual licensing**. You can use the software free of charge under the MIT License. You can also purchase a commercial license from frePPLe bv for additional functionality and professional support." The MIT grant over this repository is genuine; it does **not** cover the commercial-tier features. API reports `NOASSERTION`. |
+
+### The layer that is empty — retail planning semantics (read, do not depend)
+
+| Repo | License | Stars | Last push | Why it is listed |
+|---|---|---|---|---|
+| https://github.com/ishandutta2007/Awesome-Retail-Assortment-Planning | MIT | 6 | 2026-11-16 | The only named open-source assortment-planning artifact. It is a **curated list, not code** — and its own advice is to assemble ERPNext/Odoo + HiGHS/Pyomo + a forecaster, which is to say: there is no product. Useful as a literature index. Its entries have blank star counts and unverified licenses; do not treat them as vetted. |
+| https://github.com/ishandutta2007/Awesome-Retail-Merchandising-Cloud | MIT | 0 | 2026-10-11 | Second curated list by the same author. Zero stars. |
+| https://github.com/ishandutta2007/Awesome-Consumer-Goods-CRM | MIT | 0 | 2026-10-12 | Third curated list by the same author, covering CPG/FMCG including trade promotion. Zero stars. |
+| https://github.com/kishorkukreja/awesome-supply-chain | MIT | 102 | 2026-10-06 | The healthiest curated resource in the plane, and notable for shipping **agent skills** (including a planogram-optimization skill) rather than only links. Best single starting point. |
+| https://github.com/astrodataus/open-to-buy | **NONE** | 0 | 2026-10-29 | A static open-to-buy app for an apparel buyer, with the OTB defined as plan receipts at cost minus on-order cost. Invented data, GitHub Pages demo. **No license file (confirmed by control request) → all rights reserved.** Read the formula from the public literature instead. |
+| https://github.com/RSM-D365-Sales/trade-pro | **NONE** | 0 | 2026-10-07 | Trade-promotion and deduction-recovery prototype; its trade-funds screen derives balances from a transaction ledger, which is the right shape. **No license file → unusable.** Take the idea, not the code. |
+| https://github.com/hesamuel/planogram | **NONE** | 2 | 2020-06-30 | Shelf placement as a knapsack problem, maximising product profit subject to fixture width. The clearest small formulation available. **No license file; dead six years.** Reimplement from the published formulation. |
+| https://github.com/efeusyilmaz/Shelf-Space-Optimization | **NONE** | 0 | 2021-01-10 | Shelf-space LP exercise. **No license; dead five years.** |
+| https://github.com/valeriaarciga/planogram-optimization | **NONE** | 0 | 2026-10-13 | Greedy heuristic + exact MILP + Streamlit dashboard — but the MILP path needs a **commercial Gurobi license**, and the repo itself has **no license file**. Both halves block reuse. |
+| https://github.com/johntam/OpenTOMS | GPL-3.0 | 10 | **2012-10-26** | "Open Trade Order Management System". Licensed, and dead for fourteen years. Included because it is the oldest evidence that this gap is not new. |
+| https://github.com/dipayan/trade-promotion-management-blockchain | **NONE** | 0 | 2018-11-17 | Trade promotion on Ethereum smart contracts. Dead eight years, no license. Listed to close the search: this is what "TPM on GitHub" returns. |
+| https://github.com/subhasundardass/TradePlus | MIT | 0 | 2023-03-03 | A marketplace app, **not** a trade-promotion system despite the name. Listed to stop the next pass chasing it. |
+
+**Count it:** twelve named artifacts in the retail planning-semantics layer, **18 stars between all of
+them**, five with no license file, four dead for five years or more, and the single healthiest entry is a
+curated link list. Against ~21,500 stars of permissively-licensed solver and forecasting infrastructure
+sitting directly underneath.

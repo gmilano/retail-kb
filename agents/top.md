@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-23
+updated: 2026-11-26
 ---
 
 # 🎯 AI Agents & Commerce Intelligence — Retail & Consumer
@@ -469,3 +469,47 @@ Written down because an informed gap is information and silence is not:
 - `delivery route planning stars:>=100` → 1, and it is a dump of a W3C report. Zero real.
 - There is **no agent anywhere that promises a delivery date.** The ATP step has no agent layer
   because it has no library layer either (see `repos/foundations.md`).
+
+## Added 2026-11-26 (pass 7) — the merchandise planning, buying & trade-funds plane
+
+The plane upstream of price (pass 5) and fulfilment (pass 6): assortment → space → size curve →
+allocation → open-to-buy → purchase order → vendor-funded promotion → claim settlement. This is the
+buying office, where a retail engagement usually starts.
+
+**Read the star counts before the descriptions.** Every agent-shaped repo in this plane was verified on
+2026-11-26 via a single batched `search/repositories` call (`repo:a/b repo:c/d …`, which returns stars,
+forks, last push and SPDX together, so the fields cross-check). The result is the thinnest agent layer
+measured in this KB so far.
+
+| Agent | Repo | License | Stars | Last push | What it actually is |
+|---|---|---|---|---|---|
+| Responsive AI Clusters in Supply Chain | https://github.com/Appointat/Responsive-AI-Clusters-in-Supply-Chain | Apache-2.0 | 40 | 2024-03-28 | Multi-agent supply-chain coordination. The highest-starred agent in the plane **and abandoned for over two and a half years**. Read as a design reference only. |
+| supplypilot-agent | https://github.com/lxingwei81-ux/supplypilot-agent | MIT | 2 | 2026-09-20 | Control-tower agent: demand forecast, multi-level BOM, inventory projection, ATP allocation, procurement approval tracking. README largely in Chinese. Its own README warns the business formulas must be checked against real company policy and audit requirements. |
+| agentic-supply-planning | https://github.com/kavya2693/agentic-supply-planning | MIT | 0 | 2026-10-08 | LangGraph supervisor + four agents (demand, inventory, purchase orders, workflow). Large or urgent POs pause for planner approval; every agent step is written to an audit log. Synthetic lubricants data. **The approval-gate and audit-log shape is the reusable idea here**, not the domain content. |
+| trade-promotions-for-claude-code | https://github.com/Enterprise-DNA-OS/trade-promotions-for-claude-code | MIT | 0 | 2026-10-18 | A trade-promotion system that is "just a database and Claude Code": commands to propose, agree and match claims to promotions. **The only MIT-licensed trade-promotion artifact that exists.** Treat as a schema sketch, not a dependency. |
+| supply-chain-agent | https://github.com/mraisback/supply-chain-agent | **NONE** | 0 | 2026-08-31 | Multi-agent demand planning / inventory / network design / procurement. **No license file → all rights reserved. Not usable, at any scale, for any client.** Listed so nobody re-finds it and assumes otherwise. |
+| Supply-Chain-Demand-Agent | https://github.com/shiva-shivanibokka/Supply-Chain-Demand-Agent | **NONE** | 0 | 2026-10-08 | Agentic RAG pipeline, 30-day part demand over synthetic data. **No license file → unusable.** |
+| Supply-Chain-Agent | https://github.com/praditya7/Supply-Chain-Agent | **NONE** | 0 | 2026-09-28 | Capacitated facility-location + customer-allocation agent. Its own README says it is not meant for enterprise scale. **No license file → unusable.** |
+
+That is the whole population: **seven repos, 42 stars between them, and the only one above 2 stars has
+been dead since March 2024.** Three of the seven have no license file at all.
+
+### The licence check that produced the "NONE" rows, and why it is trustworthy
+
+A 404 on a raw license URL is **never on its own** proof that a license is missing — that was the lesson
+from the media KB, where two repos looked unlicensed because their grants sat in `license.txt`
+(lower-case) and `COPYING.md`. So each "NONE" above was established with a **control request**:
+
+- probe seven license filenames (`LICENSE`, `LICENSE.md`, `LICENSE.txt`, `license.txt`, `LICENCE`,
+  `COPYING`, `COPYING.md`) across both `main` and `master` → all 404, **and**
+- fetch `README.md` on the same branch → **200**.
+
+A README that resolves while every license name 404s is not a naming-convention failure and is not
+throttling: the file genuinely is not there. All five no-license repos in this pass (three agents above,
+two tools in `repos/foundations.md`) were confirmed this way.
+
+### Explicitly not written here
+
+`nickennethmichael/Procurement-AI-Agent` appeared in web search results as a procurement agent prototype,
+but **did not resolve** in `search/repositories` when queried by slug. A search-result title is not an
+existence proof, so it has no row. If a later pass resolves it, add it then.

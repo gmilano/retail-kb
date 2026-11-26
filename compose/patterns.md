@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-23
+updated: 2026-11-26
 ---
 
 # 🧩 Composition Patterns — Retail & Consumer
@@ -1225,3 +1225,160 @@ this repo is the integration surface, which is exactly the part that costs a qua
 - **Shorten the query, then read the results, not the total.** `shipping label carrier stars:>=30`
   → 0 looked like a clean gap; shortening to `shipping label stars:>=50` → 5 revealed the better
   finding: the layer exists only as per-carrier, per-platform, copyleft plugins.
+
+## Pattern 30 — The auditable open-to-buy (the assembly that replaces the missing engine)
+
+**Problem.** The client plans its buy in spreadsheets. Commercial merchandise financial planning (Oracle
+Retail MFP, Blue Yonder, RELEX, Anaplan, Aptos) is out of budget or out of scope, and there is no open
+alternative — the whole open retail-planning layer is 18 stars.
+
+**Stack (all verified 2026-11-26, licenses read not inferred):**
+
+| Layer | Repo | License | Why this one |
+|---|---|---|---|
+| Merchandise master, PO, inventory valuation | https://github.com/frappe/erpnext | GPL-3.0 | Holds all three in one schema. **Integrate across a service boundary (REST), never link into it.** |
+| Permissive substitute when copyleft is refused | https://github.com/apache/ofbiz-framework | Apache-2.0 | Catalog, order and pricing management under a permissive license |
+| Planning spine | https://github.com/frePPLe/frepple | MIT core (dual) | Real demand/capacity/replenishment data model. Scope the promise to the open repo — the paid tier holds extra functionality |
+| Probabilistic demand | https://github.com/awslabs/gluonts | Apache-2.0 | An OTB is a decision under uncertainty; you need a distribution, not a point |
+| Forecast baseline + backtesting | https://github.com/unit8co/darts | Apache-2.0 | Unified API, fast model bake-off at SKU×store |
+| Receipt-plan MILP | https://github.com/coin-or/pulp | MIT | Model the receipt plan; CBC bundled |
+| Solver when CBC stalls | https://github.com/ERGO-Code/HiGHS | MIT | Removes the Gurobi dependency the public examples fall back on |
+
+**Wiring.**
+
+1. Pull merchandise hierarchy, on-order and on-hand from ERPNext (or OFBiz) over REST on a schedule.
+2. `darts` for the model bake-off; promote the winner to `gluonts` for a quantile forecast per SKU×store.
+3. **Write the open-to-buy ledger yourself. This is the deliverable and the IP.** Model it as an event
+   ledger — plan, receipt, on-order, markdown, transfer — with the OTB derived, never stored as a
+   mutable balance. The arithmetic is trivial (`open-to-buy = planned receipts − on-order`, at cost or
+   at retail, and *which one* is a client-specific decision that must be explicit in the schema).
+4. `PuLP` + `HiGHS` to turn the quantile forecast plus the OTB constraint into a receipt plan by week
+   and location.
+5. Write proposed POs back to ERPNext **through an approval gate**: above a value or urgency threshold a
+   human planner confirms, and every agent step is appended to an audit log. Steal this shape from
+   `kavya2693/agentic-supply-planning` (MIT) — it is the one genuinely reusable idea in the agent layer.
+
+**Why it is defensible.** Step 3 is the part nobody can download, in any region. The rest is assembly.
+
+**Do not** use `astrodataus/open-to-buy` as a dependency — **no license file, all rights reserved**. Read
+the OTB formula from the published retail literature instead, which is where it belongs anyway.
+
+## Pattern 31 — Assortment and shelf space as one model, solved openly
+
+**Problem.** Assortment choice and space allocation are planned in separate tools (or not at all), so the
+assortment assumes space it does not have.
+
+**Stack.** `https://github.com/ishandutta2007/Awesome-Retail-Assortment-Planning` (MIT, 6★) as the
+literature index → model in `https://github.com/Pyomo/pyomo` (BSD-3-Clause) when the model is
+multi-period, or `https://github.com/coin-or/pulp` (MIT) when it is not → solve with
+`https://github.com/ERGO-Code/HiGHS` (MIT) or `https://github.com/google/or-tools` (Apache-2.0, CP-SAT
+when the constraints are combinatorial rather than linear).
+
+**Wiring.** One model, two objectives: maximise expected margin subject to (a) fixture width/height/depth
+per planogram, (b) minimum facings per must-stock line, (c) supplier pack and case rounding, (d) a
+category-role constraint so traffic-driver lines are not optimised out. Solve per fixture, then roll up
+to a store cluster and re-solve the cluster's assortment with the realised space as an input.
+
+**Critical licensing note.** Every public planogram example repo is unusable:
+`hesamuel/planogram` (**no license**, dead 2020) has the clearest knapsack formulation —
+*maximise product profit subject to fixture width* — so **reimplement from that published formulation,
+do not copy the code**. `valeriaarciga/planogram-optimization` is doubly blocked: **no license file** and
+its exact MILP path requires a **commercial Gurobi license**. `efeusyilmaz/Shelf-Space-Optimization`:
+**no license**, dead 2021. The formulations are public knowledge; the repositories are not licensed.
+
+## Pattern 32 — The vendor-funds ledger (building into a literal zero)
+
+**Problem.** Trade promotion — vendor allowances, co-op funds, billbacks, deductions — is tracked in
+spreadsheets and a commercial TPM the client cannot audit. Deductions are disputed with suppliers in cash
+and the retailer cannot reconstruct how a claim was derived.
+
+**The measurement that justifies the build.** Every trade-promotion repo that exists:
+`Enterprise-DNA-OS/trade-promotions-for-claude-code` (MIT) **0★**, `RSM-D365-Sales/trade-pro` (no license)
+**0★**, `dipayan/trade-promotion-management-blockchain` (no license, dead 2018) **0★**,
+`subhasundardass/TradePlus` (MIT, and it is a marketplace app not a TPM) **0★**. **Zero stars across the
+entire category** [measured 2026-11-26]. There is nothing to integrate and nothing to compete with.
+
+**Stack.** Read `Enterprise-DNA-OS/trade-promotions-for-claude-code` (MIT, 0★) **as a schema sketch, not
+as a dependency** — it models propose → agree → match-claims-to-promotions, which is the right spine, and
+it is the only MIT-licensed artifact in the category. Take the trade-funds-balance-from-a-ledger idea from
+`RSM-D365-Sales/trade-pro` as a **design note only** (no license file). Then build:
+
+1. **Fund master** — allowance type, supplier, category, period, basis (per-case, percent-of-purchases,
+   lump sum, scan-down). The basis field is where commercial systems lose auditability; make it explicit.
+2. **Accrual events** — generated from purchase and sales events, never hand-entered, each one pointing
+   at the source document.
+3. **Claim** — a derived document that cites the accruals it consists of.
+4. **Deduction and settlement** — the supplier's response, matched back to the claim, with the variance
+   recorded as a first-class fact rather than reconciled away.
+5. Expose the chain accrual → claim → deduction → settlement as a single queryable lineage. **That
+   lineage is the entire product.** Persist it append-only; a trade-funds balance that can be overwritten
+   is the defect being fixed.
+
+**Agent layer, optional and last.** An agent drafts claims and explains variances; it must not post
+settlements. Reuse Pattern 30's approval gate and audit log.
+
+**Where to sell it.** North America first — largest and most contested trade spend, and the retail-media
+counterparty side is concentrated (Amazon Ads and Walmart Connect took 89.5% of incremental 2026 spend).
+
+## Pattern 33 — The licence gate for this plane (four questions, and a falsifiable prediction)
+
+Run this before any repo in the merchandise-planning plane enters a client build. It exists because
+**five of the ten candidate artifacts in this plane have no license file at all**, and because the
+GitHub API's license field was wrong in both directions this pass.
+
+1. **Does a license file exist — proven, not assumed?** Probe `LICENSE`, `LICENSE.md`, `LICENSE.txt`,
+   `license.txt` (lower-case), `LICENCE`, `COPYING`, `COPYING.md` across `main` *and* `master`. If all
+   404, **fetch `README.md` on the same branch as a control.** README 200 + all license names 404 =
+   genuinely unlicensed = all rights reserved = **stop**. README also 404 = your branch or naming guess
+   is wrong, not the license. (This control step is what the media KB pass 8 learned the hard way.)
+2. **Did you read the grant, or trust the API?** `NOASSERTION` means "the scanner could not parse it".
+   This pass, four such repos all resolved to usable licenses on reading the file: PuLP → MIT, Pyomo →
+   BSD, frePPLe → MIT core, Odoo → LGPL-3.0. Never write a license into this KB from the API alone.
+3. **Is it dual-licensed, and does your promise fall inside the free grant?** `frePPLe/frepple` is MIT
+   free of charge *plus* a commercial license from frePPLe bv for additional functionality and support.
+   The MIT grant is real and covers the public repo — it does not cover the paid tier. Scope the
+   statement of work to features you have verified are in the open repository.
+4. **Does the exact solve path need a commercial solver?** `valeriaarciga/planogram-optimization` routes
+   its exact MILP through **Gurobi**. A repo can be permissively licensed and still unusable because its
+   solver is not. Check the solver, not just the repo — and substitute `HiGHS` (MIT) or `OR-Tools`
+   (Apache-2.0), which is why both are in Pattern 30.
+
+**Falsifiable prediction, recorded for the next retail pass.** By the next pass on this industry,
+open-source trade-promotion tooling will still total **0 stars** across all four named repos, and the
+retail planning-semantics layer will still sit under 50 stars in aggregate (18 today). If any single
+trade-promotion repo exceeds 25 stars, or the semantics layer clears 50, then the "the judgment layer is
+empty" law has a counterexample in this plane and the opportunity ranking in `intel/market.md` must be
+re-tested rather than carried forward.
+
+## Anti-patterns added 2026-11-26 (pass 7)
+
+- **Promising an "all open source" merchandise planning stack.** The solvers are open; the retail
+  semantics are not. The hard 70% of Patterns 30–32 is code Globant writes.
+- **Depending on any of the five no-license repos** (`astrodataus/open-to-buy`,
+  `RSM-D365-Sales/trade-pro`, `hesamuel/planogram`, `mraisback/supply-chain-agent`,
+  `shiva-shivanibokka/Supply-Chain-Demand-Agent`). "It is only a prototype" does not create a grant.
+- **Taking a curated list's entries as vetted.** The three `ishandutta2007` lists have blank star counts
+  and unverified licenses by their own admission. They are indexes, not recommendations.
+- **Linking an optimiser into ERPNext.** GPL-3.0. Service boundary, or use OFBiz (Apache-2.0).
+- **Storing open-to-buy as a mutable balance.** Derive it from an append-only event ledger, or you have
+  rebuilt the spreadsheet you were hired to replace.
+- **Selling an assortment optimiser into APAC before product-data reconciliation.** Fragmented
+  omnichannel data is upstream of the buy; the model will fail and the solver will not be the reason.
+
+## Method notes added 2026-11-26 (pass 7)
+
+- **Batch repo verification with OR'd `repo:` qualifiers.** `gh api -X GET search/repositories -f
+  q='repo:a/b repo:c/d …'` accepts ~20 slugs in one call and returns stars, forks, `pushed_at` and SPDX
+  together, so the fields cross-check each other. Four calls verified ~50 repos this pass. This is the
+  cheapest verification channel found in any pass so far — adopt it in all twelve industries.
+- **A search-result title is not an existence proof.** `nickennethmichael/Procurement-AI-Agent` appeared
+  in web results but did not resolve by slug in `search/repositories`, so it was **not written** to the
+  KB. Resolve every slug before it becomes a row.
+- **Shortening a query can manufacture false abundance as easily as false zeros** (the media pass 8
+  lesson, reconfirmed): `TradePlus` and `OpenTOMS` both surface under trade-promotion queries and neither
+  is a trade-promotion system. Read the results, not the result count.
+- **One license remains unresolved and is flagged rather than guessed:** `akeneo/pim-community-dev`
+  returns `NOASSERTION` with all seven license names 404 on `master` while `README.md` returns 200 —
+  which by rule 1 above reads as unlicensed, yet Akeneo is widely described as open source. The probe is
+  more likely wrong than Akeneo. **Settle it with a shallow clone next pass; quote no license for it
+  until then.**

@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-23
+updated: 2026-11-26
 ---
 
 # 📈 Agents Trending — Retail & Consumer
@@ -9,6 +9,34 @@ updated: 2026-11-23
 > **Append-only.** Newest dated section on top; history preserved below. This file tracks **agents and
 > agent-facing tooling**. For infrastructure and platform repos see `repos/trending.md` — until today the
 > two files were byte-identical, so the agents/repos distinction never actually existed in this KB.
+
+## 2026-11-26 (pass 7) — the merchandise planning, buying & trade-funds plane
+
+**The headline is a zero.** Every agent-shaped repo in the buying/planning plane, verified today:
+`Appointat/Responsive-AI-Clusters-in-Supply-Chain` (Apache-2.0, 40★, **dead since 2024-03-28**),
+`lxingwei81-ux/supplypilot-agent` (MIT, 2★, 2026-09-20), `kavya2693/agentic-supply-planning` (MIT, 0★,
+2026-10-08), `Enterprise-DNA-OS/trade-promotions-for-claude-code` (MIT, 0★, 2026-10-18),
+`mraisback/supply-chain-agent` (**no license**, 0★), `shiva-shivanibokka/Supply-Chain-Demand-Agent`
+(**no license**, 0★), `praditya7/Supply-Chain-Agent` (**no license**, 0★).
+
+**Seven repos, 42 stars, three unusable for want of a license file.** [measured 2026-11-26]
+
+What moved this week is not the agents — it is the **curated lists**. Three appeared or were refreshed in
+the last six weeks (`Awesome-Retail-Assortment-Planning` MIT 6★ pushed 2026-11-16,
+`Awesome-Retail-Merchandising-Cloud` MIT 0★ 2026-10-11, `Awesome-Consumer-Goods-CRM` MIT 0★ 2026-10-12),
+plus `kishorkukreja/awesome-supply-chain` (MIT, 102★, 2026-10-06), which ships **agent skills** for Claude
+Code and Codex including a planogram-optimization skill. Somebody is actively mapping this plane and
+almost nobody is watching. Lists are appearing faster than implementations — read that as demand without
+supply, which is the buy signal, not the warning.
+
+**Contrast worth keeping:** on the agentic-commerce side `google-agentic-commerce/AP2` alone holds 3,286★
+under Apache-2.0. The sell side of retail has three well-starred Apache-2.0 protocols; the buy side has
+42 stars in total. Attention is going to the checkout, not the buying office.
+
+**One agent pattern is worth stealing even at 0★:** `agentic-supply-planning` gates large or urgent
+purchase orders on explicit planner approval and writes every agent step to an audit log. That shape —
+agent proposes, human approves above a threshold, every step auditable — is what makes a planning agent
+deployable in a buying office. Take the shape, leave the lubricants data.
 
 ## 2026-11-23 (pass 6) — the fulfilment plane
 

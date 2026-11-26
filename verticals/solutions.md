@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-23
+updated: 2026-11-26
 ---
 
 # 🏭 Vertical Platforms — Retail & Consumer
@@ -489,3 +489,31 @@ authorities must accept freight data from certified eFTI platforms. The open-sou
 is **one repository with zero stars and no licence**. Meanwhile a Brazilian shipment's fiscal document
 (NF-e) and its carrier labels are covered, under MIT, in https://github.com/codespar/mcp-dev-latam.
 A European retailer has more regulation and less code than a Brazilian one on exactly this step.
+
+## Added 2026-11-26 (pass 7) — platforms that can carry a merchandise plan
+
+The question for this plane is narrower than "which commerce platform": it is **which running system
+already holds a merchandise master, a purchase order and an inventory valuation**, so that an open-to-buy
+engine has somewhere to read from and write to. That rules most storefronts out.
+
+| Platform | Repo | License | Stars | Last push | Fit for the buying office |
+|---|---|---|---|---|---|
+| frePPLe | https://github.com/frePPLe/frepple | **MIT core, dual-licensed** | 787 | 2026-11-26 | The only open planning platform with a real demand/capacity/replenishment data model. License read from `COPYING`: free of charge under MIT, with a paid tier from frePPLe bv for additional functionality and support. **Use it as the planning spine; verify which features sit behind the commercial tier before promising them.** |
+| ERPNext | https://github.com/frappe/erpnext | GPL-3.0 | 41,661 | 2026-11-26 | Holds merchandise master data, purchasing, sales, inventory valuation and financial planning in one schema — which is exactly the substrate an OTB needs. **GPL-3.0: integrate across a network/service boundary, do not link an optimiser into it.** The assortment-planning curated list reaches the same conclusion independently. |
+| Apache OFBiz | https://github.com/apache/ofbiz-framework | Apache-2.0 | 1,151 | 2026-11-26 | Catalog management, promotion & pricing management, order management under a permissive license. The only Apache-2.0 option at this layer, which makes it the default when a client will not accept copyleft anywhere in the stack. Dated UI; the data model is the asset. |
+| Odoo (Community) | https://github.com/odoo/odoo | **LGPL-3.0** | 56,125 | 2026-11-26 | Purchase, inventory and a planning module, with the largest install base here. **License read from `LICENSE` on `master`: LGPLv3** — the API reports `NOASSERTION` and public listicles routinely get this wrong. LGPL is weaker copyleft than ERPNext's GPL, so module-level extension is viable; the Enterprise edition is a separate proprietary license. |
+
+### What is deliberately not in this table
+
+- **No assortment, space-planning or trade-promotion platform**, open or dual-licensed, exists to list.
+  The category is commercial only — Oracle Retail Merchandise Financial Planning, Blue Yonder, RELEX,
+  Anaplan, Aptos, o9 and SAP are the names that recur, and none has an open counterpart. Stated here as
+  an **informed gap**, not an omission.
+- **Akeneo PIM** (`akeneo/pim-community-dev`, 1,053★, 2026-11-23) is adjacent and relevant, but its
+  license could not be verified from this session: the API returns `NOASSERTION` and all seven license
+  filenames 404 on `master` while `README.md` returns 200. Per this KB's own rule that is normally proof
+  of absence — but Akeneo is widely described as open-source, so the likelier explanation is a license
+  path this probe does not reach. **Unresolved. Do not quote a license for it until a shallow clone
+  settles it.** Flagged for the next pass.
+- **OpenEC**, named inside the merchandising curated list as an AGPL-3.0 open-source retail analytics
+  platform, **did not resolve** in a `search/repositories` query. Not written as data.

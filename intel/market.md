@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-23
+updated: 2026-11-26
 ---
 
 # 🗺️ Market Map — Retail & Consumer
@@ -330,6 +330,35 @@ explanation has to be a first-class record, not a log line.
 **Honest gap:** no federal US rule, and no state-level survey, was verified in this pass. The NYC and
 Seattle findings are solid and primary-adjacent; anything claiming a nationwide US delivery-labour
 regime is not supported by what was measured here.
+
+#### Added 2026-11-26 (pass 7) — the merchandise planning, buying & trade-funds plane
+
+**Adoption is real and governance is not.** Coresight's August 2026 survey of 100 North American retail
+executives at companies above $500M revenue found **49% holding paid AI subscriptions, up from 11% two
+years earlier** — and its headline finding is that governance is failing to keep pace with what has
+already been deployed. BRG's retail spotlight adds the shape of that gap: generative AI implementation is
+running ahead of predictive and agentic, retailers report confidence in AI policies despite coverage
+gaps, and agentic AI remains early. Consumer-side pull is steep: **AI traffic to US retail sites rose
+1,324% between October 2024 and May 2026**. On the operations side Prologis reported in early 2026 that
+nearly all of the top 30 North American retailers are deploying automation.
+
+**Why this plane matters most here.** North America is where vendor-funded trade spend is largest and
+most contested — grocery and CPG deduction disputes are settled in real money — and there is **no open
+settlement engine anywhere** (see `intel/trends.md` §2: the entire category totals zero stars). A
+retailer running trade funds on spreadsheets against a commercial TPM it cannot audit is the standard
+situation, not the exception.
+
+**Regulation — informed gap.** Searched this pass; no federal AI statute shaping retail AI in 2026 was
+identified. The practical consequence is that in North America the buying-office control story is
+**contractual and audit-driven, not statutory**: the thing that sells is a defensible record of how a buy
+or an allowance was decided, because no regulator defines it for you. That is a weaker forcing function
+than EMEA's, and a weaker reason for a client to act — price the engagement on the deduction recovery,
+not on compliance.
+
+**Named players:** Amazon Ads and Walmart Connect captured **89.5% of incremental retail-media spending in
+2026**, which concentrates the vendor-funds counterparty side of this plane into very few hands.
+Commercial planning incumbents to displace or integrate with: Oracle Retail Merchandise Financial
+Planning, Blue Yonder, RELEX, Anaplan, Aptos.
 
 ### EMEA
 
@@ -668,6 +697,33 @@ billable, defensible part — and it is where the open-source floor stops.
 were read in this pass. The 2 December 2026 deadline and the 9 July 2027 eFTI date are well
 sourced; the shape of any specific country's implementation is not yet knowable.
 
+#### Added 2026-11-26 (pass 7) — the merchandise planning, buying & trade-funds plane
+
+**The only region where the buying decision carries a statutory explainability hook.** The EU AI Act is
+the one real regulatory driver found in any region this pass. Sources disagree on scope and timing —
+transparency obligations for AI-generated and AI-manipulated content from **August 2026**, and key
+provisions enforced from **2 August 2026** — so *verify against the official text before quoting dates to
+a client*. The strategic point survives the date ambiguity: in EMEA, an automated assortment or
+allocation decision is the kind of thing a retailer may have to explain, which turns an auditable
+open-to-buy ledger from good practice into an asset.
+
+**Value and adoption.** McKinsey estimates end-to-end AI transformation could unlock **€240–320 billion**
+across European retail over five years — its own research, and a projection rather than a measured
+outcome, so quote it as a frame and not a forecast. Against that, a TCS study found only **24% currently
+use AI for autonomous decision-making**. Adoption is bifurcating: larger retailers with real data
+infrastructure are moving from pilots into pricing, forecasting and customer experience, while smaller
+firms stall on systems integration and investment capacity — which is precisely the segment that cannot
+buy Oracle MFP or RELEX and for which an open planning spine is the only route.
+
+**Why the open-source angle lands here specifically.** `frePPLe/frepple` is a European project (frePPLe
+bv) with an MIT core, and ERPNext/OFBiz cover the merchandise-master substrate. For a mid-market European
+retailer the assembly in `compose/patterns.md` Pattern 30 is not a cost play — it is the *only* way to
+get an auditable buy at all.
+
+**Named players:** Manhattan Associates, TTEC Digital, Kaspi.kz (its Kasper assistant), with McKinsey,
+Deloitte, KPMG, NVIDIA and TCS as the advisory layer, and NRF Europe and the World Retail Congress as the
+venues where this gets discussed.
+
 ### APAC
 
 - **Largest stated intent of any region:** Deloitte reports **29% of APAC consumer businesses already
@@ -941,6 +997,37 @@ carrier contracts is a deliverable; the protocol expertise is the moat.
 network-level claims and partner announcements. China and Japan were not measured on this plane in
 this pass; Japan's driver-hours constraint and China's instant-retail logistics are named here as
 unexamined, not as covered.
+
+#### Added 2026-11-26 (pass 7) — the merchandise planning, buying & trade-funds plane
+
+**The largest prize and the worst substrate.** Deloitte's March 2026 report (released in Hong Kong,
+30 March 2026) puts Asia-Pacific on course to drive **about two-thirds of the world's new retail sales
+over the next five years**, with agentic AI adoption going from **~29% today to 76% within two years** —
+survey-based, so directional. That makes APAC the region where a planning engagement has the most volume
+behind it.
+
+**But the binding constraint here is upstream of the buy.** KPMG names **fragmented omnichannel data** as
+the limit on AI adoption in APAC retail, and Deloitte flags gaps in regulation, physical infrastructure
+and digital access. An open-to-buy cannot be planned on a merchandise master that does not reconcile
+across channels. **Sequence APAC engagements accordingly: product-data reconciliation first (see the
+product-data plane above), planning second.** Selling an assortment optimiser into fragmented master data
+is how this plane fails here, and the solver is never the reason.
+
+**Regulation — informed gap.** Singapore emphasises **voluntary, accountability-based AI governance over
+prescriptive regulation**, and IMDA with Enterprise Singapore have launched digital solution categories
+to help retail SMEs adopt AI — which makes Singapore the easiest APAC entry point for an auditable
+planning build, since accountability frameworks reward exactly the audit trail Pattern 30 produces.
+**No specific current retail-AI regulation for China, Japan or Australia was found this pass.** Gap, not
+absence.
+
+**Consumer trust is a live constraint:** 53% of consumers globally are very or extremely worried about
+privacy (KPMG, same source) — relevant because the buy side touches supplier and vendor data more than
+consumer data, which is an argument for starting agentic work in the buying office rather than the
+storefront.
+
+**Named players:** Alibaba, Lazada and the super-apps (Grab) lead the agentic push; Fainders.AI launched a
+cashier-less MicroStore in South Korea in 2024. NRF APAC 2026 ran in Singapore, 2–4 June, with agentic AI
+dominating the agenda.
 
 ### LATAM
 
@@ -1283,6 +1370,39 @@ market-size claims. The one adoption figure quoted this pass for the region (Ady
 consumers using AI assistants when shopping, up from 15% a year earlier) comes from a single vendor
 survey and is labelled accordingly.
 
+#### Added 2026-11-26 (pass 7) — the merchandise planning, buying & trade-funds plane
+
+**Consumer-side adoption is sprinting; the platform layer underneath is measurably broken.** The Adyen
+Retail Report 2026 found **42% of Mexican consumers now use AI assistants when shopping, against 15% a
+year earlier**. Regionally, **38% of LATAM companies have implemented generative AI but only 23% generate
+measurable economic value**. And Retail Garage 2026 (Google Cloud with R/GA) found that **80% of major
+Latin American e-commerce platforms show critical deficiencies in technical performance and AI
+adoption**.
+
+Read those three together and the conclusion is uncomfortable but useful: in LATAM the demand signal has
+arrived ahead of the systems, and the gap between 38% implementing and 23% getting value is where the
+services work actually is.
+
+**Market pull is the strongest of any region.** Euromonitor projects Mexican retail sales **+40% over
+five years, 15 percentage points above the LATAM average**, with e-commerce **+58%** over the same period.
+Walmart (through its OpenAI partnership) and Alibaba have launched AI-first shopping modes, pushing
+Mexican merchants toward generative engine optimisation; Stripe is pushing agent-driven payments in the
+region.
+
+**Why this plane fits LATAM's actual buyer.** The regional retailer that cannot afford Oracle MFP or
+RELEX — which is most of them — currently plans its buy in spreadsheets. The MIT/Apache assembly in
+Pattern 30 is the only auditable open-to-buy available to that buyer at any price, and LATAM is where the
+share of retailers in that position is highest. This is a *capability* sale, not a cost-reduction sale,
+and it should be priced as one.
+
+**Regulation — explicit informed gap.** Searched this pass across the region: **no national AI law
+specific to retail surfaced in any LATAM market.** The single regulatory reference found was GDPR invoked
+as a *benchmark* by a payments vendor discussing agentic payments and privacy — a standard someone chose
+to cite, not a LATAM rule. Prior passes of this KB recorded that LATAM broadly tracks the EU model and
+that Chile and Uruguay have moved first on AI legislation generally; **none of that was re-verified for
+retail this pass and none of it should be quoted to a client as a retail obligation.** Treat LATAM retail
+AI regulation as unresearched here rather than non-existent.
+
 ## Globant positioning
 
 1. **Lead with protocol reachability, not models.** The scarce skill is making a retailer's catalogue and
@@ -1473,3 +1593,36 @@ justify it.** UCP and ACP both type a delivery timestamp pair, and the pairs mea
 (hand-off vs. arrival — see `intel/trends.md`). Any merchant selling through both an OpenAI surface
 and a Google surface needs an adapter that knows the difference. That is a small, specific,
 demonstrable piece of expertise, and it is exactly the kind of thing a client discovers after launch.
+
+### Added 2026-11-26 (pass 7) — positioning that follows from the merchandise planning & trade-funds plane
+
+The plane has an unusual property for this KB: **the gap is global.** No region has an open merchandise
+planning or trade-funds implementation, so unlike the fiscal-receipt or returns planes there is no
+"pick the right market" move available. That cuts both ways — the opportunity does not need
+localisation to be real, and it cannot be won by arriving in a region first.
+
+**What Globant can honestly claim.** The solver and forecasting layer is permissive, mature and pushed
+daily (~21,500 stars across OR-Tools, PuLP, Pyomo and HiGHS). The merchandise-master substrate exists
+(ERPNext, OFBiz, Odoo, frePPLe). **The missing piece is domain definitions encoded as auditable
+software** — the open-to-buy ledger, the size-curve roll-up, the vendor-funds accrual-to-settlement
+chain. That is consulting-shaped work with a software artifact at the end, which is exactly the shape
+Globant sells. It is also defensible: a competitor cannot download it either.
+
+**What Globant must not claim.** Do not promise an "all open source merchandise planning stack". The
+semantics layer does not exist, five of the ten candidate artifacts have no license file, and the only
+open planning spine (frePPLe) is dual-licensed with functionality behind a commercial tier. Any proposal
+that implies assembly-only delivery will be wrong about the hardest 70% of the work.
+
+**Ranked by where the money and the emptiness overlap:**
+
+1. **Vendor-funds settlement (North America first).** The category total is literally zero stars, trade
+   spend is a top line item in consumer-goods retail, and the disputes are cash. Highest defensibility.
+2. **Auditable open-to-buy (EMEA first).** The EU AI Act gives the audit trail a statutory hook no other
+   region provides, and European mid-market retailers are the segment priced out of Oracle MFP/RELEX.
+3. **Assortment & space optimisation (LATAM first).** Strongest market growth (Mexico +40% retail,
+   +58% e-commerce over five years) against the weakest incumbent platform layer (80% of major LATAM
+   e-commerce platforms show critical technical deficiencies).
+4. **Planning on reconciled data (APAC last, deliberately).** Biggest volume — two-thirds of the world's
+   new retail sales — but fragmented omnichannel data is upstream of the buy. Sell product-data
+   reconciliation here first; an assortment optimiser on unreconciled master data will fail and the
+   solver will not be the reason.

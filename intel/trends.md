@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-23
+updated: 2026-11-26
 ---
 
 # 📡 Trends — Retail & Consumer
@@ -958,3 +958,92 @@ authorities) and voluntary for businesses; **eCMR is B2B** (evidence of the carr
   delivery-labour regime.
 - **Not examined this pass:** China and Japan on this plane; US state-level delivery rules outside
   NYC and Seattle; air and ocean freight. Named here as gaps, not covered.
+
+## Added 2026-11-26 (pass 7) — the merchandise planning, buying & trade-funds plane
+
+### 1. The arithmetic is open; the retail chart of accounts is not [measured]
+
+This is the structural finding of the pass, and it is measurable rather than argued. The *mathematics* of
+merchandise planning is small and completely served by permissive open source: assortment choice,
+shelf-space allocation and open-to-buy are all mixed-integer programs, and `google/or-tools`
+(Apache-2.0, 14,462★), `coin-or/pulp` (MIT, 2,499★), `Pyomo/pyomo` (BSD, 2,566★) and `ERGO-Code/HiGHS`
+(MIT, 1,954★) — **~21,500 stars, all pushed within the last four days** — implement it.
+
+The *semantics* have no open implementation at all. Twelve named retail-planning artifacts exist and hold
+**18 stars between them**; five have no license file; four have been dead five years or more; the
+healthiest is a curated link list. What is scarce is not the solver. It is the definition layer: what an
+open-to-buy is at retail versus at cost, how a size curve rolls up into a buy, how a vendor allowance is
+accrued, claimed, deducted and settled.
+
+This is the same law the media and healthcare passes recorded — the format layer is equipped, the
+judgment layer is empty — and this plane is its cleanest instance yet, because here the two layers are
+*adjacent*: the open solver is one function call beneath the missing definitions.
+
+### 2. Trade promotion is the hardest zero in this knowledge base [measured]
+
+Every trade-promotion repo that exists, with its star count:
+`Enterprise-DNA-OS/trade-promotions-for-claude-code` **0**, `RSM-D365-Sales/trade-pro` **0**,
+`dipayan/trade-promotion-management-blockchain` **0** (dead since 2018),
+`subhasundardass/TradePlus` **0** (and it is a marketplace app, not TPM at all).
+
+**Literal zero across the whole category.** Trade spend is among the largest line items in consumer-goods
+retail, routinely in the high single-digit percentages of gross sales, and the open-source world has
+produced nothing anyone has starred once. Only one of the four even carries a usable license (MIT).
+
+### 3. Half the plane is legally unusable, not merely immature [measured]
+
+Five of the ten tools and agents in this plane have **no license file** — confirmed by control request,
+not inferred from a 404: `astrodataus/open-to-buy`, `RSM-D365-Sales/trade-pro`, `hesamuel/planogram`,
+`mraisback/supply-chain-agent`, `shiva-shivanibokka/Supply-Chain-Demand-Agent`. No grant means all rights
+reserved. The usual move of "borrow the demo for the prototype" is not available here, which raises the
+real cost of entering this plane above what the star counts suggest.
+
+### 4. The GitHub API license field cannot be trusted at this layer [measured]
+
+Four of the repos worth writing into this KB returned `NOASSERTION` from the API and **all four resolved
+to a usable license on reading the file**: PuLP → MIT (`LICENSE`), Pyomo → BSD (`LICENSE.md`), frePPLe →
+MIT core (`COPYING`), Odoo → LGPL-3.0 (`LICENSE`). A `NOASSERTION` here means "the scanner could not
+parse it", not "there is no license" — and the inverse error is equally live, since five repos with no
+grant at all also surface as a blank field. **Both directions require reading the file.**
+
+### 5. frePPLe's dual license is the most useful nuance in the plane
+
+`frePPLe/frepple` (787★, pushed 2026-11-26) states in `COPYING`: dual licensing, free of charge under the
+MIT License, with a commercial license from frePPLe bv for *additional functionality and professional
+support*. The MIT grant over the public repository is genuine and Globant can build on it — but a client
+promise must be scoped to what the open repo actually contains, because the paid tier is where some
+planning functionality lives. This is the only open planning spine in the plane, so getting this boundary
+right matters more than it would elsewhere.
+
+### 6. Curated lists are appearing faster than code — read it as demand, not noise [measured]
+
+Four curated resources for this plane were created or refreshed in the six weeks to 2026-11-16
+(`Awesome-Retail-Assortment-Planning` MIT 6★, `Awesome-Retail-Merchandising-Cloud` MIT 0★,
+`Awesome-Consumer-Goods-CRM` MIT 0★, `kishorkukreja/awesome-supply-chain` MIT 102★). People are actively
+trying to map this space; nothing is being built in it. The healthiest of the four ships **agent skills**
+rather than links, including a planogram-optimization skill — the first sign of the plane being packaged
+for agents at all.
+
+### 7. Attention is at the checkout, not the buying office [measured]
+
+`google-agentic-commerce/AP2` alone holds 3,286★ under Apache-2.0, and the agentic-commerce protocol
+layer (ACP, AP2, UCP) is well-funded, well-starred and permissive. The buy side of the same industry
+totals 42 stars. The sell side got three standards in a year; the buy side has not had a maintained
+implementation since 2024. For a services business this asymmetry is the opportunity, not the problem.
+
+### 8. Where the regional reporting is thin, and saying so [informed gap]
+
+Searched per region this pass. **The desert is global, not regional:** no region has an open merchandise
+planning or trade-funds implementation, which means this gap is not a localization problem and cannot be
+closed by picking a different market. Regulatory coverage specifically:
+
+- **North America** — searched; little on AI regulation in retail surfaced beyond the finding that
+  governance lags deployment. **No federal AI statute shaping retail AI in 2026 was identified.** Gap.
+- **EMEA** — the EU AI Act is the one real statutory driver, but sources disagree on scope and timing
+  (transparency duties for AI-generated content from August 2026; key provisions enforced 2 August 2026).
+  **Verify against the official text before quoting dates to a client.**
+- **APAC** — Singapore's voluntary, accountability-based approach is documented. **No specific current
+  retail-AI regulation for China, Japan or Australia was found.** Gap.
+- **LATAM** — **no national AI law specific to retail surfaced in any searched market.** The one
+  regulatory reference found was GDPR invoked as a *benchmark* by a payments vendor, which is not a LATAM
+  rule. Treat LATAM retail AI regulation as unresearched by this pass, not as absent.

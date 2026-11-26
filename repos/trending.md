@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-23
+updated: 2026-11-26
 ---
 
 # 📈 Repos Trending — Retail & Consumer
@@ -9,6 +9,41 @@ updated: 2026-11-23
 > **Append-only.** Newest dated section on top; history preserved below. This file tracks **infrastructure,
 > protocol and platform repos**. For agents and agent-facing tooling see `agents/trending.md` — until today
 > the two files were byte-identical and this distinction did not exist.
+
+## 2026-11-26 (pass 7) — the merchandise planning, buying & trade-funds plane
+
+**Infrastructure moved; retail semantics did not.** All figures from one batched
+`search/repositories` call on 2026-11-26.
+
+Healthy and pushed within the last week: `ERGO-Code/HiGHS` (MIT, 1,954★, **2026-11-26**),
+`frePPLe/frepple` (MIT core, 787★, **2026-11-26**), `google/or-tools` (Apache-2.0, 14,462★, 2026-11-25),
+`unit8co/darts` (Apache-2.0, 9,598★, 2026-11-24), `coin-or/pulp` (MIT, 2,499★, 2026-11-23),
+`Pyomo/pyomo` (BSD-3-Clause, 2,566★, 2026-11-23). `awslabs/gluonts` (Apache-2.0, 5,265★) last pushed
+2026-10-13 — the only one of the group that has gone quiet, worth a re-check next pass.
+
+Flat or dead in the same window: every single retail-planning-semantics repo. The newest *code* in the
+plane is `astrodataus/open-to-buy` (2026-10-29) and it has **no license file**. The newest activity of
+any kind is a curated list refresh (`Awesome-Retail-Assortment-Planning`, 2026-11-16).
+
+**New this pass — three license findings that change what is safe to depend on:** [measured]
+
+1. **`coin-or/pulp` is MIT, not unlicensed.** GitHub's API says `NOASSERTION`; the `LICENSE` file on
+   `master` is verbatim MIT. Same story for `Pyomo/pyomo` (BSD, grant in `LICENSE.md`).
+2. **`frePPLe/frepple` is dual-licensed and its `COPYING` says so plainly:** MIT free of charge, with a
+   commercial license from frePPLe bv for *additional functionality and professional support*. The MIT
+   grant over the repo is real; it is not a grant over the commercial tier. This is the single most
+   useful license nuance in the plane, because frePPLe is the only open planning spine worth considering.
+3. **Five repos in this plane have no license file at all**, confirmed by control request (README 200,
+   seven license filenames × two branches all 404): `astrodataus/open-to-buy`,
+   `RSM-D365-Sales/trade-pro`, `hesamuel/planogram`, `mraisback/supply-chain-agent`,
+   `shiva-shivanibokka/Supply-Chain-Demand-Agent`. No license means all rights reserved. These are not
+   "probably fine for a prototype" — they are not usable.
+
+**The sharpest zero this KB has recorded.** Trade promotion / vendor funds, every repo found, total stars:
+`trade-promotions-for-claude-code` 0 + `trade-pro` 0 + `trade-promotion-management-blockchain` 0 (dead
+2018) + `TradePlus` 0 (and it is a marketplace app, not TPM) = **literal zero across the entire
+category**. Trade spend is one of the largest line items in consumer-goods retail and the open-source
+total is zero stars.
 
 ## 2026-11-23 (pass 6) — the fulfilment plane
 
