@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-26
+updated: 2026-11-28
 ---
 
 # 📡 Trends — Retail & Consumer
@@ -1047,3 +1047,99 @@ closed by picking a different market. Regulatory coverage specifically:
 - **LATAM** — **no national AI law specific to retail surfaced in any searched market.** The one
   regulatory reference found was GDPR invoked as a *benchmark* by a payments vendor, which is not a LATAM
   rule. Treat LATAM retail AI regulation as unresearched by this pass, not as absent.
+
+## Added 2026-11-28 (pass 8) — the fresh & perishable food plane
+
+### 1. A near legal deadline produces open-source tooling faster than a profit opportunity does [measured]
+
+This is the pass's main claim and it is testable. Hold the industry, the data and the difficulty roughly
+constant and vary only *whether a date is attached*:
+
+| Step in the fresh plane | Incentive | Open source found (2026-11-28) |
+|---|---|---|
+| EUDR plot geolocation | **Legal, 30 Dec 2026 — 32 days away** | **4 real tools**, 1 fully permissive (Apache-2.0), 3 touched in the last 3 weeks, 1 co-built with the European Forest Institute |
+| Encoding the date on the pack | Standards (GS1) | 2 Apache-2.0 libraries from the standards body, maintained |
+| Cold-chain temperature proof | Food safety, **US deadline moved to 2028** | Hobby firmware only; best licence dormant since **2023-08-27** |
+| The markdown decision | **Pure profit, no deadline** | **0 usable.** 5 of 6 repos have no licence file; the licensed one died **2017-12-07** |
+
+The markdown decision is the step where money is unambiguously on the table — waste against gross margin,
+every day, per lot — and it has **nothing adoptable**. EUDR has no revenue attached at all and has four
+tools, one of them pushed two days before this measurement. **Deadlines coordinate volunteers; margin does
+not.** Margin opportunities get built privately and stay private, because the build *is* the advantage.
+
+**Falsifiable prediction, for the next pass on retail to check:** if this holds, the FSMA 204 slip to
+**2028-07-20** should keep US food-traceability tooling thin through 2027, while **EUDR** tooling keeps
+accumulating into Q1 2027 and then flattens once the date passes. If instead FSMA 204 tooling appears during
+2027 with no date pressure, this claim is wrong and should be struck.
+
+### 2. The content law is non-monotonic, for the third time, and the drop is a licence drop [measured]
+
+DESCRIBE (~11,800★) → ENCODE (75★, Apache-2.0, alive) → TRACE (Apache-2.0 generic layer alive, **food
+layer unlicensed and six years dead**) → MONITOR (hobby) → DECIDE (**0 usable**). Step 2 is healthier than
+step 3. Pass 5 of this KB read a three-step version as a smooth decline and that reading was wrong; media-kb
+pass 9 found the same non-monotonicity in recorded music. **Three industries, same shape: do not estimate a
+plane by assuming it thins downstream, and expect the collapse to be about licences rather than difficulty.**
+
+### 3. The seafood traceability standard's own repo is unlicensed and abandoned [measured]
+
+`loamCode/GDST` — behind GDST 1.2, which defines seafood KDEs/CTEs in EPCIS XML — has **no licence file
+under ten spellings**, no SPDX id, 6★ / 5f, last commit **2020-11-11**, and sits under a *personal account*
+rather than an organisation. Meanwhile the generic layer it builds on (`openepcis/openepcis-core`,
+Apache-2.0) was pushed on the day of this pass. **A standard can be live as a document and dead as code**,
+and this KB's pass-6 rule — check the spec repo separately from the implementation repo, in every industry —
+now has its clearest instance: here the "implementation" of the spec *is* the spec's repo, and it is neither
+licensed nor maintained.
+
+### 4. `NOASSERTION` was wrong in 4 of 5 cases, and 80% is the number to quote [measured]
+
+Pass 6 established "NOASSERTION is not a verdict". Quantified this pass: of five repos GitHub reported as
+`NOASSERTION`, the file showed a real licence in **four** — `foodcoops/foodsoft` AGPL-3.0 (34976 B),
+`borgels/mcp-server-fooddata-dk` **ISC** (3768 B — it hid a *permissive* licence, i.e. the error loses
+usable repos as well as adding unusable ones), `afkzonagroup/plotline` AGPL-3.0 (35126 B),
+`Vortx-AI/eudr-plugin` Apache-2.0 (953 B). Only one was genuinely unlicensed. **The licence is the file and
+only the file**, and the API flag is wrong four times out of five at this layer.
+
+### 5. A permissive licence can be scoped to a wrapper around a closed engine [new shape]
+
+`Vortx-AI/eudr-plugin` carries a genuine Apache-2.0 file whose closing paragraph restricts it to "the plugin
+manifest, the skills, and the MCP server declaration" and states that the eudr.dev runtime behind them **is
+closed**. Not a badge pointing at nothing (pass 6), not a flag hiding a licence (above) — an honest,
+accurate, permissive licence that conveys nothing of value. **MCP servers are the shape where this is
+hardest to see**, because the manifest and tool declarations are exactly the part that gets open-sourced.
+Ask what runs behind the tool declaration before adopting any permissive MCP server, in any industry.
+
+### 6. The public dataset is what produces an agent tier [measured]
+
+Fresh food has **eight** third-party Open Food Facts MCP servers, five permissively licensed, two committed
+to within five days of this pass. Pass 7's buying/planning plane had seven agent repos, 42 stars total,
+three unusable. The difference is not maturity or money — **it is that Open Food Facts exists and the buying
+office has no public dataset**. Where a client plane has an open reference dataset, expect a usable agent
+tier and wrap it; where it has none, expect to build the data layer first and budget for it.
+
+### 7. Regulatory direction split by region this pass, and the split is the opposite of the usual story
+
+**North America retreated while EMEA held.** FSMA 204 moved from 2026-01-20 to **2028-07-20**, with a
+November 2025 Appropriations Act directing FDA not to enforce before that date — a **2.5-year** slip.
+EUDR's application date for large and medium operators survived two delays and a simplification review
+(published 2026-05-04, architecture unchanged) and stands at **2026-12-30**. APAC moved *forward* on a
+longer clock: China's **GB 7718-2025** takes effect **2027-03-16**, India's FSSAI labelling amendment was
+notified 2026-03-24 and applies **2027-07-01**. LATAM is the nearest-term of all: Brazil's ANVISA
+regularization deadline under RDC 843/2024 fell on **2026-09-01**, already past. **The common assumption
+that LATAM lags on regulation is wrong again** — this is the fourth consecutive retail pass to find that,
+and here LATAM's binding date arrived *before* every other region's.
+
+### 8. Where this pass's reporting is thin, and saying so [informed gap]
+
+- **APAC** — found China and India with dated primary-ish detail. **Japan, South Korea and Australia
+  returned nothing on food date-marking or traceability** in this pass's searches. Treat as unresearched,
+  not as absent.
+- **Mexico** — NOM-051 phase 3 is reported as **2028-01-01** by most 2026 sources (a DOF accord of
+  2025-07-31 having extended phase 2 to 2027-12-31), but at least one source still asserts 2026-01-01.
+  **Sources directly contradict each other**; the underlying `PROY-NOM-051-SE/SSA1-2025` is still a draft.
+  Confirm in the DOF before quoting a date to a client. No Mexican *traceability* rule surfaced at all.
+- **Source quality, stated once:** FSMA 204's 2028 date, ANVISA's RDC 724/2026 food-service record-keeping,
+  and the FSSAI effective dates all come from **trade and consultancy secondary sources**, not the Federal
+  Register, ANVISA's own text or the FSSAI gazette. The EUDR dates are corroborated by the Commission's own
+  environment page. Weight them accordingly.
+- **Not examined:** halal/kosher certification chains, wet-market and informal retail, wine and spirits
+  excise traceability, and the whole of Africa outside EUDR's producer-country scope.

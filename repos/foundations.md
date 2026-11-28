@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-26
+updated: 2026-11-28
 ---
 
 # 🏗️ Foundational Repos — Retail & Consumer
@@ -1073,3 +1073,120 @@ Build on the first table. Do not build on the second.
 them**, five with no license file, four dead for five years or more, and the single healthiest entry is a
 curated link list. Against ~21,500 stars of permissively-licensed solver and forecasting infrastructure
 sitting directly underneath.
+
+## Added 2026-11-28 (pass 8) — the fresh & perishable food layer
+
+All figures measured 2026-11-28. **Licence = the file, read as bytes on the default branch across ten
+filename spellings.** Stars/forks from one `search/repositories` call per repo. Two date columns where they
+differ, because they measure different things (see the method note at the end of this section).
+
+### The layer that is healthy — describing the food, and encoding its date
+
+| Repo | Licence (file, bytes) | Stars / forks | Default-branch commit | Why it is a foundation |
+|---|---|---|---|---|
+| [gs1/gs1-syntax-engine](https://github.com/gs1/gs1-syntax-engine) | Apache-2.0 — read, 10172 B | 54★ / 12f | 2026-11-26 | **The single most important repo in this plane.** The standards body's own C library (with Java/C#/Python/JS bindings) that parses and validates GS1 element strings — including **AI (15) BEST BEFORE, AI (17) EXPIRATION, AI (13) PACK DATE, AI (10) BATCH/LOT**. Permissive, maintained, and it is the difference between *reading a date off a barcode* and *guessing*. |
+| [gs1/gs1-syntax-dictionary](https://github.com/gs1/gs1-syntax-dictionary) | Apache-2.0 — read, 10172 B | 21★ / 3f | 2026-08-29 | The machine-readable AI table the engine above is driven by. Vendor it with the engine; it is the data half of the same artefact. |
+| [openfoodfacts/openfoodfacts-server](https://github.com/openfoodfacts/openfoodfacts-server) | AGPL-3.0 — read, 34522 B | 1220★ / 716f | **2026-11-27** (pushed 2026-11-28) | The open product database for food: ingredients, allergens, nutrition, Nutri-Score, NOVA, Eco-Score. Pushed **the day of this pass**. AGPL-3.0: run it as a service, do not embed it in a client's product. |
+| [openfoodfacts/openfoodfacts-dart](https://github.com/openfoodfacts/openfoodfacts-dart) | Apache-2.0 — read, 11345 B | 233★ / 93f | 2026-11-26 | The **permissively-licensed** way into that database. Apache-2.0 while the server is AGPL — so the client is embeddable even where the server is not. The licence boundary here is the useful fact. |
+| [openepcis/openepcis-core](https://github.com/openepcis/openepcis-core) | Apache-2.0 — read, 11356 B | 0★ / 0f | 2026-11-25 (pushed **2026-11-28**) | EPCIS 2.0 capture/query/subscription core over OpenSearch + Kafka. **Zero stars and pushed the day of this pass** — a reminder that in standards-infrastructure tiers, stars measure nothing. Complements `openepcis/epcis-repository-ce` already in this KB; the same open-core boundary applies. |
+| [coelho85/EUDR_free_check](https://github.com/coelho85/EUDR_free_check) | Apache-2.0 — read, 11356 B | 0★ / 0f | 2026-11-26 | Screens plot geolocations (GeoJSON / Shapefile / GeoPackage / KML) against the EU JRC Global Forest Cover 2020 map, **entirely in the browser** — no plot coordinates leave the device, which is the whole supplier-confidentiality problem solved by architecture. The only fully-permissive EUDR tool found. |
+| [grocy/grocy](https://github.com/grocy/grocy) | MIT — read (`LICENSE.md`), 1095 B | **9714★ / 840f** | 2026-11-13 | By far the most-starred repo in this plane, and the **only mature MIT codebase that models a due date as a first-class concept**: stock by lot with best-before dates, FEFO consumption order, expiry reporting. Built for the household; the date logic is the reusable part. See `verticals/solutions.md` for the scope caveat. |
+| [NSIETeam/ReliaCode](https://github.com/NSIETeam/ReliaCode) | Apache-2.0 — read, 10139 B | 0★ / 0f | 2026-09-23 (pushed 2026-10-21) | Item-to-carton traceability publishing **GS1 EPCIS 2.0 events** to an OpenEPCIS repository, in pet food. Small and young, but it is a *worked wiring example* of the two Apache layers above talking to each other — rarer than either library. |
+
+**Eight repos, seven permissive (6× Apache-2.0, 1× MIT), one AGPL, and five with a commit in the last
+fortnight.** That is the healthiest tier this KB has measured in any retail plane.
+
+### Step 4 — MONITOR the temperature. Hobby grade only, and that is the measurement.
+
+Every cold-chain repo surfaced is a student, course or hobby build: ESP32/Raspberry-Pi firmware with a
+Firebase or Google-Sheets dashboard. The best-licensed one,
+[polesskiy-dev/iot-cold-chain-monitoring-system](https://github.com/polesskiy-dev/iot-cold-chain-monitoring-system)
+(MIT, 1069 B, 6★ / 4f), **last had a commit on 2023-08-27 — dormant over three years**.
+`mytechnotalent/iot-00002-cold-chain-monitor` was described in search results with specifics (Pico 2, LoRa
+gateway, a 2.0–8.0 °C band, authenticated telemetry) and **does not exist** — `ls-remote` gives the
+auth-prompt 404 signature.
+
+**There is no open-source cold-chain platform.** Not a thin one, not a copyleft one. A retailer that needs
+to prove a chilled lot stayed in band from dock to shelf is buying that, or building it.
+
+### Step 5 — DECIDE the markdown. The sharpest zero in this KB, and it is a *licence* zero.
+
+The markdown decision on perishable stock is the step with the clearest money attached — it is where food
+waste and gross margin are traded against each other, daily, per lot. Six repos exist. **Five have no
+licence file at all**, and the sixth is nine years dead:
+
+| Repo | Licence | Stars | Last commit | Verdict |
+|---|---|---|---|---|
+| [normanrz/dynamic-prices](https://github.com/normanrz/dynamic-prices) | MIT — read, 1086 B | 65★ / 33f | **2017-12-07** | The only licensed one. Demand estimation + price strategy + simulation runner for perishable goods. **Nine years without a commit.** Read the model, do not depend on the code. |
+| [mrrishit909/grocery-perishables-optimizer](https://github.com/mrrishit909/grocery-perishables-optimizer) | **none in 10 names** | 0★ | 2026-10-06 | The most complete design of the six — shelf life inferred from **lot temperature logs**, markdowns by dynamic programming, scored against a simulator's hidden truth. Its own benchmark admits markdowns beat no-markdown in only 2 of 9 cases. Unusable. |
+| [Thilagar7/FRESH-PRICE](https://github.com/Thilagar7/FRESH-PRICE) | **none in 10 names** | 0★ | 2026-10-23 | Rule-based + econometric markdown engines with a cost-plus-margin price floor. Unusable. |
+| [Pravinsc05/smart-food-waste-prediction](https://github.com/Pravinsc05/smart-food-waste-prediction) | **none in 10 names** | 0★ | 2026-10-26 | Flask + scikit-learn, 10–40% markdown tiers via elasticity. Unusable. |
+| [Shobana0212/SmartMarkdown_AI](https://github.com/Shobana0212/SmartMarkdown_AI) | **none in 10 names** | 0★ | 2026-10-22 | Single-store simulator, fixed-price vs expiry-aware policy, Streamlit. Unusable. |
+| [Sathwik-0102/rl-dynamic-pricing-food-waste](https://github.com/Sathwik-0102/rl-dynamic-pricing-food-waste) | **none in 10 names** | 1★ | 2026-06-03 | PPO in a Gymnasium FEFO simulator. README claims "zero food waste" — **a simulator result, not a field outcome**. Unusable. |
+
+**Repeat of the pass-9-media law, in a second industry: this tier is not immature, it is unlicensed.** Four
+of these five were committed to in the last eight weeks. There is active effort here; none of it is legally
+adoptable. **Screen by licence before shortlisting**, or a week of evaluation buys nothing.
+
+### ⚠️ The content law for this plane: five steps, and it is NOT monotonic
+
+> **DESCRIBE the food** (~11,800★: Open Food Facts 1,220 + grocy 9,714 + clients 825) → **ENCODE the date**
+> (75★, Apache-2.0, standards body, alive) → **TRACE the lot** (Apache-2.0 and alive at the generic layer;
+> the *food-specific* layer is unlicensed and six years dead — see GDST below) → **MONITOR the temperature**
+> (hobby only, best licence dormant 3 years) → **DECIDE the markdown** (**0 usable**, 5 of 6 unlicensed).
+
+Pass 5 (price) read a three-step version of this gradient as a smooth decline and **that reading was wrong**;
+pass 9 of media-kb found the same non-monotonicity and named it. Confirmed here a third time: step 2 is
+*healthier* than step 3, and the collapse at steps 4–5 is a licence and incentive collapse, not a difficulty
+one. **Do not estimate a plane by assuming it thins downstream.**
+
+### The food-specific traceability layer is unlicensed and abandoned
+
+[loamCode/GDST](https://github.com/loamCode/GDST) — the repository behind the **Global Dialogue on Seafood
+Traceability**, the interoperability standard GDST 1.2 that defines seafood KDEs/CTEs in EPCIS XML — has
+**no licence file under any of ten spellings**, GitHub reports no SPDX id, it carries 6★ / 5f, and its last
+commit is **2020-11-11 — six years ago**. It also sits under a *personal account*, not an organisation.
+[ift-gftc/opentraceability](https://github.com/ift-gftc/opentraceability) (MIT, 1120 B, 8★, 2026-09-14),
+already in this KB, remains the only licensed food-traceability library and still admits partial protocol
+coverage in its own README. **The generic layer (EPCIS) is Apache-2.0 and alive; the food layer on top of it
+is a personal repo with no licence, last touched six years ago.**
+
+### ⚠️ Method: two licence traps caught this pass, both of which would have produced wrong data
+
+1. **`raw.githubusercontent.com` returns HTTP 200 with the body `404: Not Found`.** A status-code check on
+   `openfoodfacts/openfoodfacts-python` therefore reported a **16-byte licence file**. There is no licence
+   file: the 16 bytes *are the string* `404: Not Found`. **Read the bytes, never the status.** This is the
+   sharpest form yet of the pass-6 rule that a short LICENSE file is a pointer, not a licence — here it is
+   not even a pointer. (That repo is **478★ / 119f**, pushed 2026-11-25, and is the most-starred Open Food
+   Facts client. API clients for an AGPL server, with no licence of their own, are a studio blocker.)
+2. **`NOASSERTION` was wrong in 4 of the 5 repos where it appeared.** The file said otherwise every time:
+   `foodcoops/foodsoft` → AGPL-3.0 (34976 B), `borgels/mcp-server-fooddata-dk` → **ISC** (3768 B, i.e. it
+   hid a *permissive* licence), `afkzonagroup/plotline` → AGPL-3.0 (35126 B), `Vortx-AI/eudr-plugin` →
+   Apache-2.0 (953 B). Only `openfoodfacts-python` genuinely had none. Pass 6 recorded "NOASSERTION is not a
+   verdict"; this pass **quantifies it at 80% false** in this plane.
+
+### ⚠️ Method: `pushed_at` is not default-branch activity, and this KB has been conflating them
+
+Seven repos this pass show a `pushed_at` later than their newest default-branch commit — `georoots/editor`
+(2026-10-21 vs 2026-11-25, **five weeks apart**), `afkzonagroup/plotline` (11-08 vs 11-22),
+`charliezstong/nutri-mcp` (2026-01-12 vs 2026-10-29, **nine months apart**), `NSIETeam/ReliaCode`,
+`noot-app/openfoodfacts-mcp-server`, `ift-gftc/opentraceability`, `openfoodfacts/openfoodfacts-server`.
+`pushed_at` counts a push to **any** branch. To answer "is the mainline alive", read the default branch's
+last commit from a shallow clone. To answer "is anyone there at all", `pushed_at` is fine. **A repo can look
+nine months fresher than its mainline is** — nutri-mcp above is exactly that, and earlier passes of this KB
+quoted single dates without saying which they meant.
+
+### Measured gaps in this plane — searched for on 2026-11-28, genuinely not there
+
+- **No open-source cold-chain platform.** Hobby firmware only; best licence dormant since 2023-08-27.
+- **No usable markdown/waste engine.** 5 of 6 unlicensed, the licensed one dead since 2017.
+- **No HACCP library.** Two candidates: `MustrHQ/kitchen-safety` (AGPL-3.0, 0★, 2026-10-26 — a working
+  app, see `verticals/solutions.md`) and `O-Nics/haccp` (**no licence**, 0★, 2026-10-07). No library, no
+  permissive option.
+- **No open FSMA 204 implementation** — no repo found that models Food Traceability List items, Critical
+  Tracking Events and Key Data Elements as such. The US deadline moved to 2028 (see `intel/market.md`) and
+  the code moved with it.
+- **No catch-weight / variable-weight item library.** `catch weight`, `weighed`, `PLU` all returned nothing
+  usable. Priced-by-weight items are a universal grocery primitive with no open implementation.
+- **Not examined this pass, and saying so:** Japan, Korea and Australia food-date regulation; halal and
+  kosher certification chains; wet-market and informal-retail supply chains; wine/spirits excise traceability.

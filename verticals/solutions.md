@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-26
+updated: 2026-11-28
 ---
 
 # 🏭 Vertical Platforms — Retail & Consumer
@@ -517,3 +517,51 @@ engine has somewhere to read from and write to. That rules most storefronts out.
   settles it.** Flagged for the next pass.
 - **OpenEC**, named inside the merchandising curated list as an AGPL-3.0 open-source retail analytics
   platform, **did not resolve** in a `search/repositories` query. Not written as data.
+
+## Added 2026-11-28 (pass 8) — platforms that already model a due date
+
+Real, deployed systems for the perishable plane. **Licence read as file bytes on the default branch**,
+2026-11-28. Read the licence column first: this plane is overwhelmingly copyleft, and the one MIT platform
+is scoped at the household.
+
+| Platform | Repo | Licence (file, bytes) | Stars / forks | Default-branch commit | What it gives a client build |
+|---|---|---|---|---|---|
+| **grocy** | [grocy/grocy](https://github.com/grocy/grocy) | **MIT** — read (`LICENSE.md`), 1095 B | **9714★ / 840f** | 2026-11-13 | "ERP for your fridge": stock held **by lot with a best-before date**, FEFO consumption order, expiry and near-expiry reporting, batch/location moves. The only mature MIT system in retail open source where **the due date is a first-class field rather than an attribute**. Scope caveat below — it is a household app, and its data model is the asset, not its UI. |
+| **Open Food Network** | [openfoodfoundation/openfoodnetwork](https://github.com/openfoodfoundation/openfoodnetwork) | AGPL-3.0 — read (`LICENCE.txt`), 34519 B | **1305★ / 809f** | **2026-11-27** | A production multi-enterprise marketplace for short food supply chains: producers, hubs, order cycles, variable weights, delivery windows. Deployed by food hubs in a dozen-plus countries. The most *operationally real* food platform in open source. AGPL — run as a service. |
+| **Foodsoft** | [foodcoops/foodsoft](https://github.com/foodcoops/foodsoft) | AGPL-3.0 — read (`LICENSE.md`), 34976 B | 361★ / 162f | **2026-11-27** | Food-cooperative ordering and distribution: group orders, order cycles, article/supplier catalogues, settlement per member. Fifteen-plus years in continuous production use in European co-ops. GitHub reports `NOASSERTION`; **the file is AGPL-3.0**. |
+| **Open Food Facts** | [openfoodfacts/openfoodfacts-server](https://github.com/openfoodfacts/openfoodfacts-server) | AGPL-3.0 — read, 34522 B | 1220★ / 716f | **2026-11-27** | Not a retail platform — the **product-data substrate** underneath one: ingredients, allergens, nutrition, Nutri-Score/NOVA/Eco-Score, taxonomies in many languages. Pair the AGPL server with the **Apache-2.0** `openfoodfacts-dart` client when the client's own code must stay proprietary. |
+| **kitchen-safety** | [MustrHQ/kitchen-safety](https://github.com/MustrHQ/kitchen-safety) | AGPL-3.0 — read, 34522 B | 0★ / 0f | 2026-10-26 | Self-hosted HACCP temperature records: login-free tablet front end for staff, protected admin, PWA. **The only working HACCP app found with a licence at all.** Its README is explicit that it does not replace a business-specific HACCP plan. ⚠️ Search results described this repo as MIT — **the file is AGPL-3.0, 34522 B**. |
+| **GeoRoots Editor** | [georoots/editor](https://github.com/georoots/editor) | GPL-3.0 — read, 35148 B | 1★ / 0f | 2026-10-21 (pushed 2026-11-25) | Browser-based creation, checking and editing of **EUDR** plot geolocation data, built with the **European Forest Institute**. All processing on the user's device. Its own FAQ is the useful caveat: it checks *geometric and structural validity only* — a clean result is not a compliance verdict. |
+
+### ⚠️ Scope caveat on grocy, stated plainly because the star count will tempt someone
+
+grocy is **9,714★ and MIT** — by a wide margin the most attractive licence/maturity combination in this
+plane — and it is **a household inventory app**. It has no multi-store model, no supplier EDI, no POS
+integration, no concept of a priced-by-weight retail line. What it does have, and what nothing else in open
+source has under a permissive licence, is **a correct, battle-tested model of stock held by lot with a due
+date, consumed FEFO**. Use it as the reference model (or the embedded engine for a small-format pilot); do
+not propose it as a grocery platform. This is the same trap pass 6 flagged on `berndruecker/flowing-retail`
+— a sample is not a product — in the opposite direction: here it is a *product*, for the wrong buyer.
+
+### ⚠️ The licence shape of this plane: copyleft platforms, permissive standards
+
+Six platforms: **one MIT (household-scoped), three AGPL-3.0, one GPL-3.0, and the only permissive options
+in the whole plane are the standards libraries** (`gs1-syntax-engine`, `openfoodfacts-dart`,
+`openepcis-core`, all Apache-2.0 — see `repos/foundations.md`). This is the **same inversion as the
+fulfilment plane (pass 6)**: components permissive, platforms copyleft, therefore **assemble, do not
+adopt**. A fully client-owned fresh-food system is reachable from the already-in-KB permissive base
+(`InvenTree` MIT, `ofbiz-framework` Apache-2.0) **plus** this plane's Apache-2.0 date/trace libraries — and
+is *not* reachable by forking any platform in the table above.
+
+### What is deliberately not in this table
+
+- **No ERP's fresh module.** Odoo and ERPNext (both already extensively in this KB) do carry lot expiry and
+  FEFO removal strategies. They are not re-listed as a fresh-food finding, because counting a general ERP's
+  expiry field as a perishables platform inflates this plane — the same error pass 9 of media-kb named when
+  it refused to count a publishing-side repo in a recording-side tier.
+- **No cold-chain platform, because there is none.** Hobby firmware only; the best-licensed one has been
+  dormant since 2023-08-27. Written up as a gap in `repos/foundations.md`, not softened into a row here.
+- **`O-Nics/haccp`** (multi-tenant HACCP API, Laravel 12) — **no licence file under ten spellings**,
+  0★, 2026-10-07. Real code, legally unusable, so no row.
+- **`N2026-2025/eudr-deforestation-radar`** and **`m1hamuha/EUDR-Compliance-Assistant`** — both pushed
+  within the last month, both with **no licence file**. Not written as data.

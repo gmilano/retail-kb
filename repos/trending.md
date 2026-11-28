@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-26
+updated: 2026-11-28
 ---
 
 # 📈 Repos Trending — Retail & Consumer
@@ -9,6 +9,53 @@ updated: 2026-11-26
 > **Append-only.** Newest dated section on top; history preserved below. This file tracks **infrastructure,
 > protocol and platform repos**. For agents and agent-facing tooling see `agents/trending.md` — until today
 > the two files were byte-identical and this distinction did not exist.
+
+## 2026-11-28 (pass 8) — the fresh & perishable food plane
+
+**What moved: compliance infrastructure against a date 32 days away. What did not: the commercial layer.**
+All figures measured 2026-11-28 — licence by reading file bytes, stars from `search/repositories`,
+activity from the default branch of a shallow clone.
+
+Pushed within the last week, and all of it is either a standard or a regulation:
+`openfoodfacts/openfoodfacts-server` (AGPL-3.0, 1,220★, **2026-11-27**, pushed 11-28),
+`openfoodfoundation/openfoodnetwork` (AGPL-3.0, 1,305★, **2026-11-27**),
+`foodcoops/foodsoft` (AGPL-3.0, 361★, **2026-11-27**),
+`openepcis/openepcis-core` (Apache-2.0, **0★**, pushed **2026-11-28**),
+`gs1/gs1-syntax-engine` (Apache-2.0, 54★, **2026-11-26**),
+`openfoodfacts/openfoodfacts-dart` (Apache-2.0, 233★, **2026-11-26**),
+`coelho85/EUDR_free_check` (Apache-2.0, 0★, **2026-11-26**),
+`openfoodfacts/open-prices` (AGPL-3.0, 114★, **2026-11-27**).
+
+**The EUDR cluster is the week's actual story.** Four plot-geolocation tools, all touched in the last three
+weeks, against **30 December 2026** for large and medium operators: `coelho85/EUDR_free_check`
+(Apache-2.0, browser-only screening against the JRC Global Forest Cover 2020 map), `afkzonagroup/plotline`
+(AGPL-3.0, 35126 B, validates GeoJSON/KML/CSV against EU Information System rules — open or self-crossing
+polygons, holes, wrong property names, the 25 MB-per-statement cap), `georoots/editor` (GPL-3.0, built with
+the **European Forest Institute**, pushed 2026-11-25), `Vortx-AI/eudr-plugin` (Apache-2.0 **scoped to the
+wrapper**; the eudr.dev runtime is closed, stated in the licence file itself). **One of the four is fully
+permissive.** Two more EUDR repos (`N2026-2025/eudr-deforestation-radar`, `m1hamuha/EUDR-Compliance-Assistant`)
+have no licence file and are not rows.
+
+Flat or dead, and it is the layer with the money in it: **every markdown and cold-chain repo in the plane.**
+`normanrz/dynamic-prices` (MIT, 65★) **2017-12-07**; `polesskiy-dev/iot-cold-chain-monitoring-system`
+(MIT, 6★) **2023-08-27**; `loamCode/GDST` — the seafood traceability standard's own repo — **no licence,
+2020-11-11**. Five further markdown repos were committed to in the last eight weeks and **not one has a
+licence file**. Full table in `repos/foundations.md`.
+
+**Zero-star repos pushed today are the pattern to take from this week.** `openepcis/openepcis-core`
+(0★/0f) and `coelho85/EUDR_free_check` (0★/0f) are both Apache-2.0 and both moved within 48 hours of this
+measurement. In standards-and-compliance tiers, stars track *consumer attention* and these have none by
+construction. **Pass 7 ranked this plane's neighbours by stars; that would have discarded the two most
+useful repos here.**
+
+**Two measurement defects found and fixed this week, both of which had been silently corrupting this KB:**
+`raw.githubusercontent.com` answers **HTTP 200 with the body `404: Not Found`**, which reported a phantom
+16-byte licence on a 478★ repo; and `pushed_at` counts pushes to *any* branch, running up to **nine months
+ahead** of the default branch's newest commit (`charliezstong/nutri-mcp`: 2026-01-12 vs 2026-10-29). Both
+written up with the full list in `repos/foundations.md`. Also: `github.com` HTML and
+`api.github.com/repos/...` both return **403 'not enabled for this session'** this pass, so star counts come
+from `gh api search/repositories` only — the pass-9 note that the GitHub API is unusable here is **half
+wrong**: `/repos/` is blocked, `search/` works.
 
 ## 2026-11-26 (pass 7) — the merchandise planning, buying & trade-funds plane
 

@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-26
+updated: 2026-11-28
 ---
 
 # 🗺️ Market Map — Retail & Consumer
@@ -360,6 +360,37 @@ not on compliance.
 Commercial planning incumbents to displace or integrate with: Oracle Retail Merchandise Financial
 Planning, Blue Yonder, RELEX, Anaplan, Aptos.
 
+
+#### Added 2026-11-28 (pass 8) — fresh & perishable: the deadline moved out 2.5 years
+
+**The regulatory clock went backwards here, and it is the single most important planning fact in this
+plane for North America.** FSMA 204 — the FDA Food Traceability Rule (21 CFR Part 1, Subpart S) — required
+firms handling foods on the **Food Traceability List** to record **Key Data Elements (KDEs)** at each
+**Critical Tracking Event (CTE)** and produce them to the FDA within **24 hours**. Original compliance date
+**2026-01-20**. It is now **2028-07-20**, and a **November 2025 Appropriations Act directed the FDA not to
+enforce** the rule before that date. Routine traceability inspections will not begin before then. The
+requirements themselves were not amended — only the date.
+
+**What that means commercially, and it cuts both ways.** The compliance-driven sale is gone for two years:
+nobody is buying a traceability programme in 2027 against a 2028 date they have already watched slip twice.
+But the KDE/CTE data model is unchanged and now has a **two-year build window with no deadline pressure** —
+which is the right condition for doing it properly rather than for an audit. Sell it as **recall speed and
+shrink**, not compliance. A grocer that can answer "which lots, which stores, which pallets" in minutes
+limits a recall to a lot instead of a category, and that is a margin argument available today.
+
+**Adoption, dated:** a Coresight Research survey of **100 North American retail executives (September
+2026)** found AI moved from pilot into core operations while **governance has not kept pace**; US paid AI
+subscriptions reached **49% in August 2026, up from 11% two years earlier** (Ramp card-spend data). On
+retail media, **Amazon Ads and Walmart Connect together take 89.5% of incremental 2026 spend**
+(EMARKETER) — relevant here because fresh is the category retail media has least penetrated.
+
+**Opportunity, specific:** the **recall-readiness build** — `gs1/gs1-syntax-engine` (Apache-2.0) to read
+lot and date off the pack, `openepcis/openepcis-core` (Apache-2.0) as the CTE event store, KDEs modelled
+explicitly. Fully permissive, client-owned, no vendor. See `compose/patterns.md` Pattern 34.
+
+**Gap, stated as a gap:** **no open-source FSMA 204 implementation exists** — no repo found that models the
+Food Traceability List, CTEs and KDEs as first-class concepts. `ift-gftc/opentraceability` (MIT, 8★) is the
+closest and admits partial protocol coverage in its own README. The code followed the deadline out to 2028.
 ### EMEA
 
 - ⏰ **Hardest deadline in any region, and it is 11 days away.** EU AI Act **Article 50** transparency
@@ -724,6 +755,48 @@ get an auditable buy at all.
 Deloitte, KPMG, NVIDIA and TCS as the advisory layer, and NRF Europe and the World Retail Congress as the
 venues where this gets discussed.
 
+
+#### Added 2026-11-28 (pass 8) — fresh & perishable: EUDR is 32 days away and it held
+
+**The date, confirmed against the Commission's own environment page rather than trade press:** the EU
+Deforestation Regulation (EU) 2023/1115 applies to **large and medium operators and traders from
+2026-12-30 — 32 days after this measurement** — to **small operators from 2027-06-30**, and to products
+newly added by Delegated Act from **2027-12-30**. Council and Parliament adopted the revision on
+**2025-12-18**. The Commission published its **simplification review on 2026-05-04**: the application date
+for large and medium companies was **kept**, and the **fundamental architecture of the EUDR is unchanged**.
+As of October 2026 trade coverage reads further simplification as unlikely while not ruling it out.
+
+**This has survived two delays and a simplification review. Plan for it, not around it.** It covers cattle,
+cocoa, coffee, oil palm, rubber, soya and wood and their derivatives — i.e. a large part of a European
+grocer's own-brand range. The operative requirement is a **Due Diligence Statement** with **plot-level
+geolocation** of production.
+
+**The one region in this plane where open source actually answered a deadline.** Four plot-geolocation
+tools, three touched within three weeks of this pass:
+
+| Tool | Licence (file, bytes) | Use |
+|---|---|---|
+| [coelho85/EUDR_free_check](https://github.com/coelho85/EUDR_free_check) | **Apache-2.0**, 11356 B | Screens plots against the EU **JRC Global Forest Cover 2020** map **entirely in the browser** — plot coordinates never leave the device. The only fully-permissive option. |
+| [afkzonagroup/plotline](https://github.com/afkzonagroup/plotline) | AGPL-3.0, 35126 B | Validates and repairs GeoJSON/KML/CSV against EU Information System rules: open or self-crossing polygons, holes, wrong property names, the **25 MB per statement** cap. |
+| [georoots/editor](https://github.com/georoots/editor) | GPL-3.0, 35148 B | Browser geodata editor built with the **European Forest Institute**. On-device processing. |
+| [Vortx-AI/eudr-plugin](https://github.com/Vortx-AI/eudr-plugin) | Apache-2.0, **953 B, scoped to the wrapper** | Plot checks, evidence gaps, statement prep — but **the eudr.dev runtime is closed**, stated in the licence file itself. ⚠️ Do not read this as an open EUDR engine. |
+
+**The architectural point worth selling:** the two best tools both process **on the client's device**, which
+dissolves the hardest commercial objection — suppliers will not hand plot coordinates to a retailer's
+cloud, because those coordinates *are* the supplier's farm base. **Confidentiality by architecture, not by
+contract.** And note what every one of these tools checks: `georoots` says so itself — *geometric and
+structural validity only*. **A clean file is not a compliance verdict**, and anyone selling it as one is
+mis-selling.
+
+**Second EMEA instrument, same plane:** the **EU AI Act** Article 50 transparency obligations are
+enforceable from **2026-08-02** and machine-readable marking of systems already on the market from
+**2026-12-02 — four days after this pass**. Relevant to fresh via AI-generated product imagery and
+AI-set shelf-edge prices.
+
+**Market size, attributed:** McKinsey with **EuroCommerce** (June 2026) put end-to-end AI transformation in
+European retail at **€240–320 billion over five years**. TCS's Global Retail Outlook 2026 found only
+**24% currently use AI for autonomous decision-making** — so the €240–320B is a headroom figure, not a
+run-rate. Publicis Sapient attributes the EMEA-specific drag to fragmented legacy estates.
 ### APAC
 
 - **Largest stated intent of any region:** Deloitte reports **29% of APAC consumer businesses already
@@ -1029,6 +1102,51 @@ storefront.
 cashier-less MicroStore in South Korea in 2024. NRF APAC 2026 ran in Singapore, 2–4 June, with agentic AI
 dominating the agenda.
 
+
+#### Added 2026-11-28 (pass 8) — fresh & perishable: two national labelling clocks, both 2027
+
+**China — GB 7718-2025.** The National Food Safety Standard for the labelling of prepackaged food was
+**issued 2025-03-16 and takes effect 2027-03-16**. As of mid-2026 **GB 7718-2011 remains the legally
+binding standard**, so there is a defined two-standard window to build across. What matters for the
+perishable plane:
+
+- **Date marking order is fixed**: production date and expiration date declared **year, month, day**.
+- An **exemption** lets some products show only shelf life and expiry date — those with a shelf life
+  **over 6 months** or a maximum packaging surface **≤ 20 cm²**.
+- For **imports** whose original packaging lacks a production date, the production date **shall be
+  calculated and declared from the shelf life and the expiration date** — i.e. a derived field, which is
+  exactly the kind of rule that belongs in code rather than in a labelling SOP.
+- **Digital labels** are introduced, and **allergen labelling moves from "may contain" toward precision
+  declaration**.
+- The NHC published a **Q&A addressing 50 implementation questions on 2025-09-25**. Typography and font-size
+  rules sit in the separate *Administrative Measures for Supervision of Food Labelling*, **not** in
+  GB 7718-2025 — do not conflate the two instruments.
+
+**India — FSSAI.** The **Labelling and Display First Amendment Regulations, 2026** were notified
+**2026-03-24** and are reported to apply from **2027-07-01**. They add **traceability requirements for
+non-retail containers**: bulk and B2B packs must be marked non-retail and carry food name, FSSAI logo and
+licence number, **date marking, storage instructions, lot/batch number** and manufacturer details.
+Separately, **food recall functionality went live on the FoSCoS portal on 2026-03-18**, and a **draft**
+licensing amendment (February 2026) would require **daily raw-material, production and storage records on a
+FIFO/FEFO basis** — FSSAI has clarified it would not apply to non-manufacturing food businesses.
+
+**Why this is the strongest build case of the four regions:** both clocks land in 2027, both are
+*labelling and lot* rules rather than ecosystem rules, and both are satisfied by the same artefact — a
+correctly encoded GS1 element string with AI (10) BATCH/LOT, AI (15) BEST BEFORE and AI (17) EXPIRATION,
+emitted per market. `gs1/gs1-syntax-engine` (Apache-2.0) does this and is maintained by the standards body.
+**One implementation, two national deadlines, no copyleft.**
+
+**Demand context, attributed:** Deloitte (March 2026) projects APAC drives about **two-thirds of the
+world's new retail sales over the next five years**, with agentic AI adoption at **~29% today rising to a
+reported 76% within two years** — vendor-surveyed and directional, not measured. KPMG attributes APAC
+adoption pressure to dense urban stores, high labour churn and quick-commerce competition, and the brake to
+fragmented omnichannel data. Singapore's IMDA favours **voluntary, accountability-based AI governance** over
+prescriptive rules.
+
+**Informed gap, explicit:** **Japan, South Korea and Australia returned nothing** on food date-marking or
+traceability in this pass's searches. That is a gap in this pass's coverage, **not** evidence of low
+activity in three of the region's most sophisticated grocery markets — Japan in particular runs some of the
+world's tightest fresh-date practices. Next pass on retail should query them by national instrument name.
 ### LATAM
 
 - 🎯 **The clearest, best-evidenced opportunity in this file.** An April 2026 scan of **75 LATAM e-commerce
@@ -1403,6 +1521,53 @@ that Chile and Uruguay have moved first on AI legislation generally; **none of t
 retail this pass and none of it should be quoted to a client as a retail obligation.** Treat LATAM retail
 AI regulation as unresearched here rather than non-existent.
 
+
+#### Added 2026-11-28 (pass 8) — fresh & perishable: the only region whose deadline has already passed
+
+**Brazil — and this is the fourth consecutive retail pass to find LATAM ahead of its own narrative.**
+ANVISA's food regularization rules under **RDC 843/2024** carried a compliance deadline of
+**2026-09-01 — already past at the time of this pass**. ANVISA's own notice told companies to use the
+period to review **regulatory classification, documentation, composition, labelling and lot
+traceability**, and stated that non-compliance **could result in cancellation of the registration**. Not a
+fine — the registration.
+
+Enforcement is visibly live: ANVISA **prohibited 11 products between 2026-01-05 and 2026-01-22**, with
+reports citing missing registration, unauthorised ingredients and **traceability failures** among the
+grounds. Separately, **RDC 724/2026** is reported to update Good Practices for food services, requiring a
+**digital record of the origin of food used, including lot number and expiry date**, with establishments
+adapting by **June 2026**. ⚠️ That last instrument comes from a **secondary trade source only** and the
+RDC number should be confirmed against ANVISA's own text before it is quoted to a client; the RDC 843/2024
+deadline is corroborated by ANVISA's own gov.br notice.
+
+**So the buyer is different here, and the pitch is different.** In North America the sale is a build
+against a 2028 date. In Brazil the deadline has gone and enforcement is running: the sale is
+**remediation** — prove lot traceability on an existing range, now, under threat to the registration. That
+is a services engagement with an immediate trigger, and it is the nearest-term commercial opportunity in
+this plane in any region.
+
+**Mexico — NOM-051, and the sources contradict each other.** Most 2026 sources place **phase 3 at
+2028-01-01**, following a **DOF accord of 2025-07-31** that extended phase 2 to **2027-12-31**; at least one
+source still asserts 2026-01-01, which appears to predate that accord. The instrument under discussion,
+**PROY-NOM-051-SE/SSA1-2025**, is **still a draft** subject to consultation, with a public-consultation
+notice on a modification to clause 4.5.3 published in December 2025. Phase 3 is expected to tighten the
+front-of-pack seal thresholds for sugars, saturated fat, trans fat, sodium and calories. **Do not quote a
+phase-3 date to a client without checking the DOF** — the contradiction is live. **No Mexican food
+*traceability* rule surfaced at all** in this pass; front-of-pack labelling is a different problem from lot
+traceability and should not be sold as one.
+
+**Consumer-side demand, dated and attributed:** Adyen's Retail Report 2026 puts **42% of Mexican consumers
+using AI assistants while shopping, up from 15% a year earlier**. Against that, a Google Cloud / R&#47;GA
+study found **80% of major LATAM e-commerce platforms have critical deficiencies in technical performance
+and AI adoption**, and while **38% of LATAM companies have implemented generative AI only 23% report
+measurable economic value**. **The demand is ahead of the platforms** — which is the Globant-shaped gap, and
+it is the same shape pass 6 found in LATAM fulfilment.
+
+**Regional opportunity, specific:** the ANVISA remediation build reuses the *same* permissive stack as the
+North American recall-readiness build — `gs1/gs1-syntax-engine` + `openepcis/openepcis-core`, both
+Apache-2.0 — with a Brazilian lot/expiry record and an ANVISA-shaped evidence export. **One engineering
+artefact, four regulatory theories** (FDA KDE/CTE, EUDR DDS, GB 7718 / FSSAI date marking, ANVISA lot
+traceability): a typed, replayable record of which lot was where, when, and at what date code. That
+convergence is Pattern 34 in `compose/patterns.md`.
 ## Globant positioning
 
 1. **Lead with protocol reachability, not models.** The scarce skill is making a retailer's catalogue and
@@ -1626,3 +1791,34 @@ that implies assembly-only delivery will be wrong about the hardest 70% of the w
    new retail sales — but fragmented omnichannel data is upstream of the buy. Sell product-data
    reconciliation here first; an assortment optimiser on unreconciled master data will fail and the
    solver will not be the reason.
+
+### Added 2026-11-28 (pass 8) — positioning that follows from the fresh & perishable plane
+
+**The asset to sell is one artefact that four regulators want.** A typed, replayable record of *which lot
+was where, when, and at what date code* satisfies FDA KDE/CTE (NA, 2028-07-20), EUDR due-diligence
+geolocation (EMEA, **2026-12-30**), GB 7718-2025 and FSSAI date marking (APAC, 2027), and ANVISA lot
+traceability (LATAM, **deadline already passed**). Build once, project four ways. This is the same
+convergence pass 6 found in fulfilment, and it is stronger here because the date is *already on the pack*.
+
+**Lead with the region whose clock has run out, not the biggest market.** Brazil's ANVISA deadline passed
+on 2026-09-01 with enforcement visibly active and **cancellation of registration** as the stated
+consequence. That is a remediation engagement available today. EMEA is next at 32 days. North America is a
+2028 story and should be sold on **recall speed and shrink**, never on compliance — the deadline has slipped
+twice and no buyer will fund a third.
+
+**Where the studio's margin actually is: the two steps with no open source.** The permissive base for
+describing food, encoding dates and tracing lots is complete and free (`gs1-syntax-engine`,
+`openepcis-core`, `openfoodfacts-dart`, all Apache-2.0 — do not bill for rebuilding these). **The
+cold-chain proof and the markdown decision have no adoptable open source at all**: hobby firmware on one
+side, five unlicensed repos and a nine-year-dead MIT project on the other. Price the engagement there.
+
+**The markdown engine is the single clearest product opportunity in this KB.** The step where food waste and
+gross margin are traded daily, per lot, has **zero usable open source** — and unlike the delivery-promise
+gap of pass 6, the inputs now exist permissively (lot + date from the syntax engine, movement from EPCIS,
+elasticity from the licensed forecasting stack already in `repos/foundations.md`). Pattern 35 is the
+assembly.
+
+**Qualify on licence before scoping, and say the number.** This plane's platforms are 3× AGPL-3.0, 1×
+GPL-3.0, and the one MIT system is a household app with 9,714 stars that will be proposed by somebody as a
+grocery platform. **Assemble, do not adopt.** And `NOASSERTION` was wrong in 4 of 5 cases this pass — a
+licence audit that reads API flags instead of files will both block usable repos and clear unusable ones.

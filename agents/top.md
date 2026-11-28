@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-26
+updated: 2026-11-28
 ---
 
 # 🎯 AI Agents & Commerce Intelligence — Retail & Consumer
@@ -513,3 +513,66 @@ two tools in `repos/foundations.md`) were confirmed this way.
 `nickennethmichael/Procurement-AI-Agent` appeared in web search results as a procurement agent prototype,
 but **did not resolve** in `search/repositories` when queried by slug. A search-result title is not an
 existence proof, so it has no row. If a later pass resolves it, add it then.
+
+## Added 2026-11-28 (pass 8) — the fresh & perishable food plane
+
+**Plane opened this pass:** the perishable item — the food whose identity includes a *date*. Chosen by a
+~75-term bounded vocabulary probe against the whole KB before any web search: `HACCP` 0, `FSMA` 0,
+`critical tracking event` 0, `key data element` 0, `best before` 0, `use by` 0, `date code` 0, `lot code` 0,
+`shelf life` 0, `spoilage` 0, `allergen` 0, `nutrition` 0, `catch weight` 0, `PLU` 0, `GDST` 0,
+`cold chain` 1, `perishable` 1, `expiry` 1. Against `EPCIS` **30** and `DPP` **29** — meaning this KB
+already knew the *wire format* for traceability and the *product-passport* layer, and had never once looked
+at the food-specific layer that rides on them. Previous planes: product-data, store, retail media, returns,
+price, fulfilment, merchandise planning.
+
+**The agent layer here is real, permissive and alive — which makes it the exception in this KB.** Six
+verified agent-surface repos below, five of them permissively licensed. Every other plane this KB has opened
+produced an agent tier that was unlicensed, dead, or both.
+
+| Agent / MCP server | Repo | Licence (file read, bytes) | Stars | Default-branch commit | What it actually does |
+|---|---|---|---|---|---|
+| OpenFoodFacts MCP (cyanheads) | [cyanheads/openfoodfacts-mcp-server](https://github.com/cyanheads/openfoodfacts-mcp-server) | Apache-2.0 — read, 11317 B | 2★ / 1f | 2026-11-24 | **Best-licensed and most recently active.** Barcode lookup, ingredient/nutrition filtered search, side-by-side comparison, and browsing the canonical tag vocabulary. STDIO or Streamable HTTP, so it drops into an agent runtime unchanged. |
+| nutri-mcp | [charliezstong/nutri-mcp](https://github.com/charliezstong/nutri-mcp) | MIT — read, 1078 B | 5★ / 1f | 2026-01-12 (pushed 2026-10-29) | Widest data coverage: Open Food Facts **plus** USDA FoodData Central and Nutritionix behind one MCP surface. Open Food Facts needs no key; USDA is optional and improves micronutrients. |
+| OpenFoodFacts MCP, offline | [noot-app/openfoodfacts-mcp-server](https://github.com/noot-app/openfoodfacts-mcp-server) | MIT — read, 1060 B | 2★ / 2f | 2026-06-11 (pushed 2026-07-01) | Queries a **local Parquet copy** of the product database through DuckDB. The only one that works with no network and no rate limit — the right choice for in-store or batch use. |
+| Danish food-data MCP | [borgels/mcp-server-fooddata-dk](https://github.com/borgels/mcp-server-fooddata-dk) | **ISC** — read, 3768 B | 0★ / 0f | 2026-11-21 | Open Food Facts + the **DTU Frida** national composition database. A worked example of the regional pattern: one national dataset joined to the global one. GitHub reports `NOASSERTION`; the file is ISC and permissive. |
+| OpenFoodFacts MCP (caleb-conner) | [caleb-conner/open-food-facts-mcp](https://github.com/caleb-conner/open-food-facts-mcp) | MIT — read, 1082 B | 1★ / 0f | 2025-08-06 | Barcode + filtered search, and the only one that interprets **Nutri-Score, NOVA and Eco-Score** rather than returning raw fields. Enforces Open Food Facts' published rate limits in code. ~15 months since a default-branch commit. |
+| EUDR compliance agent | [nohosa001-pixel/eudr-compliance-agent](https://github.com/nohosa001-pixel/eudr-compliance-agent) | MIT — read, 1094 B | 0★ / 0f | 2026-11-25 | Agent wrapper over the EU Deforestation Regulation due-diligence workflow. **Permissively licensed and committed three days before this pass** — the deadline is 32 days away (see `intel/market.md`, EMEA). Read it as a starting point, not a compliance product. |
+
+### ⚠️ The licence pattern this plane contributes: permissive wrapper, closed engine
+
+[Vortx-AI/eudr-plugin](https://github.com/Vortx-AI/eudr-plugin) (0★, pushed 2026-11-26) has a real
+Apache-2.0 LICENSE — **953 bytes, not the usual ~11,350**. The short form is not the finding. The finding is
+what the file goes on to say, verbatim:
+
+> This licence covers THIS REPOSITORY: the plugin manifest, the skills, and the MCP server declaration. It
+> does not cover the eudr.dev service those files connect to, whose runtime is closed.
+
+**This is a new licence shape for this KB, and it generalises to all twelve industries.** Previous rules
+covered a badge that promises a licence that does not exist (pass 6) and an API flag that hides one that
+does. This is a licence that is *entirely real and entirely honest* and still gives you nothing: it is
+scoped to the thin wrapper, and the engine behind it is proprietary. **An MCP server is exactly the shape
+that makes this invisible** — the manifest and the tool declarations are the open part, and the tools call
+out. Before adopting any permissively-licensed MCP server, ask what runs *behind* the tool declaration. To
+this repo's credit it says so in the licence file itself; most will not.
+
+### The 'no licence file' rows, measured not assumed
+
+Two agent-shaped repos in this plane are **unusable for want of a licence**, checked against ten filename
+spellings (`LICENSE`, `LICENSE.md`, `LICENSE.txt`, `license.txt`, `LICENCE`, `LICENCE.txt`, `COPYING`,
+`COPYING.txt`, `LICENSE-MIT`, `NOTICE`) on the default branch, reading **bytes** and not status codes:
+`JagjeevanAK/OpenFoodFacts-MCP` (pushed 2026-02-03) and `AbhishekKhond005/Open-Food-Facts-MCP` (pushed
+2026-10-23, self-described hackathon build). Neither gets a row.
+
+### Explicitly not written here
+
+- **`MrBridgeHQ/open-food-facts-mcp`** was described in search results with a full feature list — read-only
+  server, TypeScript, English and French docs, "not affiliated with Open Food Facts". It **does not exist**:
+  `git ls-remote` returns the auth-prompt 404 signature. A detailed search-result description is not an
+  existence proof, and this is the second dead slug this KB has caught being described in confident prose
+  (pass 6 caught `hotwax/poorti`).
+- **No official Open Food Facts MCP server.** All six above are third-party. Open Food Facts itself ships
+  API clients (`openfoodfacts-dart`, Apache-2.0; `openfoodfacts-python`, **no licence file** — see
+  `repos/foundations.md`), not an agent surface. If a client engagement needs one that is answerable to the
+  upstream project, it does not exist and would have to be contributed.
+- **No agent for the cold chain, the markdown decision, or HACCP record-keeping.** Those are measured zeros,
+  written up in `repos/foundations.md` rather than guessed at here.

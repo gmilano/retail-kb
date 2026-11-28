@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-26
+updated: 2026-11-28
 ---
 
 # 📈 Agents Trending — Retail & Consumer
@@ -9,6 +9,36 @@ updated: 2026-11-26
 > **Append-only.** Newest dated section on top; history preserved below. This file tracks **agents and
 > agent-facing tooling**. For infrastructure and platform repos see `repos/trending.md` — until today the
 > two files were byte-identical, so the agents/repos distinction never actually existed in this KB.
+
+## 2026-11-28 (pass 8) — the fresh & perishable food plane
+
+**This week's signal is an inversion of the last seven passes: the agent tier in this plane is the healthy
+part.** Six verified agent surfaces, five permissively licensed (Apache-2.0, ISC, 3× MIT), two with
+commits in the last five days. Compare pass 7's buying plane — seven repos, 42 stars, three unusable for
+want of a licence. The difference is not maturity, it is **that a public dataset exists to wrap**: Open
+Food Facts (1,220★, AGPL-3.0, pushed 2026-11-28, the day of this pass) has produced at least eight
+third-party MCP servers, while the buying office has no public dataset and produced none.
+
+**Freshest this week:** `cyanheads/openfoodfacts-mcp-server` (Apache-2.0, 2★, **2026-11-24**),
+`borgels/mcp-server-fooddata-dk` (ISC, 0★, **2026-11-21**), `nohosa001-pixel/eudr-compliance-agent`
+(MIT, 0★, **2026-11-25**), `Vortx-AI/eudr-plugin` (Apache-2.0 scoped, 0★, **2026-11-26**).
+
+**Two of those four are EUDR agents committed in the last three days**, against an EU deadline of
+**30 December 2026 — 32 days from this measurement**. That is the clearest instance this KB has recorded of
+*a date producing code*: see `intel/trends.md` for the full version of the claim and the falsifiable
+prediction attached to it.
+
+**New licence shape, and it is an MCP-specific trap:** `Vortx-AI/eudr-plugin` carries a genuine Apache-2.0
+file of **953 bytes** (the full text is ~11,350) whose closing paragraph states that it covers the manifest,
+skills and MCP declaration only — *"the eudr.dev service those files connect to, whose runtime is closed"*.
+A permissively-licensed MCP server can be an open wrapper on a closed engine, and the manifest is exactly
+where that is invisible. Recorded in `agents/top.md` as a rule for all twelve industries.
+
+**Measured empty this week, and these are the useful zeros:** no agent for the **cold chain**, none for the
+**markdown decision**, none for **HACCP record-keeping**, and **no official Open Food Facts MCP server** —
+all eight are third-party. `MrBridgeHQ/open-food-facts-mcp` was described in search results feature by
+feature and **does not exist** (`ls-remote` 404 signature) — the second confidently-described dead slug this
+KB has caught, after pass 6's `hotwax/poorti`.
 
 ## 2026-11-26 (pass 7) — the merchandise planning, buying & trade-funds plane
 

@@ -1,7 +1,7 @@
 ---
 industry: retail
 region: Global
-updated: 2026-11-26
+updated: 2026-11-28
 ---
 
 # 🧩 Composition Patterns — Retail & Consumer
@@ -1382,3 +1382,162 @@ re-tested rather than carried forward.
   which by rule 1 above reads as unlicensed, yet Akeneo is widely described as open source. The probe is
   more likely wrong than Akeneo. **Settle it with a shallow clone next pass; quote no license for it
   until then.**
+
+## Pattern 34 — The lot-and-date record that four regulators accept (one build, four projections)
+
+**Problem.** A grocer with ranges in two or more regions faces four different instruments asking the same
+engineering question in four vocabularies: FDA KDEs at CTEs, an EUDR Due Diligence Statement with plot
+geolocation, GB 7718-2025 / FSSAI date marking, ANVISA lot traceability. Four compliance projects is the
+default, and it is three too many.
+
+**The build, fully permissive, no copyleft anywhere:**
+
+1. **Read the pack.** [`gs1/gs1-syntax-engine`](https://github.com/gs1/gs1-syntax-engine) (Apache-2.0,
+   10172 B, 54★, 2026-11-26) parses and *validates* the GS1 element string, giving you typed
+   **AI (01) GTIN**, **AI (10) BATCH/LOT**, **AI (15) BEST BEFORE**, **AI (17) EXPIRATION**,
+   **AI (13) PACK DATE**. Vendor [`gs1/gs1-syntax-dictionary`](https://github.com/gs1/gs1-syntax-dictionary)
+   (Apache-2.0, 21★) alongside it — it is the data half of the same artefact.
+   **Do not regex a date off a barcode**; (15) and (17) are different legal claims — quality vs safety —
+   and a mapper that treats them as interchangeable converts a best-before into a use-by.
+2. **Store the movement as events.** [`openepcis/openepcis-core`](https://github.com/openepcis/openepcis-core)
+   (Apache-2.0, 11356 B, 0★, pushed 2026-11-28) for EPCIS 2.0 capture/query/subscription over
+   OpenSearch + Kafka, with `openepcis/epcis-repository-ce` (already in this KB) as the deployable unit.
+   A CTE **is** an EPCIS event; do not invent a parallel schema.
+   ⚠️ Open-core: scope the CE boundary before promising features.
+3. **Project, do not duplicate.** Four read models over the one event store:
+   `kde_cte` (FDA), `dds` (EUDR, joined to plot geometry), `date_marking` (GB 7718 / FSSAI, incl. China's
+   **derived production date** = expiry − shelf life for imports), `anvisa_lot`. Each projection is a query,
+   not a database.
+4. **Wire example to copy.** [`NSIETeam/ReliaCode`](https://github.com/NSIETeam/ReliaCode) (Apache-2.0,
+   10139 B) is a small worked instance of steps 1→2 talking to each other. Rarer than either library alone.
+
+**Why it holds:** every instrument above wants lot identity + a date + a place + a time. The disagreements
+are vocabulary and evidence format, which is projection work. **Test:** one fixture lot, four projections,
+asserted in CI. If a new instrument needs a fifth projection and no schema change, the pattern held.
+
+## Pattern 35 — The perishable markdown engine (building into the sharpest zero in this KB)
+
+**Problem.** Deciding today's discount on a lot that expires in *n* days is the highest-frequency margin
+decision in grocery, and **there is no adoptable open source for it**: 5 of 6 repos have **no licence
+file**, and the only licensed one ([`normanrz/dynamic-prices`](https://github.com/normanrz/dynamic-prices),
+MIT, 65★) has not had a commit since **2017-12-07**.
+
+**Do not fork the unlicensed ones.** Four were committed to in the last eight weeks and are still legally
+unusable. Assemble instead, from parts this KB has already verified:
+
+1. **Remaining life** — lot + AI (15)/(17) via `gs1-syntax-engine` (Pattern 34 step 1). Where temperature
+   history exists, discount remaining life against it; **note that `mrrishit909/grocery-perishables-optimizer`
+   is the only repo that designed this, and it is unlicensed — read its design, write your own.**
+2. **Demand and elasticity** — the permissive forecasting stack already in `repos/foundations.md`
+   (`nixtla/statsforecast`, `unit8co/darts` Apache-2.0, `awslabs/gluonts` Apache-2.0). Fresh demand is
+   intermittent and censored by stockouts; fit on *sales given availability*, not on sales.
+3. **The decision** — a small dynamic program over discount depth per remaining day, with a **price floor
+   at cost + floor margin** (`Thilagar7/FRESH-PRICE` has this constraint right; take the constraint, not
+   the code) and FEFO issue order (`grocy/grocy`, MIT, is the reference model for FEFO-by-due-date).
+4. **Honesty harness** — score against a no-markdown baseline on held-out weeks.
+   ⚠️ **Read the one published benchmark in this plane before promising uplift:** the most complete design
+   found beat no-markdown in **2 of 9 cases and lost in 2**. Any deck claiming "zero food waste" is quoting
+   a *simulator*, as one repo's README does explicitly. Promise measurement, then uplift.
+
+**Why it is the right thing to build:** the inputs are now all permissive and the output is a daily,
+per-lot margin decision with no incumbent open option. Unlike pass 6's delivery-promise gap, nothing is
+missing underneath it any more.
+
+## Pattern 36 — EUDR screening that suppliers will actually cooperate with (32 days out)
+
+**Problem.** EUDR needs **plot-level geolocation** from suppliers by **2026-12-30** (large/medium).
+Suppliers refuse, for a sound commercial reason: those coordinates *are* their farm base, and a retailer's
+cloud is the last place they want them.
+
+**The pattern is architectural, not contractual — and it is why the tooling here is browser-based.**
+
+1. **Screen on the supplier's device.** [`coelho85/EUDR_free_check`](https://github.com/coelho85/EUDR_free_check)
+   (**Apache-2.0**, 11356 B, pushed 2026-11-26) runs entirely in the browser against the EU **JRC Global
+   Forest Cover 2020** map, reading only the map tiles overlapping the plots. **Coordinates never leave the
+   device.** The only fully-permissive tool in the EUDR cluster — ship it as a page the supplier opens.
+2. **Validate before submission.** [`afkzonagroup/plotline`](https://github.com/afkzonagroup/plotline)
+   (**AGPL-3.0** — run as a service, do not embed) catches exactly what the EU Information System rejects:
+   open or self-crossing polygons, holes, wrong property names, the **25 MB per statement** cap.
+   For a hand-editing surface, [`georoots/editor`](https://github.com/georoots/editor) (**GPL-3.0**, built
+   with the European Forest Institute) also processes on-device.
+3. **Collect the verdict, not the geometry.** The retailer stores pass/fail + evidence hash + plot count;
+   the geometry stays with the supplier, surfaced only for the DDS. This is the deliverable that makes the
+   programme signable.
+
+⚠️ **Two warnings that belong in the statement of work.** (a) These tools check **geometric and structural
+validity only** — `georoots`' own FAQ says so. **A clean file is not a compliance verdict**, and selling it
+as one is mis-selling. (b) [`Vortx-AI/eudr-plugin`](https://github.com/Vortx-AI/eudr-plugin) looks like the
+most complete option and its Apache-2.0 licence **covers only the manifest, skills and MCP declaration** —
+the eudr.dev runtime behind it is **closed**, stated in the licence file itself. Fine as a vendor; not an
+open-source foundation.
+
+## Pattern 37 — The food-data agent surface, and the question to ask before adopting any MCP server
+
+**Problem.** A fresh-food assistant needs to answer product questions — allergens, ingredients, nutrition,
+Nutri-Score, comparisons — and this is the one step in the plane where open source is abundant: **eight**
+third-party Open Food Facts MCP servers, five permissively licensed.
+
+**Pick by deployment shape, because the licences are all fine:**
+
+| Need | Use | Licence |
+|---|---|---|
+| Best licence + most recent activity | [`cyanheads/openfoodfacts-mcp-server`](https://github.com/cyanheads/openfoodfacts-mcp-server) | Apache-2.0, 11317 B |
+| Widest nutrition coverage (OFF + USDA + Nutritionix) | [`charliezstong/nutri-mcp`](https://github.com/charliezstong/nutri-mcp) | MIT, 1078 B |
+| **In-store / offline / no rate limit** (local Parquet + DuckDB) | [`noot-app/openfoodfacts-mcp-server`](https://github.com/noot-app/openfoodfacts-mcp-server) | MIT, 1060 B |
+| A national dataset joined to the global one | [`borgels/mcp-server-fooddata-dk`](https://github.com/borgels/mcp-server-fooddata-dk) (OFF + DTU Frida) | **ISC**, 3768 B |
+| Scores interpreted, not raw fields | [`caleb-conner/open-food-facts-mcp`](https://github.com/caleb-conner/open-food-facts-mcp) | MIT, 1082 B |
+
+**Three operational notes.** (1) **Rate limits are real** — Open Food Facts publishes per-IP limits
+(~15 product reads/min, ~10 searches/min); several servers enforce them in code, and the Parquet option
+sidesteps them entirely, which is the right answer for store-level use. (2) **None of these is official** —
+Open Food Facts ships API clients, not an agent surface, so there is no upstream to escalate to. (3) The
+server is AGPL-3.0; the **`openfoodfacts-dart` client is Apache-2.0** — use the client where the client's
+own code must stay proprietary.
+
+⚠️ **The question to ask about any MCP server, in any industry:** *what runs behind the tool declaration?*
+A permissive licence on a manifest can cover an open wrapper on a closed engine — `Vortx-AI/eudr-plugin`
+says so in its own licence file, and most will not. And ⚠️ **`openfoodfacts/openfoodfacts-python`
+(478★, the most-starred OFF client) has no licence file** under ten spellings. Popularity is not permission.
+
+## Anti-patterns added 2026-11-28 (pass 8)
+
+- **Proposing grocy as a grocery platform.** MIT and 9,714★ makes it the most attractive licence/maturity
+  combination in the plane, and it is a **household** app: no multi-store model, no supplier EDI, no POS,
+  no priced-by-weight line. Use its **FEFO-by-due-date data model** as the reference; do not promise the
+  product.
+- **Treating AI (15) and AI (17) as the same field.** Best-before is a *quality* claim and expiration is a
+  *safety* claim. Collapsing them is the same class of defect as pass 6's hand-off/arrival confusion, with
+  a worse failure mode: food sold past a safety date.
+- **Forking an unlicensed markdown repo because it was committed to last month.** Recent activity is not a
+  licence. Five of them are active and unusable.
+- **Reading an API licence flag instead of the file.** `NOASSERTION` was wrong in **4 of 5** cases this
+  pass — in one case hiding a *permissive* ISC licence, so the error discards good repos too.
+- **Selling FSMA 204 compliance in North America.** The date moved to **2028-07-20** and enforcement is
+  barred before then. Sell recall speed and shrink.
+- **Presenting an EUDR geometry check as a compliance verdict.** The tools validate structure, not legality.
+
+## Method notes added 2026-11-28 (pass 8)
+
+- **Read licence bytes, never the HTTP status.** `raw.githubusercontent.com` returns **200 with the body
+  `404: Not Found`**, which manufactured a phantom "16-byte licence" on a 478★ repo. Any pass that checked
+  status codes has licence rows that need re-reading.
+- **`pushed_at` ≠ default-branch activity.** Seven repos this pass diverged, by up to **nine months**
+  (`charliezstong/nutri-mcp`: 2026-01-12 default branch vs 2026-10-29 pushed). `pushed_at` counts any
+  branch. State which one you measured.
+- **GitHub access this pass:** `github.com` HTML **and** `api.github.com/repos/...` both return **403 'not
+  enabled for this session'**; **`gh api -X GET search/repositories -f q='repo:owner/name'` works** and
+  yields stars, forks, SPDX and `pushed_at`. The pass-9 note "the GitHub REST API is useless here" is
+  **half wrong** — `/repos/` is blocked, `search/` is not.
+- **Do not rank a compliance tier by stars.** The two most useful repos found this pass
+  (`openepcis/openepcis-core`, `coelho85/EUDR_free_check`) are **0★ / 0f** and both moved within 48 hours
+  of measurement. Stars track consumer attention, which standards infrastructure has none of by construction.
+- **A detailed search-result description is not an existence proof.** `MrBridgeHQ/open-food-facts-mcp` and
+  `mytechnotalent/iot-00002-cold-chain-monitor` were both described feature-by-feature and **neither
+  exists**. `ls-remote` remains the only existence oracle. Also: I guessed
+  `openepcis/openepcis-test-data-generator` from memory and it does not exist — the real slug,
+  `openepcis/epcis-testdata-generator`, was already in this KB. **Check the KB before guessing a slug.**
+- **Search summaries assert licences and get them wrong.** `MustrHQ/kitchen-safety` was described as
+  MIT; the file is **AGPL-3.0, 34522 B**. Verify every licence claim that arrives as prose.
+- **Anti-fabrication check:** `openfoodfacts-server` 1,220★, `grocy` 9,714★, `openfoodnetwork` 1,305★,
+  `gs1-syntax-engine` 54★, `opentraceability` 8★ (vs 8★ recorded in pass 6 — **flat**, as expected over
+  two days). Recording a flat delta is the evidence this pass did not invent a curve.
